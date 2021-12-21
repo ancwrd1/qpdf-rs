@@ -1,0 +1,9 @@
+[package]
+name = "qpdf-sys"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[build-dependencies]
+cc = { version = "1",  features = ["parallel"] }
+bindgen = "0.59"
