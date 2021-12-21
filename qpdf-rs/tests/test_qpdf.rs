@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use qpdf_rs::*;
+use qpdf::*;
 
 #[test]
 fn test_qpdf_version() {
