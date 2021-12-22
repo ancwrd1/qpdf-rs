@@ -42,6 +42,9 @@ fn test_qpdf_new_objects() {
     assert!(obj.is_stream());
     assert_eq!(obj.to_string(), "1 0 R");
 
+    let stream_dict = obj.get_stream_dictionary();
+    stream_dict.set("/Type", &qpdf.new_name("/Stream"));
+
     let indirect = obj.make_indirect();
     assert!(indirect.is_indirect());
     assert_ne!(indirect.get_id(), 0);

@@ -755,6 +755,16 @@ impl<'a> QpdfObject<'a> {
         }
     }
 
+    pub fn get_stream_dictionary(&self) -> QpdfDictionary {
+        unsafe {
+            QpdfObject::new(
+                self.owner,
+                qpdf_sys::qpdf_oh_get_dict(self.owner.inner, self.inner),
+            )
+            .into()
+        }
+    }
+
     /// Get ID of the indirect object
     pub fn get_id(&self) -> u32 {
         unsafe { qpdf_sys::qpdf_oh_get_object_id(self.owner.inner, self.inner) as _ }
