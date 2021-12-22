@@ -16,29 +16,36 @@ fn test_qpdf_new_objects() {
     let qpdf = Qpdf::new();
     let obj = qpdf.new_bool(true);
     assert!(obj.is_bool() && obj.as_bool());
+    assert_eq!(obj.to_string(), "true");
 
     let obj = qpdf.new_name("foo");
     assert!(obj.is_name() && obj.as_name() == "foo");
+    assert_eq!(obj.to_string(), "foo");
 
     let obj = qpdf.new_integer(12_3456_7890);
     assert!(obj.is_scalar() && obj.as_i64() == 12_3456_7890);
+    assert_eq!(obj.to_string(), "1234567890");
 
     let obj = qpdf.new_null();
     assert!(obj.is_null());
+    assert_eq!(obj.to_string(), "null");
 
     let obj = qpdf.new_real(1.2345, 3);
     assert_eq!(obj.as_real(), "1.234");
+    assert_eq!(obj.to_string(), "1.234");
 
     let obj = qpdf.new_uninitialized();
     assert!(!obj.is_initialized());
 
     let obj = qpdf.new_stream();
     assert!(obj.is_stream());
+    assert_eq!(obj.to_string(), "1 0 R");
 
     let indirect = obj.make_indirect();
     assert!(indirect.is_indirect());
     assert_ne!(indirect.get_id(), 0);
     assert_eq!(indirect.get_generation(), 0);
+    assert_eq!(indirect.to_string(), "2 0 R");
 }
 
 #[test]
@@ -48,6 +55,15 @@ fn test_parse_object() {
     let obj = qpdf.parse_object(text).unwrap();
     assert!(obj.is_dictionary());
     println!("{}", obj.to_string());
+}
+
+#[test]
+fn test_error() {
+    let text = "<<--< /Type -- null >>";
+    let qpdf = Qpdf::new();
+    let result = qpdf.parse_object(text);
+    assert!(result.is_err());
+    println!("{:?}", result);
 }
 
 #[test]
@@ -143,4 +159,18 @@ fn test_pdf_ops() {
         saved_pdf.remove_page(&page).unwrap();
     }
     assert_eq!(saved_pdf.get_num_pages().unwrap(), 0);
+}
+
+#[test]
+fn test_pdf_encrypted() {
+    let qpdf = Qpdf::load("tests/data/encrypted.pdf");
+    assert!(qpdf.is_err());
+    println!("{:?}", qpdf);
+
+    let qpdf = Qpdf::load_encrypted("tests/data/encrypted.pdf", "test");
+    assert!(qpdf.is_ok());
+
+    let data = std::fs::read("tests/data/encrypted.pdf").unwrap();
+    let qpdf = Qpdf::load_from_memory_encrypted(&data, "test");
+    assert!(qpdf.is_ok());
 }
