@@ -87,27 +87,34 @@ impl Qpdf {
         F: FnOnce() -> T,
     {
         unsafe {
+            if qpdf_sys::qpdf_has_error(self.inner) == 0 {
+                return Ok(f());
+            }
+
             let qpdf_error = qpdf_sys::qpdf_get_error(self.inner);
             let code = qpdf_sys::qpdf_get_error_code(self.inner, qpdf_error);
 
-            error_or_ok(code).map_err(|e| {
-                let error_detail = qpdf_sys::qpdf_get_error_message_detail(self.inner, qpdf_error);
+            match error_or_ok(code) {
+                Ok(_) => Ok(f()),
+                Err(e) => {
+                    let error_detail =
+                        qpdf_sys::qpdf_get_error_message_detail(self.inner, qpdf_error);
 
-                let description = if !error_detail.is_null() {
-                    Some(CStr::from_ptr(error_detail).to_string_lossy().into_owned())
-                } else {
-                    None
-                };
+                    let description = if !error_detail.is_null() {
+                        Some(CStr::from_ptr(error_detail).to_string_lossy().into_owned())
+                    } else {
+                        None
+                    };
 
-                let position = qpdf_sys::qpdf_get_error_file_position(self.inner, qpdf_error);
+                    let position = qpdf_sys::qpdf_get_error_file_position(self.inner, qpdf_error);
 
-                QpdfError {
-                    description,
-                    position: Some(position),
-                    ..e
+                    Err(QpdfError {
+                        description,
+                        position: Some(position),
+                        ..e
+                    })
                 }
-            })?;
-            Ok(f())
+            }
         }
     }
 
