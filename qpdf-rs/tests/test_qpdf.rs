@@ -8,6 +8,7 @@ fn load_pdf() -> Qpdf {
 
 #[test]
 fn test_qpdf_version() {
+    assert_eq!(Qpdf::library_version(), "10.5.0");
     println!("{}", Qpdf::library_version());
 }
 
