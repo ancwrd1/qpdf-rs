@@ -151,7 +151,7 @@ fn test_pdf_ops() {
     }
 
     let buffer = qpdf.save_to_memory().unwrap();
-    let saved_pdf = Qpdf::do_load_memory(buffer, None).unwrap();
+    let saved_pdf = Qpdf::do_load_memory(&buffer, None).unwrap();
     assert_eq!(saved_pdf.get_num_pages().unwrap(), 4);
 
     let pages = saved_pdf.get_pages().unwrap();

@@ -1,9 +1,11 @@
-use std::borrow::Cow;
-use std::cmp::Ordering;
-use std::ffi::{CStr, CString, NulError};
-use std::ops::Deref;
-use std::path::Path;
-use std::{fmt, ptr, slice};
+use std::{
+    cmp::Ordering,
+    ffi::{CStr, CString, NulError},
+    fmt,
+    ops::Deref,
+    path::Path,
+    ptr, slice,
+};
 
 /// Error codes returned by QPDF library calls
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
@@ -220,7 +222,7 @@ impl Qpdf {
     }
 
     /// Save PDF to a memory and return a reference to it owned by the Qpdf object
-    pub fn save_to_memory(&self) -> Result<&[u8]> {
+    pub fn save_to_memory(&self) -> Result<Vec<u8>> {
         unsafe {
             qpdf_sys::qpdf_init_write_memory(self.inner);
             self.last_error_or(())?;
@@ -228,7 +230,7 @@ impl Qpdf {
             self.last_error_or(())?;
             let buffer = qpdf_sys::qpdf_get_buffer(self.inner);
             let buffer_len = qpdf_sys::qpdf_get_buffer_length(self.inner);
-            Ok(slice::from_raw_parts(buffer as *const u8, buffer_len as _))
+            Ok(slice::from_raw_parts(buffer as *const u8, buffer_len as _).to_vec())
         }
     }
 
@@ -517,32 +519,35 @@ impl<'a> QpdfObject<'a> {
     }
 
     /// 'Unparse' the object converting it to a textual representation
-    pub fn to_string(&self) -> Cow<str> {
+    pub fn to_string(&self) -> String {
         unsafe {
             CStr::from_ptr(qpdf_sys::qpdf_oh_unparse(self.owner.inner, self.inner))
                 .to_string_lossy()
+                .into_owned()
         }
     }
 
     /// 'Unparse' the object converting it to a resolved textual representation
-    pub fn to_string_resolved(&self) -> Cow<str> {
+    pub fn to_string_resolved(&self) -> String {
         unsafe {
             CStr::from_ptr(qpdf_sys::qpdf_oh_unparse_resolved(
                 self.owner.inner,
                 self.inner,
             ))
             .to_string_lossy()
+            .into_owned()
         }
     }
 
     /// 'Unparse' the object converting it to a binary representation
-    pub fn to_binary(&self) -> Cow<str> {
+    pub fn to_binary(&self) -> String {
         unsafe {
             CStr::from_ptr(qpdf_sys::qpdf_oh_unparse_binary(
                 self.owner.inner,
                 self.inner,
             ))
             .to_string_lossy()
+            .into_owned()
         }
     }
 
@@ -652,37 +657,40 @@ impl<'a> QpdfObject<'a> {
     }
 
     /// Get real value
-    pub fn as_real(&self) -> Cow<str> {
+    pub fn as_real(&self) -> String {
         unsafe {
             CStr::from_ptr(qpdf_sys::qpdf_oh_get_real_value(
                 self.owner.inner,
                 self.inner,
             ))
             .to_string_lossy()
+            .into_owned()
         }
     }
 
     /// Get name value
-    pub fn as_name(&self) -> Cow<str> {
+    pub fn as_name(&self) -> String {
         unsafe {
             CStr::from_ptr(qpdf_sys::qpdf_oh_get_name(self.owner.inner, self.inner))
                 .to_string_lossy()
+                .into_owned()
         }
     }
 
     /// Get string value
-    pub fn as_string(&self) -> Cow<str> {
+    pub fn as_string(&self) -> String {
         unsafe {
             CStr::from_ptr(qpdf_sys::qpdf_oh_get_utf8_value(
                 self.owner.inner,
                 self.inner,
             ))
             .to_string_lossy()
+            .into_owned()
         }
     }
 
     /// Get binary string value
-    pub fn as_binary_string(&self) -> &[u8] {
+    pub fn as_binary_string(&self) -> Vec<u8> {
         unsafe {
             let mut length = 0;
             let data = qpdf_sys::qpdf_oh_get_binary_string_value(
@@ -690,7 +698,7 @@ impl<'a> QpdfObject<'a> {
                 self.inner,
                 &mut length,
             );
-            slice::from_raw_parts(data as *const u8, length as _)
+            slice::from_raw_parts(data as *const u8, length as _).to_vec()
         }
     }
 
