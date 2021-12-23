@@ -47,9 +47,8 @@ fn test_qpdf_basic_objects() {
 
     let indirect = obj.make_indirect();
     assert!(indirect.is_indirect());
-    assert_ne!(indirect.get_id(), 0);
-    assert_eq!(indirect.get_generation(), 0);
-    assert_eq!(indirect.to_string(), "2 0 R");
+    assert_ne!(indirect.get_id(), obj.get_id());
+    assert_eq!(indirect.get_generation(), obj.get_generation());
 }
 
 #[test]
@@ -57,13 +56,14 @@ fn test_qpdf_streams() {
     let qpdf = Qpdf::new();
 
     let obj = qpdf.get_object_by_id(1234, 1);
-    assert!(obj.is_err());
+    assert!(obj.is_none());
 
     let obj = qpdf.new_stream_with_dictionary([("/Type", qpdf.new_name("/Test"))], &[1, 2, 3, 4]);
     assert!(obj.is_stream());
-    assert_eq!(obj.to_string(), "1 0 R");
 
-    let by_id = qpdf.get_object_by_id(1, 0).unwrap();
+    let by_id = qpdf
+        .get_object_by_id(obj.get_id(), obj.get_generation())
+        .unwrap();
     println!("{}", by_id.to_string());
 
     let data = by_id.get_stream_data(StreamDecodeLevel::R3pFull).unwrap();
@@ -76,7 +76,6 @@ fn test_qpdf_streams() {
     assert!(indirect.is_indirect());
     assert_ne!(indirect.get_id(), 0);
     assert_eq!(indirect.get_generation(), 0);
-    assert_eq!(indirect.to_string(), "2 0 R");
 }
 
 #[test]
@@ -91,18 +90,17 @@ fn test_parse_object() {
 
 #[test]
 fn test_error() {
-    let text = "<<--< /Type -- null >>";
     let qpdf = Qpdf::new();
-    qpdf.get_page(0);
-    let result = qpdf.parse_object(text);
+    assert!(qpdf.get_page(0).is_none());
+    let result = qpdf.parse_object("<<--< /Type -- null >>");
     assert!(result.is_err());
     println!("{:?}", result);
 
     let trailer = qpdf.get_trailer();
-    assert!(trailer.is_err());
+    assert!(trailer.is_none());
 
     let root = qpdf.get_root();
-    assert!(root.is_err());
+    assert!(root.is_none());
 }
 
 #[test]

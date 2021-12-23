@@ -353,24 +353,39 @@ impl Qpdf {
     }
 
     /// Get trailer object.
-    pub fn get_trailer(&self) -> Result<QpdfDictionary> {
+    pub fn get_trailer(&self) -> Option<QpdfDictionary> {
         let oh = unsafe { qpdf_sys::qpdf_get_trailer(self.inner) };
-        self.last_error_or_then(|| ())?;
-        Ok(QpdfObject::new(self, oh).into())
+        self.last_error_or_then(|| ()).ok()?;
+        let obj = QpdfObject::new(self, oh);
+        if obj.is_initialized() && !obj.is_null() {
+            Some(obj.into())
+        } else {
+            None
+        }
     }
 
     /// Get root object.
-    pub fn get_root(&self) -> Result<QpdfDictionary> {
+    pub fn get_root(&self) -> Option<QpdfDictionary> {
         let oh = unsafe { qpdf_sys::qpdf_get_root(self.inner) };
-        self.last_error_or_then(|| ())?;
-        Ok(QpdfObject::new(self, oh).into())
+        self.last_error_or_then(|| ()).ok()?;
+        let obj = QpdfObject::new(self, oh);
+        if obj.is_initialized() && !obj.is_null() {
+            Some(obj.into())
+        } else {
+            None
+        }
     }
 
     /// Find indirect object by object id and generation
-    pub fn get_object_by_id(&self, obj_id: u32, gen: u32) -> Result<QpdfObject> {
+    pub fn get_object_by_id(&self, obj_id: u32, gen: u32) -> Option<QpdfObject> {
         let oh = unsafe { qpdf_sys::qpdf_get_object_by_id(self.inner, obj_id as _, gen as _) };
-        self.last_error_or_then(|| ())?;
-        Ok(QpdfObject::new(self, oh))
+        self.last_error_or_then(|| ()).ok()?;
+        let obj = QpdfObject::new(self, oh);
+        if obj.is_initialized() && !obj.is_null() {
+            Some(obj.into())
+        } else {
+            None
+        }
     }
 
     /// Replace indirect object by object id and generation
