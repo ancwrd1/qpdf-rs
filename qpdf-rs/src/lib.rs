@@ -510,6 +510,45 @@ impl Drop for Qpdf {
     }
 }
 
+/// Types of the QPDF objects
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub enum QpdfObjectType {
+    Uninitialized,
+    Reserved,
+    Null,
+    Boolean,
+    Integer,
+    Real,
+    String,
+    Name,
+    Array,
+    Dictionary,
+    Stream,
+    Operator,
+    InlineImage,
+}
+
+impl QpdfObjectType {
+    fn from_qpdf_enum(obj_t: qpdf_sys::qpdf_object_type_e) -> Self {
+        match obj_t {
+            qpdf_sys::qpdf_object_type_e_ot_uninitialized => QpdfObjectType::Uninitialized,
+            qpdf_sys::qpdf_object_type_e_ot_reserved => QpdfObjectType::Reserved,
+            qpdf_sys::qpdf_object_type_e_ot_null => QpdfObjectType::Null,
+            qpdf_sys::qpdf_object_type_e_ot_boolean => QpdfObjectType::Boolean,
+            qpdf_sys::qpdf_object_type_e_ot_integer => QpdfObjectType::Integer,
+            qpdf_sys::qpdf_object_type_e_ot_real => QpdfObjectType::Real,
+            qpdf_sys::qpdf_object_type_e_ot_string => QpdfObjectType::String,
+            qpdf_sys::qpdf_object_type_e_ot_name => QpdfObjectType::Name,
+            qpdf_sys::qpdf_object_type_e_ot_array => QpdfObjectType::Array,
+            qpdf_sys::qpdf_object_type_e_ot_dictionary => QpdfObjectType::Dictionary,
+            qpdf_sys::qpdf_object_type_e_ot_stream => QpdfObjectType::Stream,
+            qpdf_sys::qpdf_object_type_e_ot_operator => QpdfObjectType::Operator,
+            qpdf_sys::qpdf_object_type_e_ot_inlineimage => QpdfObjectType::InlineImage,
+            _ => panic!("Unexpected object type!"),
+        }
+    }
+}
+
 /// This structure represents a single PDF object with a lifetime bound to the owning `Qpdf`.
 pub struct QpdfObject<'a> {
     owner: &'a Qpdf,
@@ -519,6 +558,16 @@ pub struct QpdfObject<'a> {
 impl<'a> QpdfObject<'a> {
     fn new(owner: &'a Qpdf, inner: qpdf_sys::qpdf_oh) -> Self {
         QpdfObject { owner, inner }
+    }
+
+    /// Get this object type
+    pub fn get_type(&self) -> QpdfObjectType {
+        unsafe {
+            QpdfObjectType::from_qpdf_enum(qpdf_sys::qpdf_oh_get_type_code(
+                self.owner.inner,
+                self.inner,
+            ))
+        }
     }
 
     /// 'Unparse' the object converting it to a textual representation
