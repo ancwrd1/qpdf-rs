@@ -18,7 +18,8 @@ Tested on the following targets:
 
 * C/C++ compiler
 * Installed clang/llvm (with `libclang` shared library) for bindgen build-time invocation
-* For cross-compilation a custom sysroot must be passed to clang via `BINDGEN_EXTRA_CLANG_ARGS` environment variable, for example: `BINDGEN_EXTRA_CLANG_ARGS="--sysroot=/usr/x86_64-w64-mingw32/sys-root"`
+* For cross-compilation a custom sysroot must be passed to clang via `BINDGEN_EXTRA_CLANG_ARGS`
+   environment variable, for example: `BINDGEN_EXTRA_CLANG_ARGS="--sysroot=/usr/x86_64-w64-mingw32/sys-root"`
 
 ## License
 
