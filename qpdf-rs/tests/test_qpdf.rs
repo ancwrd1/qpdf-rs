@@ -59,15 +59,26 @@ fn test_parse_object() {
     let obj = qpdf.parse_object(text).unwrap();
     assert!(obj.is_dictionary());
     println!("{}", obj.to_string());
+    println!("version: {}", qpdf.get_pdf_version());
 }
 
 #[test]
 fn test_error() {
     let text = "<<--< /Type -- null >>";
     let qpdf = Qpdf::new();
+    qpdf.get_page(0);
     let result = qpdf.parse_object(text);
     assert!(result.is_err());
     println!("{:?}", result);
+
+    let trailer = qpdf.get_trailer();
+    assert!(trailer.is_none());
+
+    let root = qpdf.get_root();
+    assert!(root.is_none());
+
+    let obj = qpdf.get_object_by_id(1234, 1);
+    assert!(obj.is_none());
 }
 
 #[test]
@@ -138,7 +149,7 @@ fn test_strings() {
 #[test]
 fn test_pdf_ops() {
     let qpdf = load_pdf();
-    println!("{:?}", qpdf.get_pdf_version().unwrap());
+    println!("{:?}", qpdf.get_pdf_version());
     let pages = qpdf.get_pages().unwrap();
     assert_eq!(pages.len(), 2);
 
@@ -155,7 +166,7 @@ fn test_pdf_ops() {
     }
 
     let buffer = qpdf.save_to_memory().unwrap();
-    let saved_pdf = Qpdf::do_load_memory(&buffer, None).unwrap();
+    let saved_pdf = Qpdf::load_from_memory(&buffer).unwrap();
     assert_eq!(saved_pdf.get_num_pages().unwrap(), 4);
 
     let pages = saved_pdf.get_pages().unwrap();

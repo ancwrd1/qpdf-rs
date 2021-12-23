@@ -80,8 +80,12 @@ impl fmt::Debug for Qpdf {
 }
 
 impl Qpdf {
-    fn last_error_or<T>(&self, success: T) -> Result<T> {
-        self.last_error_or_then(|| success)
+    fn wrap_ffi_call<F, R>(&self, f: F) -> Result<()>
+    where
+        F: FnOnce() -> R,
+    {
+        f();
+        self.last_error_or_then(|| ())
     }
 
     fn last_error_or_then<F, T>(&self, f: F) -> Result<T>
@@ -139,11 +143,10 @@ impl Qpdf {
         }
     }
 
-    fn do_load_file<P>(path: P, password: Option<&str>) -> Result<Self>
+    fn do_load_file<P>(&self, path: P, password: Option<&str>) -> Result<()>
     where
         P: AsRef<Path>,
     {
-        let qpdf = Qpdf::new();
         let filename = CString::new(path.as_ref().to_string_lossy().as_ref())?;
         let password = password.and_then(|p| CString::new(p).ok());
 
@@ -152,15 +155,12 @@ impl Qpdf {
             .map(|p| p.as_ptr())
             .unwrap_or_else(ptr::null);
 
-        unsafe {
-            qpdf_sys::qpdf_read(qpdf.inner, filename.as_ptr(), raw_password);
-        }
-        qpdf.last_error_or(())?;
-        Ok(qpdf)
+        self.wrap_ffi_call(|| unsafe {
+            qpdf_sys::qpdf_read(self.inner, filename.as_ptr(), raw_password)
+        })
     }
 
-    pub fn do_load_memory(buf: &[u8], password: Option<&str>) -> Result<Self> {
-        let qpdf = Qpdf::new();
+    pub fn do_load_memory(&self, buf: &[u8], password: Option<&str>) -> Result<()> {
         let password = password.and_then(|p| CString::new(p).ok());
 
         let raw_password = password
@@ -168,17 +168,15 @@ impl Qpdf {
             .map(|p| p.as_ptr())
             .unwrap_or_else(ptr::null);
 
-        unsafe {
+        self.wrap_ffi_call(|| unsafe {
             qpdf_sys::qpdf_read_memory(
-                qpdf.inner,
+                self.inner,
                 b"memory\0".as_ptr() as _,
                 buf.as_ptr() as _,
                 buf.len() as _,
                 raw_password,
             );
-        }
-        qpdf.last_error_or(())?;
-        Ok(qpdf)
+        })
     }
 
     /// Load PDF from the file
@@ -186,7 +184,9 @@ impl Qpdf {
     where
         P: AsRef<Path>,
     {
-        Qpdf::do_load_file(path, None)
+        let qpdf = Qpdf::new();
+        qpdf.do_load_file(path, None)?;
+        Ok(qpdf)
     }
 
     /// Load encrypted PDF from the file
@@ -194,17 +194,23 @@ impl Qpdf {
     where
         P: AsRef<Path>,
     {
-        Qpdf::do_load_file(path, Some(password))
+        let qpdf = Qpdf::new();
+        qpdf.do_load_file(path, Some(password))?;
+        Ok(qpdf)
     }
 
     /// Load PDF from memory
     pub fn load_from_memory(buffer: &[u8]) -> Result<Self> {
-        Qpdf::do_load_memory(buffer, None)
+        let qpdf = Qpdf::new();
+        qpdf.do_load_memory(buffer, None)?;
+        Ok(qpdf)
     }
 
     /// Load encrypted PDF from memory
     pub fn load_from_memory_encrypted(buffer: &[u8], password: &str) -> Result<Self> {
-        Qpdf::do_load_memory(buffer, Some(password))
+        let qpdf = Qpdf::new();
+        qpdf.do_load_memory(buffer, Some(password))?;
+        Ok(qpdf)
     }
 
     /// Save PDF to a file
@@ -212,34 +218,23 @@ impl Qpdf {
     where
         P: AsRef<Path>,
     {
-        unsafe {
-            let filename = CString::new(path.as_ref().to_string_lossy().as_ref())?;
-            qpdf_sys::qpdf_init_write(self.inner, filename.as_ptr());
-            self.last_error_or(())?;
-            qpdf_sys::qpdf_write(self.inner);
-            self.last_error_or(())
-        }
+        let filename = CString::new(path.as_ref().to_string_lossy().as_ref())?;
+        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_init_write(self.inner, filename.as_ptr()) })?;
+        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_write(self.inner) })
     }
 
     /// Save PDF to a memory and return a reference to it owned by the Qpdf object
     pub fn save_to_memory(&self) -> Result<Vec<u8>> {
-        unsafe {
-            qpdf_sys::qpdf_init_write_memory(self.inner);
-            self.last_error_or(())?;
-            qpdf_sys::qpdf_write(self.inner);
-            self.last_error_or(())?;
-            let buffer = qpdf_sys::qpdf_get_buffer(self.inner);
-            let buffer_len = qpdf_sys::qpdf_get_buffer_length(self.inner);
-            Ok(slice::from_raw_parts(buffer as *const u8, buffer_len as _).to_vec())
-        }
+        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_init_write_memory(self.inner) })?;
+        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_write(self.inner) })?;
+        let buffer = unsafe { qpdf_sys::qpdf_get_buffer(self.inner) };
+        let buffer_len = unsafe { qpdf_sys::qpdf_get_buffer_length(self.inner) };
+        unsafe { Ok(slice::from_raw_parts(buffer as *const u8, buffer_len as _).to_vec()) }
     }
 
     /// Check PDF for errors
     pub fn check_pdf(&self) -> Result<()> {
-        unsafe {
-            qpdf_sys::qpdf_check_pdf(self.inner);
-            self.last_error_or(())
-        }
+        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_check_pdf(self.inner) })
     }
 
     /// Enable or disable automatic PDF recovery
@@ -258,13 +253,13 @@ impl Qpdf {
     }
 
     /// Get PDF version as a string
-    pub fn get_pdf_version(&self) -> Option<String> {
+    pub fn get_pdf_version(&self) -> String {
         unsafe {
             let version = qpdf_sys::qpdf_get_pdf_version(self.inner);
             if version.is_null() {
-                None
+                String::new()
             } else {
-                Some(CStr::from_ptr(version).to_string_lossy().into_owned())
+                CStr::from_ptr(version).to_string_lossy().into_owned()
             }
         }
     }
@@ -286,15 +281,14 @@ impl Qpdf {
 
     /// Add a page object to PDF. The `first` parameter indicates whether to prepend or append it.
     pub fn add_page<'a>(&self, new_page: &'a QpdfObject, first: bool) -> Result<()> {
-        unsafe {
+        self.wrap_ffi_call(|| unsafe {
             qpdf_sys::qpdf_add_page(
                 self.inner,
                 new_page.owner.inner,
                 new_page.inner,
                 first.into(),
-            );
-        }
-        self.last_error_or(())
+            )
+        })
     }
 
     /// Add a page object to PDF before or after a specified `ref_page`. A page may belong to another PDF.
@@ -304,23 +298,22 @@ impl Qpdf {
         before: bool,
         ref_page: &QpdfObject,
     ) -> Result<()> {
-        unsafe {
+        self.wrap_ffi_call(|| unsafe {
             qpdf_sys::qpdf_add_page_at(
                 self.inner,
                 new_page.owner.inner,
                 new_page.inner,
                 before.into(),
                 ref_page.inner,
-            );
-        }
-        self.last_error_or(())
+            )
+        })
     }
 
     /// Get number of page objects in the PDF.
     pub fn get_num_pages(&self) -> Result<u32> {
         unsafe {
             let n = qpdf_sys::qpdf_get_num_pages(self.inner);
-            self.last_error_or(n as _)
+            self.last_error_or_then(|| n as _)
         }
     }
 
@@ -328,6 +321,7 @@ impl Qpdf {
     pub fn get_page(&self, zero_based_index: u32) -> Option<QpdfObject> {
         unsafe {
             let oh = qpdf_sys::qpdf_get_page_n(self.inner, zero_based_index as _);
+            self.last_error_or_then(|| ()).ok()?;
             if oh != 0 {
                 Some(QpdfObject::new(self, oh))
             } else {
@@ -346,10 +340,7 @@ impl Qpdf {
 
     /// Remove page object from the PDF.
     pub fn remove_page(&self, page: &QpdfObject) -> Result<()> {
-        unsafe {
-            qpdf_sys::qpdf_remove_page(self.inner, page.inner);
-        }
-        self.last_error_or(())
+        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_remove_page(self.inner, page.inner) })
     }
 
     /// Parse textual representation of PDF object.
@@ -364,7 +355,9 @@ impl Qpdf {
     /// Get trailer object.
     pub fn get_trailer(&self) -> Option<QpdfObject> {
         let oh = unsafe { qpdf_sys::qpdf_get_trailer(self.inner) };
-        if oh != 0 {
+        self.last_error_or_then(|| ()).ok()?;
+        let obj = QpdfObject::new(self, oh);
+        if obj.is_initialized() && !obj.is_null() {
             Some(QpdfObject::new(self, oh))
         } else {
             None
@@ -374,7 +367,9 @@ impl Qpdf {
     /// Get root object.
     pub fn get_root(&self) -> Option<QpdfObject> {
         let oh = unsafe { qpdf_sys::qpdf_get_root(self.inner) };
-        if oh != 0 {
+        self.last_error_or_then(|| ()).ok()?;
+        let obj = QpdfObject::new(self, oh);
+        if obj.is_initialized() && !obj.is_null() {
             Some(QpdfObject::new(self, oh))
         } else {
             None
@@ -384,11 +379,19 @@ impl Qpdf {
     /// Find indirect object by object id and generation
     pub fn get_object_by_id(&self, obj_id: u32, gen: u32) -> Option<QpdfObject> {
         let oh = unsafe { qpdf_sys::qpdf_get_object_by_id(self.inner, obj_id as _, gen as _) };
-        if oh != 0 {
+        let obj = QpdfObject::new(self, oh);
+        if obj.is_initialized() && !obj.is_null() {
             Some(QpdfObject::new(self, oh))
         } else {
             None
         }
+    }
+
+    /// Replace indirect object by object id and generation
+    pub fn replace_object(&self, obj_id: u32, gen: u32, object: &QpdfObject) -> Result<()> {
+        self.wrap_ffi_call(|| unsafe {
+            qpdf_sys::qpdf_replace_object(self.inner, obj_id as _, gen as _, object.inner)
+        })
     }
 
     /// Create a bool object
