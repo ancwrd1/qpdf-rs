@@ -224,8 +224,8 @@ fn build_bindings() {
 }
 
 fn main() {
+    build_bindings();
     build_cc("zlib", "zlib-1.2.11", ZLIB_SRC);
     build_cc("jpeg", "jpeg-9d", JPEG_SRC);
     build_qpdf();
-    build_bindings();
 }
