@@ -353,38 +353,24 @@ impl Qpdf {
     }
 
     /// Get trailer object.
-    pub fn get_trailer(&self) -> Option<QpdfObject> {
+    pub fn get_trailer(&self) -> Result<QpdfDictionary> {
         let oh = unsafe { qpdf_sys::qpdf_get_trailer(self.inner) };
-        self.last_error_or_then(|| ()).ok()?;
-        let obj = QpdfObject::new(self, oh);
-        if obj.is_initialized() && !obj.is_null() {
-            Some(QpdfObject::new(self, oh))
-        } else {
-            None
-        }
+        self.last_error_or_then(|| ())?;
+        Ok(QpdfObject::new(self, oh).into())
     }
 
     /// Get root object.
-    pub fn get_root(&self) -> Option<QpdfObject> {
+    pub fn get_root(&self) -> Result<QpdfDictionary> {
         let oh = unsafe { qpdf_sys::qpdf_get_root(self.inner) };
-        self.last_error_or_then(|| ()).ok()?;
-        let obj = QpdfObject::new(self, oh);
-        if obj.is_initialized() && !obj.is_null() {
-            Some(QpdfObject::new(self, oh))
-        } else {
-            None
-        }
+        self.last_error_or_then(|| ())?;
+        Ok(QpdfObject::new(self, oh).into())
     }
 
     /// Find indirect object by object id and generation
-    pub fn get_object_by_id(&self, obj_id: u32, gen: u32) -> Option<QpdfObject> {
+    pub fn get_object_by_id(&self, obj_id: u32, gen: u32) -> Result<QpdfObject> {
         let oh = unsafe { qpdf_sys::qpdf_get_object_by_id(self.inner, obj_id as _, gen as _) };
-        let obj = QpdfObject::new(self, oh);
-        if obj.is_initialized() && !obj.is_null() {
-            Some(QpdfObject::new(self, oh))
-        } else {
-            None
-        }
+        self.last_error_or_then(|| ())?;
+        Ok(QpdfObject::new(self, oh))
     }
 
     /// Replace indirect object by object id and generation
@@ -429,10 +415,23 @@ impl Qpdf {
         QpdfObject::new(self, oh)
     }
 
-    /// Create an array object
+    /// Create an empty array object
     pub fn new_array(&self) -> QpdfArray {
         let oh = unsafe { qpdf_sys::qpdf_oh_new_array(self.inner) };
         QpdfObject::new(self, oh).into()
+    }
+
+    /// Create an array object from the iterator
+    pub fn new_array_from<'a, I>(&self, iter: I) -> QpdfArray
+    where
+        I: IntoIterator<Item = QpdfObject<'a>>,
+    {
+        let oh = unsafe { qpdf_sys::qpdf_oh_new_array(self.inner) };
+        let array: QpdfArray = QpdfObject::new(self, oh).into();
+        for item in iter.into_iter() {
+            array.push(&item);
+        }
+        array
     }
 
     /// Create a name object
@@ -470,16 +469,47 @@ impl Qpdf {
         QpdfObject::new(self, oh)
     }
 
-    /// Create a dictionary object
+    /// Create an empty dictionary object
     pub fn new_dictionary(&self) -> QpdfDictionary {
         let oh = unsafe { qpdf_sys::qpdf_oh_new_dictionary(self.inner) };
         QpdfDictionary::new(QpdfObject::new(self, oh))
     }
 
-    /// Create a stream object
-    pub fn new_stream(&self) -> QpdfObject {
+    /// Create a dictionary object from the iterator
+    pub fn new_dictionary_from<'a, I, S>(&self, iter: I) -> QpdfDictionary
+    where
+        I: IntoIterator<Item = (S, QpdfObject<'a>)>,
+        S: AsRef<str>,
+    {
+        let oh = unsafe { qpdf_sys::qpdf_oh_new_dictionary(self.inner) };
+        let dict = QpdfDictionary::new(QpdfObject::new(self, oh));
+        for item in iter.into_iter() {
+            dict.set(item.0.as_ref(), &item.1);
+        }
+        dict
+    }
+
+    /// Create a stream object with the specified contents. The filter and params are not set.
+    pub fn new_stream(&self, data: &[u8]) -> QpdfObject {
         let oh = unsafe { qpdf_sys::qpdf_oh_new_stream(self.inner) };
-        QpdfObject::new(self, oh)
+        let obj = QpdfObject::new(self, oh);
+        obj.replace_stream_data(data, &self.new_null(), &self.new_null());
+        obj
+    }
+
+    /// Create a stream object with specified dictionary and contents. The filter and params are not set.
+    pub fn new_stream_with_dictionary<'a, I, S>(&self, iter: I, data: &[u8]) -> QpdfObject
+    where
+        I: IntoIterator<Item = (S, QpdfObject<'a>)>,
+        S: AsRef<str>,
+    {
+        let stream = self.new_stream(data);
+        let dict = stream.get_stream_dictionary();
+        for item in iter.into_iter() {
+            dict.set(item.0.as_ref(), &item.1);
+        }
+        drop(dict);
+        stream
     }
 
     /// Create an uninitialized object
@@ -929,7 +959,7 @@ impl<'a> QpdfArray<'a> {
     }
 
     /// Append an item to the array
-    pub fn push(&mut self, item: &QpdfObject<'a>) {
+    pub fn push(&self, item: &QpdfObject<'a>) {
         unsafe {
             qpdf_sys::qpdf_oh_append_item(self.inner.owner.inner, self.inner.inner, item.inner);
         }
@@ -986,6 +1016,15 @@ pub struct QpdfDictionary<'a> {
 impl<'a> QpdfDictionary<'a> {
     fn new(inner: QpdfObject<'a>) -> Self {
         QpdfDictionary { inner }
+    }
+
+    /// Check whether there is a key in the dictionary
+    pub fn has(&self, key: &str) -> bool {
+        unsafe {
+            let key_str = CString::new(key).unwrap();
+            qpdf_sys::qpdf_oh_has_key(self.inner.owner.inner, self.inner.inner, key_str.as_ptr())
+                != 0
+        }
     }
 
     /// Get dictionary element for the specified key

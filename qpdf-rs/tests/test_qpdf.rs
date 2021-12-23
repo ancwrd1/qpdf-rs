@@ -13,7 +13,7 @@ fn test_qpdf_version() {
 }
 
 #[test]
-fn test_qpdf_new_objects() {
+fn test_qpdf_basic_objects() {
     let qpdf = Qpdf::new();
     let obj = qpdf.new_bool(true);
     assert!(obj.is_bool() && obj.as_bool());
@@ -38,12 +38,39 @@ fn test_qpdf_new_objects() {
     let obj = qpdf.new_uninitialized();
     assert!(!obj.is_initialized());
 
-    let obj = qpdf.new_stream();
+    let obj = qpdf.new_stream(&[]);
     assert!(obj.is_stream());
     assert_eq!(obj.to_string(), "1 0 R");
 
     let stream_dict = obj.get_stream_dictionary();
     stream_dict.set("/Type", &qpdf.new_name("/Stream"));
+
+    let indirect = obj.make_indirect();
+    assert!(indirect.is_indirect());
+    assert_ne!(indirect.get_id(), 0);
+    assert_eq!(indirect.get_generation(), 0);
+    assert_eq!(indirect.to_string(), "2 0 R");
+}
+
+#[test]
+fn test_qpdf_streams() {
+    let qpdf = Qpdf::new();
+
+    let obj = qpdf.get_object_by_id(1234, 1);
+    assert!(obj.is_err());
+
+    let obj = qpdf.new_stream_with_dictionary([("/Type", qpdf.new_name("/Test"))], &[1, 2, 3, 4]);
+    assert!(obj.is_stream());
+    assert_eq!(obj.to_string(), "1 0 R");
+
+    let by_id = qpdf.get_object_by_id(1, 0).unwrap();
+    println!("{}", by_id.to_string());
+
+    let data = by_id.get_stream_data(StreamDecodeLevel::R3pFull).unwrap();
+    assert_eq!(data.as_ref(), &[1, 2, 3, 4]);
+
+    let stream_dict = obj.get_stream_dictionary();
+    assert_eq!(stream_dict.get("/Type").unwrap().as_name(), "/Test");
 
     let indirect = obj.make_indirect();
     assert!(indirect.is_indirect());
@@ -72,13 +99,10 @@ fn test_error() {
     println!("{:?}", result);
 
     let trailer = qpdf.get_trailer();
-    assert!(trailer.is_none());
+    assert!(trailer.is_err());
 
     let root = qpdf.get_root();
-    assert!(root.is_none());
-
-    let obj = qpdf.get_object_by_id(1234, 1);
-    assert!(obj.is_none());
+    assert!(root.is_err());
 }
 
 #[test]
@@ -150,6 +174,15 @@ fn test_strings() {
 fn test_pdf_ops() {
     let qpdf = load_pdf();
     println!("{:?}", qpdf.get_pdf_version());
+
+    let trailer = qpdf.get_trailer().unwrap();
+    println!("trailer: {}", trailer.inner.to_string());
+
+    let root = qpdf.get_root().unwrap();
+    println!("root: {}", root.inner.to_string());
+    assert_eq!(root.get("/Type").unwrap().as_name(), "/Catalog");
+    assert!(root.has("/Pages"));
+
     let pages = qpdf.get_pages().unwrap();
     assert_eq!(pages.len(), 2);
 
