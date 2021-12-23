@@ -11,8 +11,6 @@ jobs:
         with:
           version: "13.0"
       - uses: actions/checkout@v2
-        with:
-          depth: 50
       - run: git submodule update --init
         shell: bash
       - run: ci/set_rust_version.bash ${{ matrix.channel }} ${{ matrix.target }}
@@ -32,13 +30,12 @@ jobs:
 
   macos:
     runs-on: macos-latest
+    if: ${{ false }}
     steps:
       - uses: KyleMayes/install-llvm-action@v1
         with:
           version: "13.0"
       - uses: actions/checkout@v2
-        with:
-          depth: 50
       - run: git submodule update --init
       - run: ci/set_rust_version.bash ${{ matrix.channel }} ${{ matrix.target }}
       - run: ci/build.bash cargo ${{ matrix.target }}
@@ -53,13 +50,12 @@ jobs:
 
   linux:
     runs-on: ubuntu-latest
+    if: ${{ false }}
     steps:
       - uses: KyleMayes/install-llvm-action@v1
         with:
           version: "13.0"
       - uses: actions/checkout@v2
-        with:
-          depth: 50
       - run: git submodule update --init
       - run: ci/set_rust_version.bash ${{ matrix.channel }} ${{ matrix.target }}
       - run: ci/build.bash cargo ${{ matrix.target }}
