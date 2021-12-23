@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   windows:
     runs-on: windows-latest
+    if: ${{ false }}
     steps:
       - uses: KyleMayes/install-llvm-action@v1
         with:
