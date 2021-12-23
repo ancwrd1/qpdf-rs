@@ -6,6 +6,9 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
+      - uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "13.0"
       - uses: actions/checkout@v2
         with:
           depth: 50
@@ -19,7 +22,7 @@ jobs:
         shell: bash
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         channel: [stable]
         target:
@@ -29,17 +32,19 @@ jobs:
   macos:
     runs-on: macos-latest
     steps:
+      - uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "13.0"
       - uses: actions/checkout@v2
         with:
           depth: 50
-
       - run: git submodule update --init
       - run: ci/set_rust_version.bash ${{ matrix.channel }} ${{ matrix.target }}
       - run: ci/build.bash cargo ${{ matrix.target }}
       - run: ci/test.bash cargo ${{ matrix.target }}
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         channel: [stable]
         target:
@@ -49,17 +54,19 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
+      - uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "13.0"
       - uses: actions/checkout@v2
         with:
           depth: 50
-
       - run: git submodule update --init
       - run: ci/set_rust_version.bash ${{ matrix.channel }} ${{ matrix.target }}
       - run: ci/build.bash cargo ${{ matrix.target }}
       - run: ci/test.bash cargo ${{ matrix.target }}
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         channel: [stable]
         target:
