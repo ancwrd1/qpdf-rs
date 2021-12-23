@@ -190,8 +190,15 @@ fn build_cc(name: &str, dir: &str, files: &[&str]) {
 
 fn build_qpdf() {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
+    let cpp_flag = if env::var("TARGET").unwrap().ends_with("-msvc") {
+        "/std:c++14"
+    } else {
+        "-std=c++14"
+    };
+
     base_build()
         .cpp(true)
+        .flag(cpp_flag)
         .include(root.join("zlib-1.2.11"))
         .include(root.join("jpeg-9d"))
         .include(root.join("qpdf").join("include"))
