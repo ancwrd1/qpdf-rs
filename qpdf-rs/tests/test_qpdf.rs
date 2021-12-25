@@ -21,7 +21,7 @@ fn test_writer() {
         .content_normalization(true)
         .preserve_unreferenced_objects(true)
         .object_stream_mode(ObjectStreamMode::Disable)
-        .linearization(true)
+        .linearize(true)
         .compress_streams(true)
         .stream_data_mode(StreamDataMode::Compress);
 
@@ -73,11 +73,12 @@ fn test_pdf_from_scratch() {
         .content_normalization(true)
         .preserve_unreferenced_objects(true)
         .object_stream_mode(ObjectStreamMode::Preserve)
-        .linearization(true)
+        .linearize(true)
         .compress_streams(false)
         .stream_data_mode(StreamDataMode::Preserve);
 
     let mem = writer.write_to_memory().unwrap();
+    writer.write("/tmp/test.pdf").unwrap();
 
     let mem_pdf = Qpdf::read_from_memory(&mem).unwrap();
     assert_eq!(mem_pdf.get_pdf_version(), "1.7");

@@ -1218,7 +1218,7 @@ pub struct QpdfWriter<'a> {
     preserve_unreferenced_objects: Option<bool>,
     content_normalization: Option<bool>,
     preserve_encryption: Option<bool>,
-    linearization: Option<bool>,
+    linearize: Option<bool>,
     static_id: Option<bool>,
     min_pdf_version: Option<String>,
     force_pdf_version: Option<String>,
@@ -1235,7 +1235,7 @@ impl<'a> QpdfWriter<'a> {
             preserve_unreferenced_objects: None,
             content_normalization: None,
             preserve_encryption: None,
-            linearization: None,
+            linearize: None,
             static_id: None,
             min_pdf_version: None,
             force_pdf_version: None,
@@ -1272,8 +1272,8 @@ impl<'a> QpdfWriter<'a> {
                 );
             }
 
-            if let Some(linearization) = self.linearization {
-                qpdf_sys::qpdf_set_linearization(self.owner.inner, linearization.into());
+            if let Some(linearize) = self.linearize {
+                qpdf_sys::qpdf_set_linearization(self.owner.inner, linearize.into());
             }
 
             if let Some(static_id) = self.static_id {
@@ -1407,11 +1407,12 @@ impl<'a> QpdfWriter<'a> {
     }
 
     /// Enable or disable linearization
-    pub fn linearization(&mut self, flag: bool) -> &mut Self {
-        self.linearization = Some(flag);
+    pub fn linearize(&mut self, flag: bool) -> &mut Self {
+        self.linearize = Some(flag);
         self
     }
 
+    // Enable or disable static ID
     pub fn static_id(&mut self, flag: bool) -> &mut Self {
         self.static_id = Some(flag);
         self
