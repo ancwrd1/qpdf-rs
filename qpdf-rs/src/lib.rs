@@ -7,6 +7,24 @@ use std::{
     ptr, slice,
 };
 
+const EMPTY_PDF: &[u8] = br#"%PDF-1.3
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [] /Count 0 >>
+endobj
+xref
+0 3
+0000000000 65535 f
+0000000009 00000 n
+0000000058 00000 n
+trailer << /Size 3 /Root 1 0 R >>
+startxref
+110
+%%EOF
+"#;
+
 /// Error codes returned by QPDF library calls
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 #[non_exhaustive]
@@ -193,14 +211,18 @@ impl Qpdf {
         }
     }
 
-    /// Create an empty PDF
-    pub fn new() -> Self {
+    fn new() -> Self {
         unsafe {
             let inner = qpdf_sys::qpdf_init();
             qpdf_sys::qpdf_set_suppress_warnings(inner, true.into());
             qpdf_sys::qpdf_silence_errors(inner);
             Qpdf { inner }
         }
+    }
+
+    /// Create an empty PDF
+    pub fn empty() -> Self {
+        Qpdf::read_from_memory(EMPTY_PDF).unwrap()
     }
 
     fn do_read_file<P>(&self, path: P, password: Option<&str>) -> Result<()>
@@ -1193,15 +1215,16 @@ impl Drop for QpdfStreamData {
 pub struct QpdfWriter<'a> {
     owner: &'a Qpdf,
     compress_streams: Option<bool>,
+    preserve_unreferenced_objects: Option<bool>,
+    content_normalization: Option<bool>,
+    preserve_encryption: Option<bool>,
+    linearization: Option<bool>,
+    static_id: Option<bool>,
     min_pdf_version: Option<String>,
     force_pdf_version: Option<String>,
     stream_decode_level: Option<StreamDecodeLevel>,
     object_stream_mode: Option<ObjectStreamMode>,
     stream_data_mode: Option<StreamDataMode>,
-    preserve_unreferenced_objects: Option<bool>,
-    content_normalization: Option<bool>,
-    preserve_encryption: Option<bool>,
-    linearization: Option<bool>,
 }
 
 impl<'a> QpdfWriter<'a> {
@@ -1209,15 +1232,16 @@ impl<'a> QpdfWriter<'a> {
         QpdfWriter {
             owner,
             compress_streams: None,
+            preserve_unreferenced_objects: None,
+            content_normalization: None,
+            preserve_encryption: None,
+            linearization: None,
+            static_id: None,
             min_pdf_version: None,
             force_pdf_version: None,
             stream_decode_level: None,
             object_stream_mode: None,
             stream_data_mode: None,
-            preserve_unreferenced_objects: None,
-            content_normalization: None,
-            preserve_encryption: None,
-            linearization: None,
         }
     }
 
@@ -1250,6 +1274,10 @@ impl<'a> QpdfWriter<'a> {
 
             if let Some(linearization) = self.linearization {
                 qpdf_sys::qpdf_set_linearization(self.owner.inner, linearization.into());
+            }
+
+            if let Some(static_id) = self.static_id {
+                qpdf_sys::qpdf_set_static_ID(self.owner.inner, static_id.into());
             }
 
             if let Some(stream_decode_level) = self.stream_decode_level {
@@ -1381,6 +1409,11 @@ impl<'a> QpdfWriter<'a> {
     /// Enable or disable linearization
     pub fn linearization(&mut self, flag: bool) -> &mut Self {
         self.linearization = Some(flag);
+        self
+    }
+
+    pub fn static_id(&mut self, flag: bool) -> &mut Self {
+        self.static_id = Some(flag);
         self
     }
 }
