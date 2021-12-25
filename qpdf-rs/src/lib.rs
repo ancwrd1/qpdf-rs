@@ -1220,6 +1220,7 @@ pub struct QpdfWriter<'a> {
     preserve_encryption: Option<bool>,
     linearize: Option<bool>,
     static_id: Option<bool>,
+    deterministic_id: Option<bool>,
     min_pdf_version: Option<String>,
     force_pdf_version: Option<String>,
     stream_decode_level: Option<StreamDecodeLevel>,
@@ -1237,6 +1238,7 @@ impl<'a> QpdfWriter<'a> {
             preserve_encryption: None,
             linearize: None,
             static_id: None,
+            deterministic_id: None,
             min_pdf_version: None,
             force_pdf_version: None,
             stream_decode_level: None,
@@ -1278,6 +1280,10 @@ impl<'a> QpdfWriter<'a> {
 
             if let Some(static_id) = self.static_id {
                 qpdf_sys::qpdf_set_static_ID(self.owner.inner, static_id.into());
+            }
+
+            if let Some(deterministic_id) = self.deterministic_id {
+                qpdf_sys::qpdf_set_deterministic_ID(self.owner.inner, deterministic_id.into());
             }
 
             if let Some(stream_decode_level) = self.stream_decode_level {
@@ -1415,6 +1421,12 @@ impl<'a> QpdfWriter<'a> {
     // Enable or disable static ID
     pub fn static_id(&mut self, flag: bool) -> &mut Self {
         self.static_id = Some(flag);
+        self
+    }
+
+    // Enable or disable deterministic ID
+    pub fn deterministic_id(&mut self, flag: bool) -> &mut Self {
+        self.deterministic_id = Some(flag);
         self
     }
 }
