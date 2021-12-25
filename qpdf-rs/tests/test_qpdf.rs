@@ -66,8 +66,8 @@ fn test_pdf_from_scratch() {
 
     qpdf.add_page(&page, true).unwrap();
 
-    let mut writer = qpdf.writer();
-    writer
+    let mem = qpdf
+        .writer()
         .static_id(true)
         .force_pdf_version("1.7")
         .content_normalization(true)
@@ -75,9 +75,9 @@ fn test_pdf_from_scratch() {
         .object_stream_mode(ObjectStreamMode::Preserve)
         .linearize(true)
         .compress_streams(false)
-        .stream_data_mode(StreamDataMode::Preserve);
-
-    let mem = writer.write_to_memory().unwrap();
+        .stream_data_mode(StreamDataMode::Preserve)
+        .write_to_memory()
+        .unwrap();
 
     let mem_pdf = Qpdf::read_from_memory(&mem).unwrap();
     assert_eq!(mem_pdf.get_pdf_version(), "1.7");
