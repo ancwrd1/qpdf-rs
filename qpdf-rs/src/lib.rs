@@ -68,6 +68,66 @@ impl From<NulError> for QpdfError {
 
 pub type Result<T> = std::result::Result<T, QpdfError>;
 
+/// Stream decoding level
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub enum StreamDecodeLevel {
+    None,
+    Generalized,
+    Specialized,
+    All,
+}
+
+impl StreamDecodeLevel {
+    fn as_qpdf_enum(&self) -> qpdf_sys::qpdf_stream_decode_level_e {
+        match self {
+            StreamDecodeLevel::None => qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_none,
+            StreamDecodeLevel::Generalized => {
+                qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_generalized
+            }
+            StreamDecodeLevel::Specialized => {
+                qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_specialized
+            }
+            StreamDecodeLevel::All => qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_all,
+        }
+    }
+}
+
+/// Object stream mode
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub enum ObjectStreamMode {
+    Disable,
+    Preserve,
+    Generate,
+}
+
+impl ObjectStreamMode {
+    fn as_qpdf_enum(&self) -> qpdf_sys::qpdf_object_stream_e {
+        match self {
+            ObjectStreamMode::Disable => qpdf_sys::qpdf_object_stream_e_qpdf_o_disable,
+            ObjectStreamMode::Preserve => qpdf_sys::qpdf_object_stream_e_qpdf_o_preserve,
+            ObjectStreamMode::Generate => qpdf_sys::qpdf_object_stream_e_qpdf_o_generate,
+        }
+    }
+}
+
+/// Object stream mode
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub enum StreamDataMode {
+    Uncompress,
+    Preserve,
+    Compress,
+}
+
+impl StreamDataMode {
+    fn as_qpdf_enum(&self) -> qpdf_sys::qpdf_stream_data_e {
+        match self {
+            StreamDataMode::Uncompress => qpdf_sys::qpdf_stream_data_e_qpdf_s_uncompress,
+            StreamDataMode::Preserve => qpdf_sys::qpdf_stream_data_e_qpdf_s_preserve,
+            StreamDataMode::Compress => qpdf_sys::qpdf_stream_data_e_qpdf_s_compress,
+        }
+    }
+}
+
 /// Qpdf is a data structure which represents a PDF file
 pub struct Qpdf {
     inner: qpdf_sys::qpdf_data,
@@ -143,7 +203,7 @@ impl Qpdf {
         }
     }
 
-    fn do_load_file<P>(&self, path: P, password: Option<&str>) -> Result<()>
+    fn do_read_file<P>(&self, path: P, password: Option<&str>) -> Result<()>
     where
         P: AsRef<Path>,
     {
@@ -179,57 +239,43 @@ impl Qpdf {
         })
     }
 
-    /// Load PDF from the file
-    pub fn load<P>(path: P) -> Result<Self>
+    /// Read PDF from the file
+    pub fn read<P>(path: P) -> Result<Self>
     where
         P: AsRef<Path>,
     {
         let qpdf = Qpdf::new();
-        qpdf.do_load_file(path, None)?;
+        qpdf.do_read_file(path, None)?;
         Ok(qpdf)
     }
 
     /// Load encrypted PDF from the file
-    pub fn load_encrypted<P>(path: P, password: &str) -> Result<Self>
+    pub fn read_encrypted<P>(path: P, password: &str) -> Result<Self>
     where
         P: AsRef<Path>,
     {
         let qpdf = Qpdf::new();
-        qpdf.do_load_file(path, Some(password))?;
+        qpdf.do_read_file(path, Some(password))?;
         Ok(qpdf)
     }
 
     /// Load PDF from memory
-    pub fn load_from_memory(buffer: &[u8]) -> Result<Self> {
+    pub fn read_from_memory(buffer: &[u8]) -> Result<Self> {
         let qpdf = Qpdf::new();
         qpdf.do_load_memory(buffer, None)?;
         Ok(qpdf)
     }
 
     /// Load encrypted PDF from memory
-    pub fn load_from_memory_encrypted(buffer: &[u8], password: &str) -> Result<Self> {
+    pub fn read_from_memory_encrypted(buffer: &[u8], password: &str) -> Result<Self> {
         let qpdf = Qpdf::new();
         qpdf.do_load_memory(buffer, Some(password))?;
         Ok(qpdf)
     }
 
-    /// Save PDF to a file
-    pub fn save<P>(&self, path: P) -> Result<()>
-    where
-        P: AsRef<Path>,
-    {
-        let filename = CString::new(path.as_ref().to_string_lossy().as_ref())?;
-        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_init_write(self.inner, filename.as_ptr()) })?;
-        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_write(self.inner) })
-    }
-
-    /// Save PDF to a memory and return a reference to it owned by the Qpdf object
-    pub fn save_to_memory(&self) -> Result<Vec<u8>> {
-        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_init_write_memory(self.inner) })?;
-        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_write(self.inner) })?;
-        let buffer = unsafe { qpdf_sys::qpdf_get_buffer(self.inner) };
-        let buffer_len = unsafe { qpdf_sys::qpdf_get_buffer_length(self.inner) };
-        unsafe { Ok(slice::from_raw_parts(buffer as *const u8, buffer_len as _).to_vec()) }
+    /// Return QpdfWriter used to write PDF to file or memory
+    pub fn writer(&self) -> QpdfWriter {
+        QpdfWriter::new(self)
     }
 
     /// Check PDF for errors
@@ -245,11 +291,6 @@ impl Qpdf {
     /// Enable or disable xref streams ignorance
     pub fn ignore_xref_streams(&self, flag: bool) {
         unsafe { qpdf_sys::qpdf_set_ignore_xref_streams(self.inner, flag.into()) }
-    }
-
-    /// Enable or disable stream compression
-    pub fn compress_streams(&self, flag: bool) {
-        unsafe { qpdf_sys::qpdf_set_compress_streams(self.inner, flag.into()) }
     }
 
     /// Get PDF version as a string
@@ -1108,24 +1149,6 @@ impl<'a> From<QpdfObject<'a>> for QpdfDictionary<'a> {
     }
 }
 
-/// Stream decoding level
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub enum StreamDecodeLevel {
-    R3pFull,
-    R3pLow,
-    R3pNone,
-}
-
-impl StreamDecodeLevel {
-    fn as_qpdf_enum(&self) -> qpdf_sys::qpdf_stream_decode_level_e {
-        match self {
-            StreamDecodeLevel::R3pFull => qpdf_sys::qpdf_r3_print_e_qpdf_r3p_full,
-            StreamDecodeLevel::R3pLow => qpdf_sys::qpdf_r3_print_e_qpdf_r3p_low,
-            StreamDecodeLevel::R3pNone => qpdf_sys::qpdf_r3_print_e_qpdf_r3p_none,
-        }
-    }
-}
-
 /// This structure holds an owned stream data.
 pub struct QpdfStreamData {
     data: *const u8,
@@ -1163,5 +1186,201 @@ impl Drop for QpdfStreamData {
         unsafe {
             libc::free(self.data as _);
         }
+    }
+}
+
+/// PDF writer with several customizable parameters
+pub struct QpdfWriter<'a> {
+    owner: &'a Qpdf,
+    compress_streams: Option<bool>,
+    min_pdf_version: Option<String>,
+    force_pdf_version: Option<String>,
+    stream_decode_level: Option<StreamDecodeLevel>,
+    object_stream_mode: Option<ObjectStreamMode>,
+    stream_data_mode: Option<StreamDataMode>,
+    preserve_unreferenced_objects: Option<bool>,
+    content_normalization: Option<bool>,
+    preserve_encryption: Option<bool>,
+    linearization: Option<bool>,
+}
+
+impl<'a> QpdfWriter<'a> {
+    fn new(owner: &'a Qpdf) -> Self {
+        QpdfWriter {
+            owner,
+            compress_streams: None,
+            min_pdf_version: None,
+            force_pdf_version: None,
+            stream_decode_level: None,
+            object_stream_mode: None,
+            stream_data_mode: None,
+            preserve_unreferenced_objects: None,
+            content_normalization: None,
+            preserve_encryption: None,
+            linearization: None,
+        }
+    }
+
+    fn process_params(&self) -> Result<()> {
+        unsafe {
+            if let Some(compress_streams) = self.compress_streams {
+                qpdf_sys::qpdf_set_compress_streams(self.owner.inner, compress_streams.into());
+            }
+
+            if let Some(preserve_unreferenced_objects) = self.preserve_unreferenced_objects {
+                qpdf_sys::qpdf_set_preserve_unreferenced_objects(
+                    self.owner.inner,
+                    preserve_unreferenced_objects.into(),
+                );
+            }
+
+            if let Some(content_normalization) = self.content_normalization {
+                qpdf_sys::qpdf_set_content_normalization(
+                    self.owner.inner,
+                    content_normalization.into(),
+                );
+            }
+
+            if let Some(preserve_encryption) = self.preserve_encryption {
+                qpdf_sys::qpdf_set_preserve_encryption(
+                    self.owner.inner,
+                    preserve_encryption.into(),
+                );
+            }
+
+            if let Some(linearization) = self.linearization {
+                qpdf_sys::qpdf_set_linearization(self.owner.inner, linearization.into());
+            }
+
+            if let Some(stream_decode_level) = self.stream_decode_level {
+                qpdf_sys::qpdf_set_decode_level(
+                    self.owner.inner,
+                    stream_decode_level.as_qpdf_enum(),
+                );
+            }
+
+            if let Some(object_stream_mode) = self.object_stream_mode {
+                qpdf_sys::qpdf_set_object_stream_mode(
+                    self.owner.inner,
+                    object_stream_mode.as_qpdf_enum(),
+                );
+            }
+
+            if let Some(stream_data_mode) = self.stream_data_mode {
+                qpdf_sys::qpdf_set_stream_data_mode(
+                    self.owner.inner,
+                    stream_data_mode.as_qpdf_enum(),
+                );
+            }
+
+            if let Some(ref version) = self.min_pdf_version {
+                let version = CString::new(version.as_str())?;
+                self.owner.wrap_ffi_call(|| {
+                    qpdf_sys::qpdf_set_minimum_pdf_version(self.owner.inner, version.as_ptr())
+                })?;
+            }
+            if let Some(ref version) = self.force_pdf_version {
+                let version = CString::new(version.as_str())?;
+                self.owner.wrap_ffi_call(|| {
+                    qpdf_sys::qpdf_force_pdf_version(self.owner.inner, version.as_ptr())
+                })?;
+            }
+        }
+        Ok(())
+    }
+
+    /// Write PDF to a file
+    pub fn write<P>(&self, path: P) -> Result<()>
+    where
+        P: AsRef<Path>,
+    {
+        let filename = CString::new(path.as_ref().to_string_lossy().as_ref())?;
+
+        let inner = self.owner.inner;
+
+        self.owner
+            .wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_init_write(inner, filename.as_ptr()) })?;
+
+        self.process_params()?;
+
+        self.owner
+            .wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_write(inner) })
+    }
+
+    /// Write PDF to a memory and return a reference to it owned by the Qpdf object
+    pub fn write_to_memory(&self) -> Result<Vec<u8>> {
+        let inner = self.owner.inner;
+        self.owner
+            .wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_init_write_memory(inner) })?;
+
+        self.process_params()?;
+
+        self.owner
+            .wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_write(inner) })?;
+
+        let buffer = unsafe { qpdf_sys::qpdf_get_buffer(inner) };
+        let buffer_len = unsafe { qpdf_sys::qpdf_get_buffer_length(inner) };
+
+        unsafe { Ok(slice::from_raw_parts(buffer as *const u8, buffer_len as _).to_vec()) }
+    }
+
+    /// Enable or disable stream compression
+    pub fn compress_streams(&mut self, flag: bool) -> &mut Self {
+        self.compress_streams = Some(flag);
+        self
+    }
+
+    /// Set minimum PDF version
+    pub fn minimum_pdf_version(&mut self, version: &str) -> &mut Self {
+        self.min_pdf_version = Some(version.to_owned());
+        self
+    }
+
+    /// Force a specific PDF version
+    pub fn force_pdf_version(&mut self, version: &str) -> &mut Self {
+        self.force_pdf_version = Some(version.to_owned());
+        self
+    }
+
+    /// Set stream decode level
+    pub fn stream_decode_level(&mut self, level: StreamDecodeLevel) -> &mut Self {
+        self.stream_decode_level = Some(level);
+        self
+    }
+
+    /// Set object stream mode
+    pub fn object_stream_mode(&mut self, mode: ObjectStreamMode) -> &mut Self {
+        self.object_stream_mode = Some(mode);
+        self
+    }
+
+    /// Set stream data mode
+    pub fn stream_data_mode(&mut self, mode: StreamDataMode) -> &mut Self {
+        self.stream_data_mode = Some(mode);
+        self
+    }
+
+    /// Set a flag indicating whether to preserve the unreferenced objects
+    pub fn preserve_unreferenced_objects(&mut self, flag: bool) -> &mut Self {
+        self.preserve_unreferenced_objects = Some(flag);
+        self
+    }
+
+    /// Set a flag indicating whether to normalized contents
+    pub fn content_normalization(&mut self, flag: bool) -> &mut Self {
+        self.content_normalization = Some(flag);
+        self
+    }
+
+    /// Preserve or remove encryption
+    pub fn preserve_encryption(&mut self, flag: bool) -> &mut Self {
+        self.preserve_encryption = Some(flag);
+        self
+    }
+
+    /// Enable or disable linearization
+    pub fn linearization(&mut self, flag: bool) -> &mut Self {
+        self.linearization = Some(flag);
+        self
     }
 }

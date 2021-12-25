@@ -3,13 +3,32 @@ use std::collections::HashSet;
 use qpdf::*;
 
 fn load_pdf() -> Qpdf {
-    Qpdf::load("tests/data/test.pdf").unwrap()
+    Qpdf::read("tests/data/test.pdf").unwrap()
 }
 
 #[test]
 fn test_qpdf_version() {
     assert_eq!(Qpdf::library_version(), "10.5.0");
     println!("{}", Qpdf::library_version());
+}
+
+#[test]
+fn test_writer() {
+    let qpdf = load_pdf();
+    let mut writer = qpdf.writer();
+    writer
+        .force_pdf_version("1.7")
+        .content_normalization(true)
+        .preserve_unreferenced_objects(true)
+        .object_stream_mode(ObjectStreamMode::Disable)
+        .linearization(true)
+        .compress_streams(true)
+        .stream_data_mode(StreamDataMode::Compress);
+
+    let mem = writer.write_to_memory().unwrap();
+
+    let mem_pdf = Qpdf::read_from_memory(&mem).unwrap();
+    assert_eq!(mem_pdf.get_pdf_version(), "1.7");
 }
 
 #[test]
@@ -66,7 +85,7 @@ fn test_qpdf_streams() {
         .unwrap();
     println!("{}", by_id.to_string());
 
-    let data = by_id.get_stream_data(StreamDecodeLevel::R3pFull).unwrap();
+    let data = by_id.get_stream_data(StreamDecodeLevel::None).unwrap();
     assert_eq!(data.as_ref(), &[1, 2, 3, 4]);
 
     let stream_dict = obj.get_stream_dictionary();
@@ -196,8 +215,8 @@ fn test_pdf_ops() {
         qpdf.add_page(&dict.inner.clone(), false).unwrap();
     }
 
-    let buffer = qpdf.save_to_memory().unwrap();
-    let saved_pdf = Qpdf::load_from_memory(&buffer).unwrap();
+    let buffer = qpdf.writer().write_to_memory().unwrap();
+    let saved_pdf = Qpdf::read_from_memory(&buffer).unwrap();
     assert_eq!(saved_pdf.get_num_pages().unwrap(), 4);
 
     let pages = saved_pdf.get_pages().unwrap();
@@ -209,14 +228,14 @@ fn test_pdf_ops() {
 
 #[test]
 fn test_pdf_encrypted() {
-    let qpdf = Qpdf::load("tests/data/encrypted.pdf");
+    let qpdf = Qpdf::read("tests/data/encrypted.pdf");
     assert!(qpdf.is_err());
     println!("{:?}", qpdf);
 
-    let qpdf = Qpdf::load_encrypted("tests/data/encrypted.pdf", "test");
+    let qpdf = Qpdf::read_encrypted("tests/data/encrypted.pdf", "test");
     assert!(qpdf.is_ok());
 
     let data = std::fs::read("tests/data/encrypted.pdf").unwrap();
-    let qpdf = Qpdf::load_from_memory_encrypted(&data, "test");
+    let qpdf = Qpdf::read_from_memory_encrypted(&data, "test");
     assert!(qpdf.is_ok());
 }
