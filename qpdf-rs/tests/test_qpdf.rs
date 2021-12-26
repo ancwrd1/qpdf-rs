@@ -53,13 +53,13 @@ fn test_pdf_from_scratch() {
     let contents = qpdf.new_stream(b"BT /F1 15 Tf 72 720 Td (First Page) Tj ET\n");
     let mediabox = qpdf.parse_object("[0 0 612 792]").unwrap();
     let rfont = qpdf.new_dictionary_from([("/F1", font)]);
-    let resources = qpdf.new_dictionary_from([("/ProcSet", procset), ("/Font", rfont.inner)]);
+    let resources = qpdf.new_dictionary_from([("/ProcSet", procset), ("/Font", rfont.into())]);
     let page = qpdf
         .new_dictionary_from([
             ("/Type", qpdf.new_name("/Page")),
             ("/MediaBox", mediabox),
             ("/Contents", contents),
-            ("/Resources", resources.inner),
+            ("/Resources", resources.into()),
         ])
         .inner
         .make_indirect();

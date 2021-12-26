@@ -554,15 +554,16 @@ impl Qpdf {
     }
 
     /// Create a dictionary object from the iterator
-    pub fn new_dictionary_from<'a, I, S>(&self, iter: I) -> QpdfDictionary
+    pub fn new_dictionary_from<'a, I, S, O>(&self, iter: I) -> QpdfDictionary
     where
-        I: IntoIterator<Item = (S, QpdfObject<'a>)>,
+        I: IntoIterator<Item = (S, O)>,
         S: AsRef<str>,
+        O: Into<QpdfObject<'a>>,
     {
         let oh = unsafe { qpdf_sys::qpdf_oh_new_dictionary(self.inner) };
         let dict = QpdfDictionary::new(QpdfObject::new(self, oh));
         for item in iter.into_iter() {
-            dict.set(item.0.as_ref(), &item.1);
+            dict.set(item.0.as_ref(), &item.1.into());
         }
         dict
     }
@@ -576,15 +577,16 @@ impl Qpdf {
     }
 
     /// Create a stream object with specified dictionary and contents. The filter and params are not set.
-    pub fn new_stream_with_dictionary<'a, I, S>(&self, iter: I, data: &[u8]) -> QpdfObject
+    pub fn new_stream_with_dictionary<'a, I, S, O>(&self, iter: I, data: &[u8]) -> QpdfObject
     where
-        I: IntoIterator<Item = (S, QpdfObject<'a>)>,
+        I: IntoIterator<Item = (S, O)>,
         S: AsRef<str>,
+        O: Into<QpdfObject<'a>>,
     {
         let stream = self.new_stream(data);
         let dict = stream.get_stream_dictionary();
         for item in iter.into_iter() {
-            dict.set(item.0.as_ref(), &item.1);
+            dict.set(item.0.as_ref(), &item.1.into());
         }
         drop(dict);
         stream
@@ -1069,6 +1071,12 @@ impl<'a> From<QpdfObject<'a>> for QpdfArray<'a> {
     }
 }
 
+impl<'a> From<QpdfArray<'a>> for QpdfObject<'a> {
+    fn from(dict: QpdfArray<'a>) -> Self {
+        dict.inner
+    }
+}
+
 /// QpdfArray iterator
 pub struct QpdfArrayIterator<'a> {
     index: usize,
@@ -1168,6 +1176,12 @@ impl<'a> QpdfDictionary<'a> {
 impl<'a> From<QpdfObject<'a>> for QpdfDictionary<'a> {
     fn from(obj: QpdfObject<'a>) -> Self {
         QpdfDictionary::new(obj)
+    }
+}
+
+impl<'a> From<QpdfDictionary<'a>> for QpdfObject<'a> {
+    fn from(dict: QpdfDictionary<'a>) -> Self {
+        dict.inner
     }
 }
 
