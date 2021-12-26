@@ -282,16 +282,16 @@ impl Qpdf {
     }
 
     /// Load PDF from memory
-    pub fn read_from_memory(buffer: &[u8]) -> Result<Self> {
+    pub fn read_from_memory<T: AsRef<[u8]>>(buffer: T) -> Result<Self> {
         let qpdf = Qpdf::new();
-        qpdf.do_load_memory(buffer, None)?;
+        qpdf.do_load_memory(buffer.as_ref(), None)?;
         Ok(qpdf)
     }
 
     /// Load encrypted PDF from memory
-    pub fn read_from_memory_encrypted(buffer: &[u8], password: &str) -> Result<Self> {
+    pub fn read_from_memory_encrypted<T: AsRef<[u8]>>(buffer: T, password: &str) -> Result<Self> {
         let qpdf = Qpdf::new();
-        qpdf.do_load_memory(buffer, Some(password))?;
+        qpdf.do_load_memory(buffer.as_ref(), Some(password))?;
         Ok(qpdf)
     }
 
@@ -343,31 +343,30 @@ impl Qpdf {
     }
 
     /// Add a page object to PDF. The `first` parameter indicates whether to prepend or append it.
-    pub fn add_page<'a>(&self, new_page: &'a QpdfObject, first: bool) -> Result<()> {
+    pub fn add_page<'a, T: AsRef<QpdfObject<'a>>>(&self, new_page: T, first: bool) -> Result<()> {
         self.wrap_ffi_call(|| unsafe {
             qpdf_sys::qpdf_add_page(
                 self.inner,
-                new_page.owner.inner,
-                new_page.inner,
+                new_page.as_ref().owner.inner,
+                new_page.as_ref().inner,
                 first.into(),
             )
         })
     }
 
     /// Add a page object to PDF before or after a specified `ref_page`. A page may belong to another PDF.
-    pub fn add_page_at<'a>(
-        &self,
-        new_page: &'a QpdfObject,
-        before: bool,
-        ref_page: &QpdfObject,
-    ) -> Result<()> {
+    pub fn add_page_at<'a, 'b, N, R>(&'a self, new_page: N, before: bool, ref_page: R) -> Result<()>
+    where
+        N: AsRef<QpdfObject<'b>>,
+        R: AsRef<QpdfObject<'a>>,
+    {
         self.wrap_ffi_call(|| unsafe {
             qpdf_sys::qpdf_add_page_at(
                 self.inner,
-                new_page.owner.inner,
-                new_page.inner,
+                new_page.as_ref().owner.inner,
+                new_page.as_ref().inner,
                 before.into(),
-                ref_page.inner,
+                ref_page.as_ref().inner,
             )
         })
     }
@@ -402,8 +401,10 @@ impl Qpdf {
     }
 
     /// Remove page object from the PDF.
-    pub fn remove_page(&self, page: &QpdfObject) -> Result<()> {
-        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_remove_page(self.inner, page.inner) })
+    pub fn remove_page<'a, P: AsRef<QpdfObject<'a>>>(&self, page: P) -> Result<()> {
+        self.wrap_ffi_call(|| unsafe {
+            qpdf_sys::qpdf_remove_page(self.inner, page.as_ref().inner)
+        })
     }
 
     /// Parse textual representation of PDF object.
@@ -452,9 +453,14 @@ impl Qpdf {
     }
 
     /// Replace indirect object by object id and generation
-    pub fn replace_object(&self, obj_id: u32, gen: u32, object: &QpdfObject) -> Result<()> {
+    pub fn replace_object<'a, O: AsRef<QpdfObject<'a>>>(
+        &self,
+        obj_id: u32,
+        gen: u32,
+        object: O,
+    ) -> Result<()> {
         self.wrap_ffi_call(|| unsafe {
-            qpdf_sys::qpdf_replace_object(self.inner, obj_id as _, gen as _, object.inner)
+            qpdf_sys::qpdf_replace_object(self.inner, obj_id as _, gen as _, object.as_ref().inner)
         })
     }
 
@@ -540,9 +546,13 @@ impl Qpdf {
     }
 
     /// Create a binary string object enclosed in angle brackets
-    pub fn new_binary_string(&self, value: &[u8]) -> QpdfObject {
+    pub fn new_binary_string<V: AsRef<[u8]>>(&self, value: V) -> QpdfObject {
         let oh = unsafe {
-            qpdf_sys::qpdf_oh_new_binary_string(self.inner, value.as_ptr() as _, value.len() as _)
+            qpdf_sys::qpdf_oh_new_binary_string(
+                self.inner,
+                value.as_ref().as_ptr() as _,
+                value.as_ref().len() as _,
+            )
         };
         QpdfObject::new(self, oh)
     }
@@ -569,21 +579,22 @@ impl Qpdf {
     }
 
     /// Create a stream object with the specified contents. The filter and params are not set.
-    pub fn new_stream(&self, data: &[u8]) -> QpdfObject {
+    pub fn new_stream<D: AsRef<[u8]>>(&self, data: D) -> QpdfObject {
         let oh = unsafe { qpdf_sys::qpdf_oh_new_stream(self.inner) };
         let obj = QpdfObject::new(self, oh);
-        obj.replace_stream_data(data, &self.new_null(), &self.new_null());
+        obj.replace_stream_data(data.as_ref(), &self.new_null(), &self.new_null());
         obj
     }
 
     /// Create a stream object with specified dictionary and contents. The filter and params are not set.
-    pub fn new_stream_with_dictionary<'a, I, S, O>(&self, iter: I, data: &[u8]) -> QpdfObject
+    pub fn new_stream_with_dictionary<'a, I, S, O, D>(&self, iter: I, data: D) -> QpdfObject
     where
         I: IntoIterator<Item = (S, O)>,
         S: AsRef<str>,
         O: Into<QpdfObject<'a>>,
+        D: AsRef<[u8]>,
     {
-        let stream = self.new_stream(data);
+        let stream = self.new_stream(data.as_ref());
         let dict = stream.get_stream_dictionary();
         for item in iter.into_iter() {
             dict.set(item.0.as_ref(), &item.1.into());
@@ -598,9 +609,13 @@ impl Qpdf {
         QpdfObject::new(self, oh)
     }
 
-    pub fn copy_from_foreign<'f>(&self, foreign: &QpdfObject<'f>) -> QpdfObject {
+    pub fn copy_from_foreign<'f, O: AsRef<QpdfObject<'f>>>(&self, foreign: O) -> QpdfObject {
         let oh = unsafe {
-            qpdf_sys::qpdf_oh_copy_foreign_object(self.inner, foreign.owner.inner, foreign.inner)
+            qpdf_sys::qpdf_oh_copy_foreign_object(
+                self.inner,
+                foreign.as_ref().owner.inner,
+                foreign.as_ref().inner,
+            )
         };
         QpdfObject::new(self, oh)
     }
@@ -904,15 +919,20 @@ impl<'a> QpdfObject<'a> {
     }
 
     /// Replace stream data
-    pub fn replace_stream_data(&self, data: &[u8], filter: &QpdfObject, params: &QpdfObject) {
+    pub fn replace_stream_data<'b, F, P, D>(&self, data: D, filter: F, params: P)
+    where
+        F: AsRef<QpdfObject<'b>>,
+        P: AsRef<QpdfObject<'b>>,
+        D: AsRef<[u8]>,
+    {
         unsafe {
             qpdf_sys::qpdf_oh_replace_stream_data(
                 self.owner.inner,
                 self.inner,
-                data.as_ptr() as _,
-                data.len() as _,
-                filter.inner,
-                params.inner,
+                data.as_ref().as_ptr() as _,
+                data.as_ref().len() as _,
+                filter.as_ref().inner,
+                params.as_ref().inner,
             );
         }
     }
@@ -935,6 +955,12 @@ impl<'a> QpdfObject<'a> {
     /// Get generation of the indirect object
     pub fn get_generation(&self) -> u32 {
         unsafe { qpdf_sys::qpdf_oh_get_generation(self.owner.inner, self.inner) as _ }
+    }
+}
+
+impl<'a> AsRef<QpdfObject<'a>> for QpdfObject<'a> {
+    fn as_ref(&self) -> &QpdfObject<'a> {
+        self
     }
 }
 
@@ -1027,32 +1053,36 @@ impl<'a> QpdfArray<'a> {
     }
 
     /// Set array item
-    pub fn set(&mut self, index: usize, item: &QpdfObject<'a>) {
+    pub fn set<I: AsRef<QpdfObject<'a>>>(&mut self, index: usize, item: I) {
         unsafe {
             qpdf_sys::qpdf_oh_set_array_item(
                 self.inner.owner.inner,
                 self.inner.inner,
                 index as _,
-                item.inner,
+                item.as_ref().inner,
             );
         }
     }
 
     /// Append an item to the array
-    pub fn push(&self, item: &QpdfObject<'a>) {
+    pub fn push<I: AsRef<QpdfObject<'a>>>(&self, item: I) {
         unsafe {
-            qpdf_sys::qpdf_oh_append_item(self.inner.owner.inner, self.inner.inner, item.inner);
+            qpdf_sys::qpdf_oh_append_item(
+                self.inner.owner.inner,
+                self.inner.inner,
+                item.as_ref().inner,
+            );
         }
     }
 
     /// Insert an item into array
-    pub fn insert(&mut self, index: usize, item: &QpdfObject<'a>) {
+    pub fn insert<I: AsRef<QpdfObject<'a>>>(&mut self, index: usize, item: I) {
         unsafe {
             qpdf_sys::qpdf_oh_insert_item(
                 self.inner.owner.inner,
                 self.inner.inner,
                 index as _,
-                item.inner,
+                item.as_ref().inner,
             );
         }
     }
@@ -1074,6 +1104,12 @@ impl<'a> From<QpdfObject<'a>> for QpdfArray<'a> {
 impl<'a> From<QpdfArray<'a>> for QpdfObject<'a> {
     fn from(dict: QpdfArray<'a>) -> Self {
         dict.inner
+    }
+}
+
+impl<'a> AsRef<QpdfObject<'a>> for QpdfArray<'a> {
+    fn as_ref(&self) -> &QpdfObject<'a> {
+        &self.inner
     }
 }
 
@@ -1132,14 +1168,14 @@ impl<'a> QpdfDictionary<'a> {
     }
 
     /// Set dictionary element for the specified key
-    pub fn set(&self, key: &str, value: &QpdfObject) {
+    pub fn set<V: AsRef<QpdfObject<'a>>>(&self, key: &str, value: V) {
         unsafe {
             let key_str = CString::new(key).unwrap();
             qpdf_sys::qpdf_oh_replace_key(
                 self.inner.owner.inner,
                 self.inner.inner,
                 key_str.as_ptr(),
-                value.inner,
+                value.as_ref().inner,
             );
         }
     }
@@ -1182,6 +1218,12 @@ impl<'a> From<QpdfObject<'a>> for QpdfDictionary<'a> {
 impl<'a> From<QpdfDictionary<'a>> for QpdfObject<'a> {
     fn from(dict: QpdfDictionary<'a>) -> Self {
         dict.inner
+    }
+}
+
+impl<'a> AsRef<QpdfObject<'a>> for QpdfDictionary<'a> {
+    fn as_ref(&self) -> &QpdfObject<'a> {
+        &self.inner
     }
 }
 

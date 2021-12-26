@@ -259,7 +259,7 @@ fn test_pdf_ops() {
         let data = dict.inner.get_page_content_data().unwrap();
         println!("{}", String::from_utf8_lossy(data.as_ref()));
 
-        qpdf.add_page(&dict.inner.clone(), false).unwrap();
+        qpdf.add_page(&dict, false).unwrap();
     }
 
     let buffer = qpdf.writer().write_to_memory().unwrap();
