@@ -43,7 +43,7 @@ fn test_pdf_from_scratch() {
                         /Subtype /Type1
                         /Name /F1
                         /BaseFont /Helvetica
-                        /Encoding /StandardEncoding
+                        /Encoding /WinAnsiEncoding
                       >>"#,
         )
         .unwrap()
@@ -52,7 +52,7 @@ fn test_pdf_from_scratch() {
     let procset = qpdf.parse_object("[/PDF /Text]").unwrap().make_indirect();
     let contents = qpdf.new_stream(b"BT /F1 15 Tf 72 720 Td (First Page) Tj ET\n");
     let mediabox = qpdf.parse_object("[0 0 612 792]").unwrap();
-    let rfont = qpdf.new_dictionary_from([("/Font", font)]);
+    let rfont = qpdf.new_dictionary_from([("/F1", font)]);
     let resources = qpdf.new_dictionary_from([("/ProcSet", procset), ("/Font", rfont.inner)]);
     let page = qpdf
         .new_dictionary_from([
@@ -74,7 +74,7 @@ fn test_pdf_from_scratch() {
         .preserve_unreferenced_objects(true)
         .object_stream_mode(ObjectStreamMode::Preserve)
         .linearize(true)
-        .compress_streams(false)
+        .compress_streams(true)
         .stream_data_mode(StreamDataMode::Preserve)
         .write_to_memory()
         .unwrap();
