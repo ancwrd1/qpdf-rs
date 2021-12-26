@@ -1,16 +1,23 @@
 use std::{
-    ffi::{CStr, CString, NulError},
+    ffi::{CStr, CString},
     fmt,
     path::Path,
     ptr,
 };
 
-pub use crate::dict::QpdfDictionary;
-pub use crate::object::{QpdfArray, QpdfObject};
-pub use crate::writer::QpdfWriter;
+pub use array::*;
+pub use dict::*;
+pub use error::*;
+pub use object::*;
+pub use scalar::*;
+pub use stream::*;
+pub use writer::*;
 
+pub mod array;
 pub mod dict;
+pub mod error;
 pub mod object;
+pub mod scalar;
 pub mod stream;
 pub mod writer;
 
@@ -32,121 +39,7 @@ startxref
 %%EOF
 "#;
 
-/// Error codes returned by QPDF library calls
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub enum QpdfErrorCode {
-    Unknown,
-    InvalidParameter,
-    InternalError,
-    SystemError,
-    Unsupported,
-    InvalidPassword,
-    DamagedPdf,
-    PagesError,
-    ObjectError,
-}
-
-fn error_or_ok(error: qpdf_sys::qpdf_error_code_e) -> Result<()> {
-    let code = match error as qpdf_sys::qpdf_error_code_e {
-        qpdf_sys::qpdf_error_code_e_qpdf_e_success => return Ok(()),
-        qpdf_sys::qpdf_error_code_e_qpdf_e_internal => QpdfErrorCode::InternalError,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_system => QpdfErrorCode::SystemError,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_unsupported => QpdfErrorCode::Unsupported,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_password => QpdfErrorCode::InvalidPassword,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_damaged_pdf => QpdfErrorCode::DamagedPdf,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_pages => QpdfErrorCode::PagesError,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_object => QpdfErrorCode::ObjectError,
-        _ => QpdfErrorCode::Unknown,
-    };
-    Err(QpdfError {
-        error_code: code,
-        description: None,
-        position: None,
-    })
-}
-
-impl Default for QpdfErrorCode {
-    fn default() -> Self {
-        QpdfErrorCode::Unknown
-    }
-}
-
-/// QpdfError holds an error code and an optional extra information
-#[derive(Debug, Clone, PartialEq, PartialOrd, Default)]
-#[non_exhaustive]
-pub struct QpdfError {
-    pub error_code: QpdfErrorCode,
-    pub description: Option<String>,
-    pub position: Option<u64>,
-}
-
-impl From<NulError> for QpdfError {
-    fn from(_: NulError) -> Self {
-        QpdfError {
-            error_code: QpdfErrorCode::InvalidParameter,
-            description: None,
-            position: None,
-        }
-    }
-}
-
 pub type Result<T> = std::result::Result<T, QpdfError>;
-
-/// Stream decoding level
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub enum StreamDecodeLevel {
-    None,
-    Generalized,
-    Specialized,
-    All,
-}
-
-impl StreamDecodeLevel {
-    fn as_qpdf_enum(&self) -> qpdf_sys::qpdf_stream_decode_level_e {
-        match self {
-            StreamDecodeLevel::None => qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_none,
-            StreamDecodeLevel::Generalized => qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_generalized,
-            StreamDecodeLevel::Specialized => qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_specialized,
-            StreamDecodeLevel::All => qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_all,
-        }
-    }
-}
-
-/// Object stream mode
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub enum ObjectStreamMode {
-    Disable,
-    Preserve,
-    Generate,
-}
-
-impl ObjectStreamMode {
-    fn as_qpdf_enum(&self) -> qpdf_sys::qpdf_object_stream_e {
-        match self {
-            ObjectStreamMode::Disable => qpdf_sys::qpdf_object_stream_e_qpdf_o_disable,
-            ObjectStreamMode::Preserve => qpdf_sys::qpdf_object_stream_e_qpdf_o_preserve,
-            ObjectStreamMode::Generate => qpdf_sys::qpdf_object_stream_e_qpdf_o_generate,
-        }
-    }
-}
-
-/// Object stream mode
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-pub enum StreamDataMode {
-    Uncompress,
-    Preserve,
-    Compress,
-}
-
-impl StreamDataMode {
-    fn as_qpdf_enum(&self) -> qpdf_sys::qpdf_stream_data_e {
-        match self {
-            StreamDataMode::Uncompress => qpdf_sys::qpdf_stream_data_e_qpdf_s_uncompress,
-            StreamDataMode::Preserve => qpdf_sys::qpdf_stream_data_e_qpdf_s_preserve,
-            StreamDataMode::Compress => qpdf_sys::qpdf_stream_data_e_qpdf_s_compress,
-        }
-    }
-}
 
 /// Qpdf is a data structure which represents a PDF file
 pub struct Qpdf {
@@ -425,7 +318,7 @@ impl Qpdf {
         self.last_error_or_then(|| ()).ok()?;
         let obj = QpdfObject::new(self, oh);
         if obj.is_initialized() && !obj.is_null() {
-            Some(obj.into())
+            Some(obj)
         } else {
             None
         }
@@ -451,24 +344,24 @@ impl Qpdf {
     }
 
     /// Create an integer object
-    pub fn new_integer(&self, value: i64) -> QpdfObject {
+    pub fn new_integer(&self, value: i64) -> QpdfScalar {
         let oh = unsafe { qpdf_sys::qpdf_oh_new_integer(self.inner, value) };
-        QpdfObject::new(self, oh)
+        QpdfObject::new(self, oh).into()
     }
 
     /// Create a real object from the textual representation
-    pub fn new_real_from_string(&self, value: &str) -> QpdfObject {
+    pub fn new_real_from_string(&self, value: &str) -> QpdfScalar {
         let oh = unsafe {
             let value_str = CString::new(value).unwrap();
             qpdf_sys::qpdf_oh_new_real_from_string(self.inner, value_str.as_ptr())
         };
-        QpdfObject::new(self, oh)
+        QpdfObject::new(self, oh).into()
     }
 
     /// Create a real object from the double value
-    pub fn new_real(&self, value: f64, decimal_places: u32) -> QpdfObject {
+    pub fn new_real(&self, value: f64, decimal_places: u32) -> QpdfScalar {
         let oh = unsafe { qpdf_sys::qpdf_oh_new_real_from_double(self.inner, value, decimal_places as _) };
-        QpdfObject::new(self, oh)
+        QpdfObject::new(self, oh).into()
     }
 
     /// Create an empty array object
@@ -547,15 +440,15 @@ impl Qpdf {
     }
 
     /// Create a stream object with the specified contents. The filter and params are not set.
-    pub fn new_stream<D: AsRef<[u8]>>(&self, data: D) -> QpdfObject {
+    pub fn new_stream<D: AsRef<[u8]>>(&self, data: D) -> QpdfStream {
         let oh = unsafe { qpdf_sys::qpdf_oh_new_stream(self.inner) };
-        let obj = QpdfObject::new(self, oh);
-        obj.replace_stream_data(data.as_ref(), &self.new_null(), &self.new_null());
+        let obj: QpdfStream = QpdfObject::new(self, oh).into();
+        obj.replace_data(data, &self.new_null(), &self.new_null());
         obj
     }
 
     /// Create a stream object with specified dictionary and contents. The filter and params are not set.
-    pub fn new_stream_with_dictionary<'a, I, S, O, T>(&self, iter: I, data: T) -> QpdfObject
+    pub fn new_stream_with_dictionary<'a, I, S, O, T>(&self, iter: I, data: T) -> QpdfStream
     where
         I: IntoIterator<Item = (S, O)>,
         S: AsRef<str>,
@@ -563,7 +456,7 @@ impl Qpdf {
         T: AsRef<[u8]>,
     {
         let stream = self.new_stream(data.as_ref());
-        let dict = stream.get_stream_dictionary();
+        let dict = stream.get_dictionary();
         for item in iter.into_iter() {
             dict.set(item.0.as_ref(), &item.1.into());
         }
@@ -571,13 +464,7 @@ impl Qpdf {
         stream
     }
 
-    /// Create an uninitialized object
-    pub fn new_uninitialized(&self) -> QpdfObject {
-        let oh = unsafe { qpdf_sys::qpdf_oh_new_uninitialized(self.inner) };
-        QpdfObject::new(self, oh)
-    }
-
-    pub fn copy_from_foreign<'f, O: AsRef<QpdfObject<'f>>>(&self, foreign: O) -> QpdfObject {
+    pub fn copy_from_foreign<'f, F: AsRef<QpdfObject<'f>>>(&self, foreign: F) -> QpdfObject {
         let oh = unsafe {
             qpdf_sys::qpdf_oh_copy_foreign_object(self.inner, foreign.as_ref().owner.inner, foreign.as_ref().inner)
         };

@@ -1,4 +1,7 @@
-use std::ffi::{CStr, CString};
+use std::{
+    ffi::{CStr, CString},
+    fmt,
+};
 
 use crate::object::QpdfObject;
 
@@ -15,11 +18,6 @@ impl<'a> QpdfDictionary<'a> {
     /// Return inner QpdfObject
     pub fn inner(&self) -> &QpdfObject {
         &self.inner
-    }
-
-    /// Return string representation of the dictionary
-    pub fn to_string(&self) -> String {
-        self.inner.to_string()
     }
 
     /// Convert object into indirect object
@@ -102,5 +100,11 @@ impl<'a> From<QpdfDictionary<'a>> for QpdfObject<'a> {
 impl<'a> AsRef<QpdfObject<'a>> for QpdfDictionary<'a> {
     fn as_ref(&self) -> &QpdfObject<'a> {
         &self.inner
+    }
+}
+
+impl<'a> fmt::Display for QpdfDictionary<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.inner.fmt(f)
     }
 }

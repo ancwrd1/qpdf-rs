@@ -1,5 +1,6 @@
 use std::collections::HashSet;
 
+use qpdf::scalar::QpdfScalar;
 use qpdf::*;
 
 fn load_pdf() -> Qpdf {
@@ -58,7 +59,7 @@ fn test_pdf_from_scratch() {
         .new_dictionary_from([
             ("/Type", qpdf.new_name("/Page")),
             ("/MediaBox", mediabox),
-            ("/Contents", contents),
+            ("/Contents", contents.into()),
             ("/Resources", resources.into()),
         ])
         .into_indirect();
@@ -95,7 +96,7 @@ fn test_qpdf_basic_objects() {
     assert_eq!(obj.to_string(), "foo");
 
     let obj = qpdf.new_integer(12_3456_7890);
-    assert!(obj.is_scalar() && obj.as_i64() == 12_3456_7890);
+    assert!(obj.inner().is_scalar() && obj.as_i64() == 12_3456_7890);
     assert_eq!(obj.to_string(), "1234567890");
 
     let obj = qpdf.new_null();
@@ -106,17 +107,14 @@ fn test_qpdf_basic_objects() {
     assert_eq!(obj.as_real(), "1.234");
     assert_eq!(obj.to_string(), "1.234");
 
-    let obj = qpdf.new_uninitialized();
-    assert!(!obj.is_initialized());
-
     let obj = qpdf.new_stream(&[]);
-    assert!(obj.is_stream());
+    assert!(obj.inner().is_stream());
     assert_eq!(obj.to_string(), "3 0 R");
 
-    obj.get_stream_dictionary().set("/Type", &qpdf.new_name("/Stream"));
+    obj.get_dictionary().set("/Type", &qpdf.new_name("/Stream"));
 
-    let obj_id = obj.get_id();
-    let indirect = obj.into_indirect();
+    let obj_id = obj.inner().get_id();
+    let indirect = QpdfObject::from(obj).into_indirect();
     assert_ne!(indirect.get_id(), obj_id);
 }
 
@@ -128,17 +126,20 @@ fn test_qpdf_streams() {
     assert!(obj.is_none());
 
     let obj = qpdf.new_stream_with_dictionary([("/Type", qpdf.new_name("/Test"))], &[1, 2, 3, 4]);
-    assert!(obj.is_stream());
+    assert!(obj.inner().is_stream());
 
-    let by_id = qpdf.get_object_by_id(obj.get_id(), obj.get_generation()).unwrap();
+    let by_id: QpdfStream = qpdf
+        .get_object_by_id(obj.inner().get_id(), obj.inner().get_generation())
+        .unwrap()
+        .into();
     println!("{}", by_id.to_string());
 
-    let data = by_id.get_stream_data(StreamDecodeLevel::None).unwrap();
+    let data = by_id.get_data(StreamDecodeLevel::None).unwrap();
     assert_eq!(data.as_ref(), &[1, 2, 3, 4]);
 
-    assert_eq!(obj.get_stream_dictionary().get("/Type").unwrap().as_name(), "/Test");
+    assert_eq!(obj.get_dictionary().get("/Type").unwrap().as_name(), "/Test");
 
-    let indirect = obj.into_indirect();
+    let indirect = QpdfObject::from(obj).into_indirect();
     assert!(indirect.is_indirect());
     assert_ne!(indirect.get_id(), 0);
     assert_eq!(indirect.get_generation(), 0);
@@ -174,7 +175,10 @@ fn test_array() {
 
     assert!(arr.get(10).is_none());
 
-    assert_eq!(arr.iter().map(|v| v.as_i32()).collect::<Vec<_>>(), vec![1, 2, 3]);
+    assert_eq!(
+        arr.iter().map(|v| QpdfScalar::from(v).as_i32()).collect::<Vec<_>>(),
+        vec![1, 2, 3]
+    );
 
     arr.set(1, &qpdf.new_integer(5));
     assert_eq!(arr.to_string(), "[ 1 5 3 ]");
