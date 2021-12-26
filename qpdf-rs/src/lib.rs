@@ -578,12 +578,12 @@ impl Qpdf {
     }
 
     /// Create a stream object with specified dictionary and contents. The filter and params are not set.
-    pub fn new_stream_with_dictionary<'a, I, S, O, D>(&self, iter: I, data: D) -> QpdfObject
+    pub fn new_stream_with_dictionary<'a, I, S, O, T>(&self, iter: I, data: T) -> QpdfObject
     where
         I: IntoIterator<Item = (S, O)>,
         S: AsRef<str>,
         O: Into<QpdfObject<'a>>,
-        D: AsRef<[u8]>,
+        T: AsRef<[u8]>,
     {
         let stream = self.new_stream(data.as_ref());
         let dict = stream.get_stream_dictionary();
