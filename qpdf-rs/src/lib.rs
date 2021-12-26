@@ -158,14 +158,14 @@ impl Qpdf {
         Ok(qpdf)
     }
 
-    /// Load PDF from memory
+    /// Read PDF from memory
     pub fn read_from_memory<T: AsRef<[u8]>>(buffer: T) -> Result<Self> {
         let qpdf = Qpdf::new();
         qpdf.do_load_memory(buffer.as_ref(), None)?;
         Ok(qpdf)
     }
 
-    /// Load encrypted PDF from memory
+    /// Read encrypted PDF from memory
     pub fn read_from_memory_encrypted<T: AsRef<[u8]>>(buffer: T, password: &str) -> Result<Self> {
         let qpdf = Qpdf::new();
         qpdf.do_load_memory(buffer.as_ref(), Some(password))?;

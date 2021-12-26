@@ -112,6 +112,7 @@ impl<'a> QpdfStream<'a> {
         }
     }
 
+    /// Return a dictionary associated with the stream
     pub fn get_dictionary(&self) -> QpdfDictionary {
         unsafe {
             QpdfObject::new(
