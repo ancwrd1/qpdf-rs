@@ -99,12 +99,8 @@ impl StreamDecodeLevel {
     fn as_qpdf_enum(&self) -> qpdf_sys::qpdf_stream_decode_level_e {
         match self {
             StreamDecodeLevel::None => qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_none,
-            StreamDecodeLevel::Generalized => {
-                qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_generalized
-            }
-            StreamDecodeLevel::Specialized => {
-                qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_specialized
-            }
+            StreamDecodeLevel::Generalized => qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_generalized,
+            StreamDecodeLevel::Specialized => qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_specialized,
             StreamDecodeLevel::All => qpdf_sys::qpdf_stream_decode_level_e_qpdf_dl_all,
         }
     }
@@ -181,8 +177,7 @@ impl Qpdf {
             match error_or_ok(code) {
                 Ok(_) => Ok(f()),
                 Err(e) => {
-                    let error_detail =
-                        qpdf_sys::qpdf_get_error_message_detail(self.inner, qpdf_error);
+                    let error_detail = qpdf_sys::qpdf_get_error_message_detail(self.inner, qpdf_error);
 
                     let description = if !error_detail.is_null() {
                         Some(CStr::from_ptr(error_detail).to_string_lossy().into_owned())
@@ -229,23 +224,15 @@ impl Qpdf {
         let filename = CString::new(path.to_string_lossy().as_ref())?;
         let password = password.and_then(|p| CString::new(p).ok());
 
-        let raw_password = password
-            .as_ref()
-            .map(|p| p.as_ptr())
-            .unwrap_or_else(ptr::null);
+        let raw_password = password.as_ref().map(|p| p.as_ptr()).unwrap_or_else(ptr::null);
 
-        self.wrap_ffi_call(|| unsafe {
-            qpdf_sys::qpdf_read(self.inner, filename.as_ptr(), raw_password)
-        })
+        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_read(self.inner, filename.as_ptr(), raw_password) })
     }
 
     pub fn do_load_memory(&self, buf: &[u8], password: Option<&str>) -> Result<()> {
         let password = password.and_then(|p| CString::new(p).ok());
 
-        let raw_password = password
-            .as_ref()
-            .map(|p| p.as_ptr())
-            .unwrap_or_else(ptr::null);
+        let raw_password = password.as_ref().map(|p| p.as_ptr()).unwrap_or_else(ptr::null);
 
         self.wrap_ffi_call(|| unsafe {
             qpdf_sys::qpdf_read_memory(
@@ -385,17 +372,12 @@ impl Qpdf {
 
     /// Get all pages from the PDF.
     pub fn get_pages(&self) -> Result<Vec<QpdfObject>> {
-        Ok((0..self.get_num_pages()?)
-            .map(|i| self.get_page(i))
-            .flatten()
-            .collect())
+        Ok((0..self.get_num_pages()?).map(|i| self.get_page(i)).flatten().collect())
     }
 
     /// Remove page object from the PDF.
     pub fn remove_page<'a, P: AsRef<QpdfObject<'a>>>(&self, page: P) -> Result<()> {
-        self.wrap_ffi_call(|| unsafe {
-            qpdf_sys::qpdf_remove_page(self.inner, page.as_ref().inner)
-        })
+        self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_remove_page(self.inner, page.as_ref().inner) })
     }
 
     /// Parse textual representation of PDF object.
@@ -444,12 +426,7 @@ impl Qpdf {
     }
 
     /// Replace indirect object by object id and generation
-    pub fn replace_object<'a, O: AsRef<QpdfObject<'a>>>(
-        &self,
-        obj_id: u32,
-        gen: u32,
-        object: O,
-    ) -> Result<()> {
+    pub fn replace_object<'a, O: AsRef<QpdfObject<'a>>>(&self, obj_id: u32, gen: u32, object: O) -> Result<()> {
         self.wrap_ffi_call(|| unsafe {
             qpdf_sys::qpdf_replace_object(self.inner, obj_id as _, gen as _, object.as_ref().inner)
         })
@@ -484,9 +461,7 @@ impl Qpdf {
 
     /// Create a real object from the double value
     pub fn new_real(&self, value: f64, decimal_places: u32) -> QpdfObject {
-        let oh = unsafe {
-            qpdf_sys::qpdf_oh_new_real_from_double(self.inner, value, decimal_places as _)
-        };
+        let oh = unsafe { qpdf_sys::qpdf_oh_new_real_from_double(self.inner, value, decimal_places as _) };
         QpdfObject::new(self, oh)
     }
 
@@ -539,11 +514,7 @@ impl Qpdf {
     /// Create a binary string object enclosed in angle brackets
     pub fn new_binary_string<V: AsRef<[u8]>>(&self, value: V) -> QpdfObject {
         let oh = unsafe {
-            qpdf_sys::qpdf_oh_new_binary_string(
-                self.inner,
-                value.as_ref().as_ptr() as _,
-                value.as_ref().len() as _,
-            )
+            qpdf_sys::qpdf_oh_new_binary_string(self.inner, value.as_ref().as_ptr() as _, value.as_ref().len() as _)
         };
         QpdfObject::new(self, oh)
     }
@@ -602,11 +573,7 @@ impl Qpdf {
 
     pub fn copy_from_foreign<'f, O: AsRef<QpdfObject<'f>>>(&self, foreign: O) -> QpdfObject {
         let oh = unsafe {
-            qpdf_sys::qpdf_oh_copy_foreign_object(
-                self.inner,
-                foreign.as_ref().owner.inner,
-                foreign.as_ref().inner,
-            )
+            qpdf_sys::qpdf_oh_copy_foreign_object(self.inner, foreign.as_ref().owner.inner, foreign.as_ref().inner)
         };
         QpdfObject::new(self, oh)
     }
@@ -678,12 +645,7 @@ impl<'a> QpdfObject<'a> {
 
     /// Get this object type
     pub fn get_type(&self) -> QpdfObjectType {
-        unsafe {
-            QpdfObjectType::from_qpdf_enum(qpdf_sys::qpdf_oh_get_type_code(
-                self.owner.inner,
-                self.inner,
-            ))
-        }
+        unsafe { QpdfObjectType::from_qpdf_enum(qpdf_sys::qpdf_oh_get_type_code(self.owner.inner, self.inner)) }
     }
 
     /// 'Unparse' the object converting it to a textual representation
@@ -698,24 +660,18 @@ impl<'a> QpdfObject<'a> {
     /// 'Unparse' the object converting it to a resolved textual representation
     pub fn to_string_resolved(&self) -> String {
         unsafe {
-            CStr::from_ptr(qpdf_sys::qpdf_oh_unparse_resolved(
-                self.owner.inner,
-                self.inner,
-            ))
-            .to_string_lossy()
-            .into_owned()
+            CStr::from_ptr(qpdf_sys::qpdf_oh_unparse_resolved(self.owner.inner, self.inner))
+                .to_string_lossy()
+                .into_owned()
         }
     }
 
     /// 'Unparse' the object converting it to a binary representation
     pub fn to_binary(&self) -> String {
         unsafe {
-            CStr::from_ptr(qpdf_sys::qpdf_oh_unparse_binary(
-                self.owner.inner,
-                self.inner,
-            ))
-            .to_string_lossy()
-            .into_owned()
+            CStr::from_ptr(qpdf_sys::qpdf_oh_unparse_binary(self.owner.inner, self.inner))
+                .to_string_lossy()
+                .into_owned()
         }
     }
 
@@ -827,12 +783,9 @@ impl<'a> QpdfObject<'a> {
     /// Get real value
     pub fn as_real(&self) -> String {
         unsafe {
-            CStr::from_ptr(qpdf_sys::qpdf_oh_get_real_value(
-                self.owner.inner,
-                self.inner,
-            ))
-            .to_string_lossy()
-            .into_owned()
+            CStr::from_ptr(qpdf_sys::qpdf_oh_get_real_value(self.owner.inner, self.inner))
+                .to_string_lossy()
+                .into_owned()
         }
     }
 
@@ -848,12 +801,9 @@ impl<'a> QpdfObject<'a> {
     /// Get string value
     pub fn as_string(&self) -> String {
         unsafe {
-            CStr::from_ptr(qpdf_sys::qpdf_oh_get_utf8_value(
-                self.owner.inner,
-                self.inner,
-            ))
-            .to_string_lossy()
-            .into_owned()
+            CStr::from_ptr(qpdf_sys::qpdf_oh_get_utf8_value(self.owner.inner, self.inner))
+                .to_string_lossy()
+                .into_owned()
         }
     }
 
@@ -861,11 +811,7 @@ impl<'a> QpdfObject<'a> {
     pub fn as_binary_string(&self) -> Vec<u8> {
         unsafe {
             let mut length = 0;
-            let data = qpdf_sys::qpdf_oh_get_binary_string_value(
-                self.owner.inner,
-                self.inner,
-                &mut length,
-            );
+            let data = qpdf_sys::qpdf_oh_get_binary_string_value(self.owner.inner, self.inner, &mut length);
             slice::from_raw_parts(data as *const u8, length as _).to_vec()
         }
     }
@@ -896,12 +842,7 @@ impl<'a> QpdfObject<'a> {
         unsafe {
             let mut len = 0;
             let mut buffer = ptr::null_mut();
-            qpdf_sys::qpdf_oh_get_page_content_data(
-                self.owner.inner,
-                self.inner,
-                &mut buffer,
-                &mut len,
-            );
+            qpdf_sys::qpdf_oh_get_page_content_data(self.owner.inner, self.inner, &mut buffer, &mut len);
             self.owner.last_error_or_then(|| QpdfStreamData {
                 data: buffer as _,
                 len: len as _,
@@ -929,13 +870,7 @@ impl<'a> QpdfObject<'a> {
     }
 
     pub fn get_stream_dictionary(&self) -> QpdfDictionary {
-        unsafe {
-            QpdfObject::new(
-                self.owner,
-                qpdf_sys::qpdf_oh_get_dict(self.owner.inner, self.inner),
-            )
-            .into()
-        }
+        unsafe { QpdfObject::new(self.owner, qpdf_sys::qpdf_oh_get_dict(self.owner.inner, self.inner)).into() }
     }
 
     /// Get ID of the indirect object
@@ -1007,9 +942,7 @@ impl<'a> QpdfArray<'a> {
 
     /// Get array length
     pub fn len(&self) -> usize {
-        unsafe {
-            qpdf_sys::qpdf_oh_get_array_n_items(self.inner.owner.inner, self.inner.inner) as _
-        }
+        unsafe { qpdf_sys::qpdf_oh_get_array_n_items(self.inner.owner.inner, self.inner.inner) as _ }
     }
 
     /// Return true if array is empty
@@ -1019,10 +952,7 @@ impl<'a> QpdfArray<'a> {
 
     /// Return array iterator
     pub fn iter(&self) -> QpdfArrayIterator {
-        QpdfArrayIterator {
-            index: 0,
-            inner: self,
-        }
+        QpdfArrayIterator { index: 0, inner: self }
     }
 
     /// Get array item
@@ -1031,11 +961,7 @@ impl<'a> QpdfArray<'a> {
             Some(unsafe {
                 QpdfObject::new(
                     self.inner.owner,
-                    qpdf_sys::qpdf_oh_get_array_item(
-                        self.inner.owner.inner,
-                        self.inner.inner,
-                        index as _,
-                    ),
+                    qpdf_sys::qpdf_oh_get_array_item(self.inner.owner.inner, self.inner.inner, index as _),
                 )
             })
         } else {
@@ -1058,11 +984,7 @@ impl<'a> QpdfArray<'a> {
     /// Append an item to the array
     pub fn push<I: AsRef<QpdfObject<'a>>>(&self, item: I) {
         unsafe {
-            qpdf_sys::qpdf_oh_append_item(
-                self.inner.owner.inner,
-                self.inner.inner,
-                item.as_ref().inner,
-            );
+            qpdf_sys::qpdf_oh_append_item(self.inner.owner.inner, self.inner.inner, item.as_ref().inner);
         }
     }
 
@@ -1135,8 +1057,7 @@ impl<'a> QpdfDictionary<'a> {
     pub fn has(&self, key: &str) -> bool {
         unsafe {
             let key_str = CString::new(key).unwrap();
-            qpdf_sys::qpdf_oh_has_key(self.inner.owner.inner, self.inner.inner, key_str.as_ptr())
-                != 0
+            qpdf_sys::qpdf_oh_has_key(self.inner.owner.inner, self.inner.inner, key_str.as_ptr()) != 0
         }
     }
 
@@ -1144,11 +1065,7 @@ impl<'a> QpdfDictionary<'a> {
     pub fn get(&self, key: &str) -> Option<QpdfObject> {
         unsafe {
             let key_str = CString::new(key).unwrap();
-            let oh = qpdf_sys::qpdf_oh_get_key(
-                self.inner.owner.inner,
-                self.inner.inner,
-                key_str.as_ptr(),
-            );
+            let oh = qpdf_sys::qpdf_oh_get_key(self.inner.owner.inner, self.inner.inner, key_str.as_ptr());
             let obj = QpdfObject::new(self.inner.owner, oh);
             if !obj.is_null() {
                 Some(obj)
@@ -1175,11 +1092,7 @@ impl<'a> QpdfDictionary<'a> {
     pub fn remove(&self, key: &str) {
         unsafe {
             let key_str = CString::new(key).unwrap();
-            qpdf_sys::qpdf_oh_remove_key(
-                self.inner.owner.inner,
-                self.inner.inner,
-                key_str.as_ptr(),
-            );
+            qpdf_sys::qpdf_oh_remove_key(self.inner.owner.inner, self.inner.inner, key_str.as_ptr());
         }
     }
 
@@ -1308,17 +1221,11 @@ impl<'a> QpdfWriter<'a> {
             }
 
             if let Some(content_normalization) = self.content_normalization {
-                qpdf_sys::qpdf_set_content_normalization(
-                    self.owner.inner,
-                    content_normalization.into(),
-                );
+                qpdf_sys::qpdf_set_content_normalization(self.owner.inner, content_normalization.into());
             }
 
             if let Some(preserve_encryption) = self.preserve_encryption {
-                qpdf_sys::qpdf_set_preserve_encryption(
-                    self.owner.inner,
-                    preserve_encryption.into(),
-                );
+                qpdf_sys::qpdf_set_preserve_encryption(self.owner.inner, preserve_encryption.into());
             }
 
             if let Some(linearize) = self.linearize {
@@ -1334,37 +1241,26 @@ impl<'a> QpdfWriter<'a> {
             }
 
             if let Some(stream_decode_level) = self.stream_decode_level {
-                qpdf_sys::qpdf_set_decode_level(
-                    self.owner.inner,
-                    stream_decode_level.as_qpdf_enum(),
-                );
+                qpdf_sys::qpdf_set_decode_level(self.owner.inner, stream_decode_level.as_qpdf_enum());
             }
 
             if let Some(object_stream_mode) = self.object_stream_mode {
-                qpdf_sys::qpdf_set_object_stream_mode(
-                    self.owner.inner,
-                    object_stream_mode.as_qpdf_enum(),
-                );
+                qpdf_sys::qpdf_set_object_stream_mode(self.owner.inner, object_stream_mode.as_qpdf_enum());
             }
 
             if let Some(stream_data_mode) = self.stream_data_mode {
-                qpdf_sys::qpdf_set_stream_data_mode(
-                    self.owner.inner,
-                    stream_data_mode.as_qpdf_enum(),
-                );
+                qpdf_sys::qpdf_set_stream_data_mode(self.owner.inner, stream_data_mode.as_qpdf_enum());
             }
 
             if let Some(ref version) = self.min_pdf_version {
                 let version = CString::new(version.as_str())?;
-                self.owner.wrap_ffi_call(|| {
-                    qpdf_sys::qpdf_set_minimum_pdf_version(self.owner.inner, version.as_ptr())
-                })?;
+                self.owner
+                    .wrap_ffi_call(|| qpdf_sys::qpdf_set_minimum_pdf_version(self.owner.inner, version.as_ptr()))?;
             }
             if let Some(ref version) = self.force_pdf_version {
                 let version = CString::new(version.as_str())?;
-                self.owner.wrap_ffi_call(|| {
-                    qpdf_sys::qpdf_force_pdf_version(self.owner.inner, version.as_ptr())
-                })?;
+                self.owner
+                    .wrap_ffi_call(|| qpdf_sys::qpdf_force_pdf_version(self.owner.inner, version.as_ptr()))?;
             }
         }
         Ok(())
@@ -1384,8 +1280,7 @@ impl<'a> QpdfWriter<'a> {
 
         self.process_params()?;
 
-        self.owner
-            .wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_write(inner) })
+        self.owner.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_write(inner) })
     }
 
     /// Write PDF to a memory and return a reference to it owned by the Qpdf object
@@ -1396,8 +1291,7 @@ impl<'a> QpdfWriter<'a> {
 
         self.process_params()?;
 
-        self.owner
-            .wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_write(inner) })?;
+        self.owner.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_write(inner) })?;
 
         let buffer = unsafe { qpdf_sys::qpdf_get_buffer(inner) };
         let buffer_len = unsafe { qpdf_sys::qpdf_get_buffer_length(inner) };

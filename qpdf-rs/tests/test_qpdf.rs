@@ -133,9 +133,7 @@ fn test_qpdf_streams() {
     let obj = qpdf.new_stream_with_dictionary([("/Type", qpdf.new_name("/Test"))], &[1, 2, 3, 4]);
     assert!(obj.is_stream());
 
-    let by_id = qpdf
-        .get_object_by_id(obj.get_id(), obj.get_generation())
-        .unwrap();
+    let by_id = qpdf.get_object_by_id(obj.get_id(), obj.get_generation()).unwrap();
     println!("{}", by_id.to_string());
 
     let data = by_id.get_stream_data(StreamDecodeLevel::None).unwrap();
@@ -180,10 +178,7 @@ fn test_array() {
 
     assert!(arr.get(10).is_none());
 
-    assert_eq!(
-        arr.iter().map(|v| v.as_i32()).collect::<Vec<_>>(),
-        vec![1, 2, 3]
-    );
+    assert_eq!(arr.iter().map(|v| v.as_i32()).collect::<Vec<_>>(), vec![1, 2, 3]);
 
     arr.set(1, &qpdf.new_integer(5));
     assert_eq!(arr.inner().to_string(), "[ 1 5 3 ]");
