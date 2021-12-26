@@ -47,9 +47,9 @@ fn test_pdf_from_scratch() {
                       >>"#,
         )
         .unwrap()
-        .make_indirect();
+        .into_indirect();
 
-    let procset = qpdf.parse_object("[/PDF /Text]").unwrap().make_indirect();
+    let procset = qpdf.parse_object("[/PDF /Text]").unwrap().into_indirect();
     let contents = qpdf.new_stream(b"BT /F1 15 Tf 72 720 Td (First Page) Tj ET\n");
     let mediabox = qpdf.parse_object("[0 0 612 792]").unwrap();
     let rfont = qpdf.new_dictionary_from([("/F1", font)]);
@@ -61,8 +61,7 @@ fn test_pdf_from_scratch() {
             ("/Contents", contents),
             ("/Resources", resources.into()),
         ])
-        .inner
-        .make_indirect();
+        .into_indirect();
 
     qpdf.add_page(&page, true).unwrap();
 
@@ -114,13 +113,11 @@ fn test_qpdf_basic_objects() {
     assert!(obj.is_stream());
     assert_eq!(obj.to_string(), "3 0 R");
 
-    let stream_dict = obj.get_stream_dictionary();
-    stream_dict.set("/Type", &qpdf.new_name("/Stream"));
+    obj.get_stream_dictionary().set("/Type", &qpdf.new_name("/Stream"));
 
-    let indirect = obj.make_indirect();
-    assert!(indirect.is_indirect());
-    assert_ne!(indirect.get_id(), obj.get_id());
-    assert_eq!(indirect.get_generation(), obj.get_generation());
+    let obj_id = obj.get_id();
+    let indirect = obj.into_indirect();
+    assert_ne!(indirect.get_id(), obj_id);
 }
 
 #[test]
@@ -139,10 +136,9 @@ fn test_qpdf_streams() {
     let data = by_id.get_stream_data(StreamDecodeLevel::None).unwrap();
     assert_eq!(data.as_ref(), &[1, 2, 3, 4]);
 
-    let stream_dict = obj.get_stream_dictionary();
-    assert_eq!(stream_dict.get("/Type").unwrap().as_name(), "/Test");
+    assert_eq!(obj.get_stream_dictionary().get("/Type").unwrap().as_name(), "/Test");
 
-    let indirect = obj.make_indirect();
+    let indirect = obj.into_indirect();
     assert!(indirect.is_indirect());
     assert_ne!(indirect.get_id(), 0);
     assert_eq!(indirect.get_generation(), 0);
@@ -174,14 +170,14 @@ fn test_array() {
     arr.push(&qpdf.new_integer(1));
     arr.push(&qpdf.new_integer(2));
     arr.push(&qpdf.new_integer(3));
-    assert_eq!(arr.inner().to_string(), "[ 1 2 3 ]");
+    assert_eq!(arr.to_string(), "[ 1 2 3 ]");
 
     assert!(arr.get(10).is_none());
 
     assert_eq!(arr.iter().map(|v| v.as_i32()).collect::<Vec<_>>(), vec![1, 2, 3]);
 
     arr.set(1, &qpdf.new_integer(5));
-    assert_eq!(arr.inner().to_string(), "[ 1 5 3 ]");
+    assert_eq!(arr.to_string(), "[ 1 5 3 ]");
 }
 
 #[test]
@@ -235,10 +231,10 @@ fn test_pdf_ops() {
     println!("{:?}", qpdf.get_pdf_version());
 
     let trailer = qpdf.get_trailer().unwrap();
-    println!("trailer: {}", trailer.inner.to_string());
+    println!("trailer: {}", trailer.to_string());
 
     let root = qpdf.get_root().unwrap();
-    println!("root: {}", root.inner.to_string());
+    println!("root: {}", root.to_string());
     assert_eq!(root.get("/Type").unwrap().as_name(), "/Catalog");
     assert!(root.has("/Pages"));
 
@@ -251,7 +247,7 @@ fn test_pdf_ops() {
         assert!(!keys.is_empty());
         println!("{:?}", keys);
 
-        let data = dict.inner.get_page_content_data().unwrap();
+        let data = dict.inner().get_page_content_data().unwrap();
         println!("{}", String::from_utf8_lossy(data.as_ref()));
 
         qpdf.add_page(&dict, false).unwrap();

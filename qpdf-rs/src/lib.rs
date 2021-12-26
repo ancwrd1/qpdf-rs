@@ -27,7 +27,6 @@ startxref
 
 /// Error codes returned by QPDF library calls
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-#[non_exhaustive]
 pub enum QpdfErrorCode {
     Unknown,
     InvalidParameter,
@@ -676,7 +675,7 @@ impl<'a> QpdfObject<'a> {
     }
 
     /// Create indirect object from this one
-    pub fn make_indirect(&self) -> Self {
+    pub fn into_indirect(self) -> Self {
         unsafe {
             QpdfObject::new(
                 self.owner,
@@ -936,8 +935,19 @@ impl<'a> QpdfArray<'a> {
         QpdfArray { inner }
     }
 
+    /// Return inner object
     pub fn inner(&self) -> &QpdfObject {
         &self.inner
+    }
+
+    /// Return string representation of the dictionary
+    pub fn to_string(&self) -> String {
+        self.inner.to_string()
+    }
+
+    /// Convert object into indirect object
+    pub fn into_indirect(self) -> Self {
+        QpdfArray::new(self.inner.into_indirect())
     }
 
     /// Get array length
@@ -1043,14 +1053,28 @@ impl<'a> Iterator for QpdfArrayIterator<'a> {
 }
 
 /// QpdfDictionary wraps a QpdfObject for dictionary-related operations
-#[non_exhaustive]
 pub struct QpdfDictionary<'a> {
-    pub inner: QpdfObject<'a>,
+    inner: QpdfObject<'a>,
 }
 
 impl<'a> QpdfDictionary<'a> {
     fn new(inner: QpdfObject<'a>) -> Self {
         QpdfDictionary { inner }
+    }
+
+    /// Return inner QpdfObject
+    pub fn inner(&self) -> &QpdfObject {
+        &self.inner
+    }
+
+    /// Return string representation of the dictionary
+    pub fn to_string(&self) -> String {
+        self.inner.to_string()
+    }
+
+    /// Convert object into indirect object
+    pub fn into_indirect(self) -> Self {
+        QpdfDictionary::new(self.inner.into_indirect())
     }
 
     /// Check whether there is a key in the dictionary
