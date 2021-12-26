@@ -225,11 +225,8 @@ impl Qpdf {
         Qpdf::read_from_memory(EMPTY_PDF).unwrap()
     }
 
-    fn do_read_file<P>(&self, path: P, password: Option<&str>) -> Result<()>
-    where
-        P: AsRef<Path>,
-    {
-        let filename = CString::new(path.as_ref().to_string_lossy().as_ref())?;
+    fn do_read_file(&self, path: &Path, password: Option<&str>) -> Result<()> {
+        let filename = CString::new(path.to_string_lossy().as_ref())?;
         let password = password.and_then(|p| CString::new(p).ok());
 
         let raw_password = password
@@ -262,22 +259,16 @@ impl Qpdf {
     }
 
     /// Read PDF from the file
-    pub fn read<P>(path: P) -> Result<Self>
-    where
-        P: AsRef<Path>,
-    {
+    pub fn read<P: AsRef<Path>>(path: P) -> Result<Self> {
         let qpdf = Qpdf::new();
-        qpdf.do_read_file(path, None)?;
+        qpdf.do_read_file(path.as_ref(), None)?;
         Ok(qpdf)
     }
 
     /// Load encrypted PDF from the file
-    pub fn read_encrypted<P>(path: P, password: &str) -> Result<Self>
-    where
-        P: AsRef<Path>,
-    {
+    pub fn read_encrypted<P: AsRef<Path>>(path: P, password: &str) -> Result<Self> {
         let qpdf = Qpdf::new();
-        qpdf.do_read_file(path, Some(password))?;
+        qpdf.do_read_file(path.as_ref(), Some(password))?;
         Ok(qpdf)
     }
 
