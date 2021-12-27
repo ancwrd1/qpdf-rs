@@ -12,11 +12,6 @@ impl<'a> QpdfArray<'a> {
         QpdfArray { inner }
     }
 
-    /// Return inner object
-    pub fn inner(&self) -> &QpdfObject {
-        &self.inner
-    }
-
     /// Get array length
     pub fn len(&self) -> usize {
         unsafe { qpdf_sys::qpdf_oh_get_array_n_items(self.inner.owner.inner, self.inner.inner) as _ }

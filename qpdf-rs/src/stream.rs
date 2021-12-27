@@ -68,11 +68,6 @@ impl<'a> QpdfStream<'a> {
         QpdfStream { inner }
     }
 
-    /// Return inner object
-    pub fn inner(&self) -> &QpdfObject {
-        &self.inner
-    }
-
     /// Replace stream data
     pub fn replace_data<'b, F, P, D>(&self, data: D, filter: F, params: P)
     where

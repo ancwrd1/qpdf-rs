@@ -15,11 +15,6 @@ impl<'a> QpdfDictionary<'a> {
         QpdfDictionary { inner }
     }
 
-    /// Return inner QpdfObject
-    pub fn inner(&self) -> &QpdfObject {
-        &self.inner
-    }
-
     /// Get contents from the page object
     pub fn get_page_content_data(&self) -> Result<QpdfStreamData> {
         unsafe {

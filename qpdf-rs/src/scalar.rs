@@ -12,11 +12,6 @@ impl<'a> QpdfScalar<'a> {
         Self { inner }
     }
 
-    /// Return inner QpdfObject
-    pub fn inner(&self) -> &QpdfObject {
-        &self.inner
-    }
-
     /// Get i64 value
     pub fn as_i64(&self) -> i64 {
         unsafe { qpdf_sys::qpdf_oh_get_int_value(self.inner.owner.inner, self.inner.inner) }
