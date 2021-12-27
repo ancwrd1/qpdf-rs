@@ -61,19 +61,6 @@ const JPEG_SRC: &[&str] = &[
     "jquant1.c",
     "jquant2.c",
     "jutils.c",
-    "rdbmp.c",
-    "rdcolmap.c",
-    "rdgif.c",
-    "rdppm.c",
-    "rdrle.c",
-    "rdswitch.c",
-    "rdtarga.c",
-    "transupp.c",
-    "wrbmp.c",
-    "wrgif.c",
-    "wrppm.c",
-    "wrrle.c",
-    "wrtarga.c",
 ];
 
 const QPDF_SRC: &[&str] = &[
