@@ -19,7 +19,7 @@ fn test_writer() {
     let mut writer = qpdf.writer();
     writer
         .force_pdf_version("1.7")
-        .content_normalization(true)
+        .normalize_content(true)
         .preserve_unreferenced_objects(true)
         .object_stream_mode(ObjectStreamMode::Disable)
         .linearize(true)
@@ -70,7 +70,7 @@ fn test_pdf_from_scratch() {
         .writer()
         .static_id(true)
         .force_pdf_version("1.7")
-        .content_normalization(true)
+        .normalize_content(true)
         .preserve_unreferenced_objects(true)
         .object_stream_mode(ObjectStreamMode::Preserve)
         .linearize(true)

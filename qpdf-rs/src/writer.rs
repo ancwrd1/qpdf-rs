@@ -7,7 +7,7 @@ pub struct QpdfWriter<'a> {
     owner: &'a Qpdf,
     compress_streams: Option<bool>,
     preserve_unreferenced_objects: Option<bool>,
-    content_normalization: Option<bool>,
+    normalize_content: Option<bool>,
     preserve_encryption: Option<bool>,
     linearize: Option<bool>,
     static_id: Option<bool>,
@@ -25,7 +25,7 @@ impl<'a> QpdfWriter<'a> {
             owner,
             compress_streams: None,
             preserve_unreferenced_objects: None,
-            content_normalization: None,
+            normalize_content: None,
             preserve_encryption: None,
             linearize: None,
             static_id: None,
@@ -51,8 +51,8 @@ impl<'a> QpdfWriter<'a> {
                 );
             }
 
-            if let Some(content_normalization) = self.content_normalization {
-                qpdf_sys::qpdf_set_content_normalization(self.owner.inner, content_normalization.into());
+            if let Some(normalize_content) = self.normalize_content {
+                qpdf_sys::qpdf_set_content_normalization(self.owner.inner, normalize_content.into());
             }
 
             if let Some(preserve_encryption) = self.preserve_encryption {
@@ -173,8 +173,8 @@ impl<'a> QpdfWriter<'a> {
     }
 
     /// Set a flag indicating whether to normalized contents
-    pub fn content_normalization(&mut self, flag: bool) -> &mut Self {
-        self.content_normalization = Some(flag);
+    pub fn normalize_content(&mut self, flag: bool) -> &mut Self {
+        self.normalize_content = Some(flag);
         self
     }
 
