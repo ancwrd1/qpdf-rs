@@ -75,11 +75,6 @@ pub trait QpdfObjectLike {
         self.inner().is_indirect()
     }
 
-    /// Return true if the object is initialized
-    fn is_initialized(&self) -> bool {
-        self.inner().is_initialized()
-    }
-
     /// Get boolean value
     fn as_bool(&self) -> bool {
         self.inner().as_bool()
@@ -159,10 +154,6 @@ impl<'a> QpdfObjectLike for QpdfObject<'a> {
 
     fn is_indirect(&self) -> bool {
         unsafe { qpdf_sys::qpdf_oh_is_indirect(self.owner.inner, self.inner) != 0 }
-    }
-
-    fn is_initialized(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_initialized(self.owner.inner, self.inner) != 0 }
     }
 
     fn as_bool(&self) -> bool {

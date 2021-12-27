@@ -21,6 +21,7 @@ pub mod scalar;
 pub mod stream;
 pub mod writer;
 
+// minimal empty PDF
 const EMPTY_PDF: &[u8] = br#"%PDF-1.3
 1 0 obj
 << /Type /Catalog /Pages 2 0 R >>
@@ -293,7 +294,7 @@ impl Qpdf {
         let oh = unsafe { qpdf_sys::qpdf_get_trailer(self.inner) };
         self.last_error_or_then(|| ()).ok()?;
         let obj = QpdfObject::new(self, oh);
-        if obj.is_initialized() && obj.get_type() != QpdfObjectType::Null {
+        if obj.get_type() != QpdfObjectType::Uninitialized && obj.get_type() != QpdfObjectType::Null {
             Some(obj.into())
         } else {
             None
@@ -305,7 +306,7 @@ impl Qpdf {
         let oh = unsafe { qpdf_sys::qpdf_get_root(self.inner) };
         self.last_error_or_then(|| ()).ok()?;
         let obj = QpdfObject::new(self, oh);
-        if obj.is_initialized() && obj.get_type() != QpdfObjectType::Null {
+        if obj.get_type() != QpdfObjectType::Uninitialized && obj.get_type() != QpdfObjectType::Null {
             Some(obj.into())
         } else {
             None
@@ -317,7 +318,7 @@ impl Qpdf {
         let oh = unsafe { qpdf_sys::qpdf_get_object_by_id(self.inner, obj_id as _, gen as _) };
         self.last_error_or_then(|| ()).ok()?;
         let obj = QpdfObject::new(self, oh);
-        if obj.is_initialized() && obj.get_type() != QpdfObjectType::Null {
+        if obj.get_type() != QpdfObjectType::Uninitialized && obj.get_type() != QpdfObjectType::Null {
             Some(obj)
         } else {
             None
