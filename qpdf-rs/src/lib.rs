@@ -257,12 +257,12 @@ impl Qpdf {
     }
 
     /// Get a page object from the PDF with a given zero-based index
-    pub fn get_page(&self, zero_based_index: u32) -> Option<QpdfObject> {
+    pub fn get_page(&self, zero_based_index: u32) -> Option<QpdfDictionary> {
         unsafe {
             let oh = qpdf_sys::qpdf_get_page_n(self.inner, zero_based_index as _);
             self.last_error_or_then(|| ()).ok()?;
             if oh != 0 {
-                Some(QpdfObject::new(self, oh))
+                Some(QpdfObject::new(self, oh).into())
             } else {
                 None
             }
@@ -270,7 +270,7 @@ impl Qpdf {
     }
 
     /// Get all pages from the PDF.
-    pub fn get_pages(&self) -> Result<Vec<QpdfObject>> {
+    pub fn get_pages(&self) -> Result<Vec<QpdfDictionary>> {
         Ok((0..self.get_num_pages()?).map(|i| self.get_page(i)).flatten().collect())
     }
 
