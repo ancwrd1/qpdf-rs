@@ -3,7 +3,7 @@ use std::{cmp::Ordering, ffi::CStr, fmt, ptr, slice};
 use crate::{stream::QpdfStreamData, Qpdf, Result};
 
 /// Types of the QPDF objects
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
 pub enum QpdfObjectType {
     Uninitialized,
     Reserved,

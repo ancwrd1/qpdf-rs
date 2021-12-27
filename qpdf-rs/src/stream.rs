@@ -3,7 +3,7 @@ use std::{fmt, ops::Deref, ptr, slice};
 use crate::{QpdfDictionary, QpdfObject, QpdfObjectLike, Result};
 
 /// Stream decoding level
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
 pub enum StreamDecodeLevel {
     None,
     Generalized,
@@ -23,7 +23,7 @@ impl StreamDecodeLevel {
 }
 
 /// Object stream mode
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
 pub enum ObjectStreamMode {
     Disable,
     Preserve,
@@ -41,7 +41,7 @@ impl ObjectStreamMode {
 }
 
 /// Object stream mode
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
 pub enum StreamDataMode {
     Uncompress,
     Preserve,

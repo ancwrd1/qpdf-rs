@@ -4,7 +4,7 @@ use std::fmt;
 use crate::Result;
 
 /// Error codes returned by QPDF library calls
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
 pub enum QpdfErrorCode {
     Unknown,
     InvalidParameter,
