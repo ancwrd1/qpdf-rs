@@ -1,4 +1,5 @@
 use std::ffi::NulError;
+use std::fmt;
 
 use crate::Result;
 
@@ -43,18 +44,44 @@ impl Default for QpdfErrorCode {
 
 /// QpdfError holds an error code and an optional extra information
 #[derive(Debug, Clone, PartialEq, PartialOrd, Default)]
-#[non_exhaustive]
 pub struct QpdfError {
-    pub error_code: QpdfErrorCode,
-    pub description: Option<String>,
-    pub position: Option<u64>,
+    pub(crate) error_code: QpdfErrorCode,
+    pub(crate) description: Option<String>,
+    pub(crate) position: Option<u64>,
+}
+
+impl fmt::Display for QpdfError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{:?}: {}",
+            self.error_code,
+            self.description.as_deref().unwrap_or_default()
+        )
+    }
+}
+
+impl std::error::Error for QpdfError {}
+
+impl QpdfError {
+    pub fn error_code(&self) -> QpdfErrorCode {
+        self.error_code
+    }
+
+    pub fn description(&self) -> Option<&str> {
+        self.description.as_deref()
+    }
+
+    pub fn position(&self) -> Option<u64> {
+        self.position
+    }
 }
 
 impl From<NulError> for QpdfError {
     fn from(_: NulError) -> Self {
         QpdfError {
             error_code: QpdfErrorCode::InvalidParameter,
-            description: None,
+            description: Some("Unexpected null code in the string parameter".to_owned()),
             position: None,
         }
     }
