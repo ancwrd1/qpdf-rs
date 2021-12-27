@@ -1,9 +1,9 @@
 use std::{
     ffi::{CStr, CString},
-    fmt,
+    fmt, ptr,
 };
 
-use crate::{QpdfObject, QpdfObjectLike};
+use crate::{QpdfObject, QpdfObjectLike, QpdfObjectType, QpdfStreamData, Result};
 
 /// QpdfDictionary wraps a QpdfObject for dictionary-related operations
 pub struct QpdfDictionary<'a> {
@@ -20,6 +20,18 @@ impl<'a> QpdfDictionary<'a> {
         &self.inner
     }
 
+    /// Get contents from the page object
+    pub fn get_page_content_data(&self) -> Result<QpdfStreamData> {
+        unsafe {
+            let mut len = 0;
+            let mut buffer = ptr::null_mut();
+            qpdf_sys::qpdf_oh_get_page_content_data(self.inner.owner.inner, self.inner.inner, &mut buffer, &mut len);
+            self.inner
+                .owner
+                .last_error_or_then(|| QpdfStreamData::new(buffer, len as _))
+        }
+    }
+
     /// Check whether there is a key in the dictionary
     pub fn has(&self, key: &str) -> bool {
         unsafe {
@@ -34,7 +46,7 @@ impl<'a> QpdfDictionary<'a> {
             let key_str = CString::new(key).unwrap();
             let oh = qpdf_sys::qpdf_oh_get_key(self.inner.owner.inner, self.inner.inner, key_str.as_ptr());
             let obj = QpdfObject::new(self.inner.owner, oh);
-            if !obj.is_null() {
+            if obj.get_type() != QpdfObjectType::Null {
                 Some(obj)
             } else {
                 None

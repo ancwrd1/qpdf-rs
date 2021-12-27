@@ -1,6 +1,6 @@
-use std::{cmp::Ordering, ffi::CStr, fmt, ptr, slice};
+use std::{cmp::Ordering, ffi::CStr, fmt, slice};
 
-use crate::{stream::QpdfStreamData, Qpdf, Result};
+use crate::Qpdf;
 
 /// Types of the QPDF objects
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
@@ -60,39 +60,9 @@ pub trait QpdfObjectLike {
         self.inner().to_binary()
     }
 
-    /// Return true if this is a boolean object
-    fn is_bool(&self) -> bool {
-        self.inner().is_bool()
-    }
-
-    /// Return true if this is a real object
-    fn is_real(&self) -> bool {
-        self.inner().is_real()
-    }
-
-    /// Return true if this is an array object
-    fn is_array(&self) -> bool {
-        self.inner().is_array()
-    }
-
-    /// Return true if this is a name object
-    fn is_name(&self) -> bool {
-        self.inner().is_name()
-    }
-
-    /// Return true if this is a string object
-    fn is_string(&self) -> bool {
-        self.inner().is_string()
-    }
-
     /// Return true if this is an operator object
     fn is_operator(&self) -> bool {
         self.inner().is_operator()
-    }
-
-    /// Return true if this is a null object
-    fn is_null(&self) -> bool {
-        self.inner().is_null()
     }
 
     /// Return true if this is a scalar object
@@ -105,24 +75,9 @@ pub trait QpdfObjectLike {
         self.inner().is_indirect()
     }
 
-    /// Return true if this is a dictionary object
-    fn is_dictionary(&self) -> bool {
-        self.inner().is_dictionary()
-    }
-
     /// Return true if the object is initialized
     fn is_initialized(&self) -> bool {
         self.inner().is_initialized()
-    }
-
-    /// Return true if the object contains an inline image
-    fn is_inline_image(&self) -> bool {
-        self.inner().is_inline_image()
-    }
-
-    /// Return true if this is a stream object
-    fn is_stream(&self) -> bool {
-        self.inner().is_stream()
     }
 
     /// Get boolean value
@@ -143,11 +98,6 @@ pub trait QpdfObjectLike {
     /// Get binary string value
     fn as_binary_string(&self) -> Vec<u8> {
         self.inner().as_binary_string()
-    }
-
-    /// Get contents from the page object
-    fn get_page_content_data(&self) -> Result<QpdfStreamData> {
-        self.inner().get_page_content_data()
     }
 
     /// Get ID of the indirect object
@@ -199,32 +149,8 @@ impl<'a> QpdfObjectLike for QpdfObject<'a> {
         }
     }
 
-    fn is_bool(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_bool(self.owner.inner, self.inner) != 0 }
-    }
-
-    fn is_real(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_real(self.owner.inner, self.inner) != 0 }
-    }
-
-    fn is_array(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_array(self.owner.inner, self.inner) != 0 }
-    }
-
-    fn is_name(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_name(self.owner.inner, self.inner) != 0 }
-    }
-
-    fn is_string(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_string(self.owner.inner, self.inner) != 0 }
-    }
-
     fn is_operator(&self) -> bool {
         unsafe { qpdf_sys::qpdf_oh_is_operator(self.owner.inner, self.inner) != 0 }
-    }
-
-    fn is_null(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_null(self.owner.inner, self.inner) != 0 }
     }
 
     fn is_scalar(&self) -> bool {
@@ -235,20 +161,8 @@ impl<'a> QpdfObjectLike for QpdfObject<'a> {
         unsafe { qpdf_sys::qpdf_oh_is_indirect(self.owner.inner, self.inner) != 0 }
     }
 
-    fn is_dictionary(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_dictionary(self.owner.inner, self.inner) != 0 }
-    }
-
     fn is_initialized(&self) -> bool {
         unsafe { qpdf_sys::qpdf_oh_is_initialized(self.owner.inner, self.inner) != 0 }
-    }
-
-    fn is_inline_image(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_inline_image(self.owner.inner, self.inner) != 0 }
-    }
-
-    fn is_stream(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_stream(self.owner.inner, self.inner) != 0 }
     }
 
     fn as_bool(&self) -> bool {
@@ -276,15 +190,6 @@ impl<'a> QpdfObjectLike for QpdfObject<'a> {
             let mut length = 0;
             let data = qpdf_sys::qpdf_oh_get_binary_string_value(self.owner.inner, self.inner, &mut length);
             slice::from_raw_parts(data as *const u8, length as _).to_vec()
-        }
-    }
-
-    fn get_page_content_data(&self) -> Result<QpdfStreamData> {
-        unsafe {
-            let mut len = 0;
-            let mut buffer = ptr::null_mut();
-            qpdf_sys::qpdf_oh_get_page_content_data(self.owner.inner, self.inner, &mut buffer, &mut len);
-            self.owner.last_error_or_then(|| QpdfStreamData::new(buffer, len as _))
         }
     }
 

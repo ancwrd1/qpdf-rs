@@ -85,11 +85,11 @@ fn test_pdf_from_scratch() {
 fn test_qpdf_basic_objects() {
     let qpdf = Qpdf::empty();
     let obj = qpdf.new_bool(true);
-    assert!(obj.is_bool() && obj.as_bool());
+    assert!(obj.get_type() == QpdfObjectType::Boolean && obj.as_bool());
     assert_eq!(obj.to_string(), "true");
 
     let obj = qpdf.new_name("foo");
-    assert!(obj.is_name() && obj.as_name() == "foo");
+    assert!(obj.get_type() == QpdfObjectType::Name && obj.as_name() == "foo");
     assert_eq!(obj.to_string(), "foo");
 
     let obj = qpdf.new_integer(12_3456_7890);
@@ -97,7 +97,7 @@ fn test_qpdf_basic_objects() {
     assert_eq!(obj.to_string(), "1234567890");
 
     let obj = qpdf.new_null();
-    assert!(obj.is_null());
+    assert_eq!(obj.get_type(), QpdfObjectType::Null);
     assert_eq!(obj.to_string(), "null");
 
     let obj = qpdf.new_real(1.2345, 3);
@@ -105,7 +105,7 @@ fn test_qpdf_basic_objects() {
     assert_eq!(obj.to_string(), "1.234");
 
     let obj = qpdf.new_stream(&[]);
-    assert!(obj.is_stream());
+    assert_eq!(obj.get_type(), QpdfObjectType::Stream);
     assert_eq!(obj.to_string(), "3 0 R");
 
     obj.get_dictionary().set("/Type", &qpdf.new_name("/Stream"));
@@ -122,7 +122,7 @@ fn test_qpdf_streams() {
     assert!(obj.is_none());
 
     let obj = qpdf.new_stream_with_dictionary([("/Type", qpdf.new_name("/Test"))], &[1, 2, 3, 4]);
-    assert!(obj.is_stream());
+    assert_eq!(obj.get_type(), QpdfObjectType::Stream);
 
     let by_id: QpdfStream = qpdf
         .get_object_by_id(obj.get_id(), obj.get_generation())
@@ -147,7 +147,7 @@ fn test_parse_object() {
     let text = "<< /Type /Page /Resources << /XObject null >> /MediaBox null /Contents null >>";
     let qpdf = Qpdf::empty();
     let obj = qpdf.parse_object(text).unwrap();
-    assert!(obj.is_dictionary());
+    assert_eq!(obj.get_type(), QpdfObjectType::Dictionary);
     println!("{}", obj.to_string());
     println!("version: {}", qpdf.get_pdf_version());
 }
@@ -198,7 +198,7 @@ fn test_dictionary() {
             .collect::<HashSet<_>>()
     );
 
-    assert!(dict.get("/Type").unwrap().is_name());
+    assert_eq!(dict.get("/Type").unwrap().get_type(), QpdfObjectType::Name);
     assert_eq!(dict.get("/Contents").unwrap().as_string(), "hello");
 
     let bval = qpdf.new_bool(true);

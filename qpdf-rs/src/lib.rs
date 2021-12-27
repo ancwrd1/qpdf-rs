@@ -128,7 +128,7 @@ impl Qpdf {
         self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_read(self.inner, filename.as_ptr(), raw_password) })
     }
 
-    pub fn do_load_memory(&self, buf: &[u8], password: Option<&str>) -> Result<()> {
+    pub fn do_read_from_memory(&self, buf: &[u8], password: Option<&str>) -> Result<()> {
         let password = password.and_then(|p| CString::new(p).ok());
 
         let raw_password = password.as_ref().map(|p| p.as_ptr()).unwrap_or_else(ptr::null);
@@ -161,14 +161,14 @@ impl Qpdf {
     /// Read PDF from memory
     pub fn read_from_memory<T: AsRef<[u8]>>(buffer: T) -> Result<Self> {
         let qpdf = Qpdf::new();
-        qpdf.do_load_memory(buffer.as_ref(), None)?;
+        qpdf.do_read_from_memory(buffer.as_ref(), None)?;
         Ok(qpdf)
     }
 
     /// Read encrypted PDF from memory
     pub fn read_from_memory_encrypted<T: AsRef<[u8]>>(buffer: T, password: &str) -> Result<Self> {
         let qpdf = Qpdf::new();
-        qpdf.do_load_memory(buffer.as_ref(), Some(password))?;
+        qpdf.do_read_from_memory(buffer.as_ref(), Some(password))?;
         Ok(qpdf)
     }
 
@@ -293,7 +293,7 @@ impl Qpdf {
         let oh = unsafe { qpdf_sys::qpdf_get_trailer(self.inner) };
         self.last_error_or_then(|| ()).ok()?;
         let obj = QpdfObject::new(self, oh);
-        if obj.is_initialized() && !obj.is_null() {
+        if obj.is_initialized() && obj.get_type() != QpdfObjectType::Null {
             Some(obj.into())
         } else {
             None
@@ -305,7 +305,7 @@ impl Qpdf {
         let oh = unsafe { qpdf_sys::qpdf_get_root(self.inner) };
         self.last_error_or_then(|| ()).ok()?;
         let obj = QpdfObject::new(self, oh);
-        if obj.is_initialized() && !obj.is_null() {
+        if obj.is_initialized() && obj.get_type() != QpdfObjectType::Null {
             Some(obj.into())
         } else {
             None
@@ -317,7 +317,7 @@ impl Qpdf {
         let oh = unsafe { qpdf_sys::qpdf_get_object_by_id(self.inner, obj_id as _, gen as _) };
         self.last_error_or_then(|| ()).ok()?;
         let obj = QpdfObject::new(self, oh);
-        if obj.is_initialized() && !obj.is_null() {
+        if obj.is_initialized() && obj.get_type() != QpdfObjectType::Null {
             Some(obj)
         } else {
             None
@@ -392,7 +392,7 @@ impl Qpdf {
         QpdfObject::new(self, oh)
     }
 
-    /// Create a UTF-8 unicode string object encoded as a binary string
+    /// Create a string object encoded as a PDF string or binary string
     pub fn new_utf8_string(&self, value: &str) -> QpdfObject {
         let oh = unsafe {
             let value_str = CString::new(value).unwrap();
@@ -464,6 +464,7 @@ impl Qpdf {
         stream
     }
 
+    /// Copy object from the foreign PDF
     pub fn copy_from_foreign<'f, F: AsRef<QpdfObject<'f>>>(&self, foreign: F) -> QpdfObject {
         let oh = unsafe {
             qpdf_sys::qpdf_oh_copy_foreign_object(self.inner, foreign.as_ref().owner.inner, foreign.as_ref().inner)
