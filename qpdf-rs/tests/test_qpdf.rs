@@ -47,24 +47,21 @@ fn test_pdf_from_scratch() {
                         /Encoding /WinAnsiEncoding
                       >>"#,
         )
-        .unwrap()
-        .into_indirect();
+        .unwrap();
 
-    let procset = qpdf.parse_object("[/PDF /Text]").unwrap().into_indirect();
+    let procset = qpdf.parse_object("[/PDF /Text]").unwrap();
     let contents = qpdf.new_stream(b"BT /F1 15 Tf 72 720 Td (First Page) Tj ET\n");
     let mediabox = qpdf.parse_object("[0 0 612 792]").unwrap();
-    let rfont = qpdf.new_dictionary_from([("/F1", font)]);
-    let resources = qpdf.new_dictionary_from([("/ProcSet", procset), ("/Font", rfont.into())]);
-    let page = qpdf
-        .new_dictionary_from([
-            ("/Type", qpdf.new_name("/Page")),
-            ("/MediaBox", mediabox),
-            ("/Contents", contents.into()),
-            ("/Resources", resources.into()),
-        ])
-        .into_indirect();
+    let rfont = qpdf.new_dictionary_from([("/F1", font.make_indirect())]);
+    let resources = qpdf.new_dictionary_from([("/ProcSet", procset.make_indirect()), ("/Font", rfont.into())]);
+    let page = qpdf.new_dictionary_from([
+        ("/Type", qpdf.new_name("/Page")),
+        ("/MediaBox", mediabox),
+        ("/Contents", contents.into()),
+        ("/Resources", resources.into()),
+    ]);
 
-    qpdf.add_page(&page, true).unwrap();
+    qpdf.add_page(&page.make_indirect(), true).unwrap();
 
     let mem = qpdf
         .writer()
@@ -114,8 +111,7 @@ fn test_qpdf_basic_objects() {
     obj.get_dictionary().set("/Type", &qpdf.new_name("/Stream"));
 
     let obj_id = obj.get_id();
-    let indirect = QpdfObject::from(obj).into_indirect();
-    assert_ne!(indirect.get_id(), obj_id);
+    assert_ne!(QpdfObject::from(obj).make_indirect().get_id(), obj_id);
 }
 
 #[test]
@@ -139,7 +135,8 @@ fn test_qpdf_streams() {
 
     assert_eq!(obj.get_dictionary().get("/Type").unwrap().as_name(), "/Test");
 
-    let indirect = QpdfObject::from(obj).into_indirect();
+    let obj = QpdfObject::from(obj);
+    let indirect = obj.make_indirect();
     assert!(indirect.is_indirect());
     assert_ne!(indirect.get_id(), 0);
     assert_eq!(indirect.get_generation(), 0);

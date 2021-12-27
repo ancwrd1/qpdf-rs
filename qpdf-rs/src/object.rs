@@ -45,6 +45,11 @@ pub trait QpdfObjectLike {
     /// Return inner object
     fn inner(&self) -> &QpdfObject;
 
+    /// Create indirect object from this one
+    fn make_indirect(&self) -> QpdfObject {
+        self.inner().make_indirect()
+    }
+
     /// Get this object type
     fn get_type(&self) -> QpdfObjectType {
         self.inner().get_type()
@@ -166,21 +171,20 @@ impl<'a> QpdfObject<'a> {
     pub(crate) fn new(owner: &'a Qpdf, inner: qpdf_sys::qpdf_oh) -> Self {
         QpdfObject { owner, inner }
     }
+}
 
-    /// Create indirect object from this one
-    pub fn into_indirect(self) -> Self {
+impl<'a> QpdfObjectLike for QpdfObject<'a> {
+    fn inner(&self) -> &QpdfObject {
+        self
+    }
+
+    fn make_indirect(&self) -> QpdfObject {
         unsafe {
             QpdfObject::new(
                 self.owner,
                 qpdf_sys::qpdf_make_indirect_object(self.owner.inner, self.inner),
             )
         }
-    }
-}
-
-impl<'a> QpdfObjectLike for QpdfObject<'a> {
-    fn inner(&self) -> &QpdfObject {
-        self
     }
 
     fn get_type(&self) -> QpdfObjectType {

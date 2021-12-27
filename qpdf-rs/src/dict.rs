@@ -20,11 +20,6 @@ impl<'a> QpdfDictionary<'a> {
         &self.inner
     }
 
-    /// Convert object into indirect object
-    pub fn into_indirect(self) -> Self {
-        QpdfDictionary::new(self.inner.into_indirect())
-    }
-
     /// Check whether there is a key in the dictionary
     pub fn has(&self, key: &str) -> bool {
         unsafe {

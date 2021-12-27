@@ -17,11 +17,6 @@ impl<'a> QpdfArray<'a> {
         &self.inner
     }
 
-    /// Convert object into indirect object
-    pub fn into_indirect(self) -> Self {
-        QpdfArray::new(self.inner.into_indirect())
-    }
-
     /// Get array length
     pub fn len(&self) -> usize {
         unsafe { qpdf_sys::qpdf_oh_get_array_n_items(self.inner.owner.inner, self.inner.inner) as _ }
