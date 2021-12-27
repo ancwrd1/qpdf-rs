@@ -1,6 +1,6 @@
 use std::fmt;
 
-use crate::QpdfObject;
+use crate::{QpdfObject, QpdfObjectLike};
 
 /// QpdfArray wraps a QpdfObject for array-specific operations
 pub struct QpdfArray<'a> {
@@ -87,6 +87,12 @@ impl<'a> QpdfArray<'a> {
         unsafe {
             qpdf_sys::qpdf_oh_erase_item(self.inner.owner.inner, self.inner.inner, index as _);
         }
+    }
+}
+
+impl<'a> QpdfObjectLike for QpdfArray<'a> {
+    fn inner(&self) -> &QpdfObject {
+        &self.inner
     }
 }
 

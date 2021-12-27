@@ -3,7 +3,7 @@ use std::{
     fmt,
 };
 
-use crate::object::QpdfObject;
+use crate::{QpdfObject, QpdfObjectLike};
 
 /// QpdfDictionary wraps a QpdfObject for dictionary-related operations
 pub struct QpdfDictionary<'a> {
@@ -82,6 +82,12 @@ impl<'a> QpdfDictionary<'a> {
             }
         }
         keys
+    }
+}
+
+impl<'a> QpdfObjectLike for QpdfDictionary<'a> {
+    fn inner(&self) -> &QpdfObject {
+        &self.inner
     }
 }
 

@@ -1,6 +1,6 @@
 use std::{fmt, ops::Deref, ptr, slice};
 
-use crate::{QpdfDictionary, QpdfObject, Result};
+use crate::{QpdfDictionary, QpdfObject, QpdfObjectLike, Result};
 
 /// Stream decoding level
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
@@ -121,6 +121,12 @@ impl<'a> QpdfStream<'a> {
             )
             .into()
         }
+    }
+}
+
+impl<'a> QpdfObjectLike for QpdfStream<'a> {
+    fn inner(&self) -> &QpdfObject {
+        &self.inner
     }
 }
 

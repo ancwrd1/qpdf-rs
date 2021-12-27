@@ -1,6 +1,6 @@
 use std::{ffi::CStr, fmt};
 
-use crate::QpdfObject;
+use crate::{QpdfObject, QpdfObjectLike};
 
 /// QpdfScalar represents scalar objects such as integer and real
 pub struct QpdfScalar<'a> {
@@ -52,6 +52,12 @@ impl<'a> QpdfScalar<'a> {
             .to_string_lossy()
             .into_owned()
         }
+    }
+}
+
+impl<'a> QpdfObjectLike for QpdfScalar<'a> {
+    fn inner(&self) -> &QpdfObject {
+        &self.inner
     }
 }
 

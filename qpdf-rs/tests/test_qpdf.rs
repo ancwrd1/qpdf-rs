@@ -96,7 +96,7 @@ fn test_qpdf_basic_objects() {
     assert_eq!(obj.to_string(), "foo");
 
     let obj = qpdf.new_integer(12_3456_7890);
-    assert!(obj.inner().is_scalar() && obj.as_i64() == 12_3456_7890);
+    assert!(obj.is_scalar() && obj.as_i64() == 12_3456_7890);
     assert_eq!(obj.to_string(), "1234567890");
 
     let obj = qpdf.new_null();
@@ -108,12 +108,12 @@ fn test_qpdf_basic_objects() {
     assert_eq!(obj.to_string(), "1.234");
 
     let obj = qpdf.new_stream(&[]);
-    assert!(obj.inner().is_stream());
+    assert!(obj.is_stream());
     assert_eq!(obj.to_string(), "3 0 R");
 
     obj.get_dictionary().set("/Type", &qpdf.new_name("/Stream"));
 
-    let obj_id = obj.inner().get_id();
+    let obj_id = obj.get_id();
     let indirect = QpdfObject::from(obj).into_indirect();
     assert_ne!(indirect.get_id(), obj_id);
 }
@@ -126,10 +126,10 @@ fn test_qpdf_streams() {
     assert!(obj.is_none());
 
     let obj = qpdf.new_stream_with_dictionary([("/Type", qpdf.new_name("/Test"))], &[1, 2, 3, 4]);
-    assert!(obj.inner().is_stream());
+    assert!(obj.is_stream());
 
     let by_id: QpdfStream = qpdf
-        .get_object_by_id(obj.inner().get_id(), obj.inner().get_generation())
+        .get_object_by_id(obj.get_id(), obj.get_generation())
         .unwrap()
         .into();
     println!("{}", by_id.to_string());
@@ -251,7 +251,7 @@ fn test_pdf_ops() {
         assert!(!keys.is_empty());
         println!("{:?}", keys);
 
-        let data = dict.inner().get_page_content_data().unwrap();
+        let data = dict.get_page_content_data().unwrap();
         println!("{}", String::from_utf8_lossy(data.as_ref()));
 
         qpdf.add_page(&dict, false).unwrap();
