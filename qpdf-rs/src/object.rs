@@ -45,6 +45,10 @@ pub trait QpdfObjectLike {
     /// Return inner object
     fn inner(&self) -> &QpdfObject;
 
+    fn owner(&self) -> &Qpdf {
+        self.inner().owner
+    }
+
     /// Get this object type
     fn get_type(&self) -> QpdfObjectType {
         self.inner().get_type()
@@ -119,22 +123,14 @@ impl<'a> QpdfObjectLike for QpdfObject<'a> {
     }
 
     fn get_type(&self) -> QpdfObjectType {
-        unsafe {
-            QpdfObjectType::from_qpdf_enum(qpdf_sys::qpdf_oh_get_type_code(
-                self.owner.inner,
-                self.inner,
-            ))
-        }
+        unsafe { QpdfObjectType::from_qpdf_enum(qpdf_sys::qpdf_oh_get_type_code(self.owner.inner, self.inner)) }
     }
 
     fn to_binary(&self) -> String {
         unsafe {
-            CStr::from_ptr(qpdf_sys::qpdf_oh_unparse_binary(
-                self.owner.inner,
-                self.inner,
-            ))
-            .to_string_lossy()
-            .into_owned()
+            CStr::from_ptr(qpdf_sys::qpdf_oh_unparse_binary(self.owner.inner, self.inner))
+                .to_string_lossy()
+                .into_owned()
         }
     }
 
@@ -164,23 +160,16 @@ impl<'a> QpdfObjectLike for QpdfObject<'a> {
 
     fn as_string(&self) -> String {
         unsafe {
-            CStr::from_ptr(qpdf_sys::qpdf_oh_get_utf8_value(
-                self.owner.inner,
-                self.inner,
-            ))
-            .to_string_lossy()
-            .into_owned()
+            CStr::from_ptr(qpdf_sys::qpdf_oh_get_utf8_value(self.owner.inner, self.inner))
+                .to_string_lossy()
+                .into_owned()
         }
     }
 
     fn as_binary_string(&self) -> Vec<u8> {
         unsafe {
             let mut length = 0;
-            let data = qpdf_sys::qpdf_oh_get_binary_string_value(
-                self.owner.inner,
-                self.inner,
-                &mut length,
-            );
+            let data = qpdf_sys::qpdf_oh_get_binary_string_value(self.owner.inner, self.inner, &mut length);
             slice::from_raw_parts(data as *const u8, length as _).to_vec()
         }
     }
@@ -242,8 +231,7 @@ impl<'a> fmt::Display for QpdfObject<'a> {
             write!(
                 f,
                 "{}",
-                CStr::from_ptr(qpdf_sys::qpdf_oh_unparse(self.owner.inner, self.inner))
-                    .to_string_lossy()
+                CStr::from_ptr(qpdf_sys::qpdf_oh_unparse(self.owner.inner, self.inner)).to_string_lossy()
             )
         }
     }
