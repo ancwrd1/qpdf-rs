@@ -472,6 +472,16 @@ impl Qpdf {
         };
         QpdfObject::new(self, oh)
     }
+
+    /// Create indirect object
+    pub fn make_indirect<'a, O: AsRef<QpdfObject<'a>>>(&self, obj: O) -> QpdfObject {
+        unsafe {
+            QpdfObject::new(
+                self,
+                qpdf_sys::qpdf_make_indirect_object(self.inner, obj.as_ref().inner),
+            )
+        }
+    }
 }
 
 impl Default for Qpdf {
