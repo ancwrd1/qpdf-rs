@@ -3,12 +3,12 @@ use std::{ffi::CStr, fmt};
 use crate::{QpdfObject, QpdfObjectLike};
 
 /// QpdfScalar represents scalar objects such as integer and real
-pub struct QpdfScalar<'a> {
-    inner: QpdfObject<'a>,
+pub struct QpdfScalar {
+    inner: QpdfObject,
 }
 
-impl<'a> QpdfScalar<'a> {
-    pub(crate) fn new(inner: QpdfObject<'a>) -> Self {
+impl QpdfScalar {
+    pub(crate) fn new(inner: QpdfObject) -> Self {
         Self { inner }
     }
 
@@ -50,31 +50,31 @@ impl<'a> QpdfScalar<'a> {
     }
 }
 
-impl<'a> QpdfObjectLike for QpdfScalar<'a> {
+impl QpdfObjectLike for QpdfScalar {
     fn inner(&self) -> &QpdfObject {
         &self.inner
     }
 }
 
-impl<'a> From<QpdfObject<'a>> for QpdfScalar<'a> {
-    fn from(obj: QpdfObject<'a>) -> Self {
+impl From<QpdfObject> for QpdfScalar {
+    fn from(obj: QpdfObject) -> Self {
         QpdfScalar::new(obj)
     }
 }
 
-impl<'a> From<QpdfScalar<'a>> for QpdfObject<'a> {
-    fn from(dict: QpdfScalar<'a>) -> Self {
+impl From<QpdfScalar> for QpdfObject {
+    fn from(dict: QpdfScalar) -> Self {
         dict.inner
     }
 }
 
-impl<'a> AsRef<QpdfObject<'a>> for QpdfScalar<'a> {
-    fn as_ref(&self) -> &QpdfObject<'a> {
+impl AsRef<QpdfObject> for QpdfScalar {
+    fn as_ref(&self) -> &QpdfObject {
         &self.inner
     }
 }
 
-impl<'a> fmt::Display for QpdfScalar<'a> {
+impl fmt::Display for QpdfScalar {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.inner.fmt(f)
     }

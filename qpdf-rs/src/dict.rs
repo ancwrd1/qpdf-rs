@@ -6,12 +6,12 @@ use std::{
 use crate::{QpdfObject, QpdfObjectLike, QpdfObjectType, QpdfStreamData, Result};
 
 /// QpdfDictionary wraps a QpdfObject for dictionary-related operations
-pub struct QpdfDictionary<'a> {
-    inner: QpdfObject<'a>,
+pub struct QpdfDictionary {
+    inner: QpdfObject,
 }
 
-impl<'a> QpdfDictionary<'a> {
-    pub(crate) fn new(inner: QpdfObject<'a>) -> Self {
+impl QpdfDictionary {
+    pub(crate) fn new(inner: QpdfObject) -> Self {
         QpdfDictionary { inner }
     }
 
@@ -40,7 +40,7 @@ impl<'a> QpdfDictionary<'a> {
         unsafe {
             let key_str = CString::new(key).unwrap();
             let oh = qpdf_sys::qpdf_oh_get_key(self.inner.owner.inner, self.inner.inner, key_str.as_ptr());
-            let obj = QpdfObject::new(self.inner.owner, oh);
+            let obj = QpdfObject::new(self.inner.owner.clone(), oh);
             if obj.get_type() != QpdfObjectType::Null {
                 Some(obj)
             } else {
@@ -50,7 +50,7 @@ impl<'a> QpdfDictionary<'a> {
     }
 
     /// Set dictionary element for the specified key
-    pub fn set<V: AsRef<QpdfObject<'a>>>(&self, key: &str, value: V) {
+    pub fn set<V: AsRef<QpdfObject>>(&self, key: &str, value: V) {
         unsafe {
             let key_str = CString::new(key).unwrap();
             qpdf_sys::qpdf_oh_replace_key(
@@ -87,31 +87,31 @@ impl<'a> QpdfDictionary<'a> {
     }
 }
 
-impl<'a> QpdfObjectLike for QpdfDictionary<'a> {
+impl QpdfObjectLike for QpdfDictionary {
     fn inner(&self) -> &QpdfObject {
         &self.inner
     }
 }
 
-impl<'a> From<QpdfObject<'a>> for QpdfDictionary<'a> {
-    fn from(obj: QpdfObject<'a>) -> Self {
+impl From<QpdfObject> for QpdfDictionary {
+    fn from(obj: QpdfObject) -> Self {
         QpdfDictionary::new(obj)
     }
 }
 
-impl<'a> From<QpdfDictionary<'a>> for QpdfObject<'a> {
-    fn from(dict: QpdfDictionary<'a>) -> Self {
+impl From<QpdfDictionary> for QpdfObject {
+    fn from(dict: QpdfDictionary) -> Self {
         dict.inner
     }
 }
 
-impl<'a> AsRef<QpdfObject<'a>> for QpdfDictionary<'a> {
-    fn as_ref(&self) -> &QpdfObject<'a> {
+impl AsRef<QpdfObject> for QpdfDictionary {
+    fn as_ref(&self) -> &QpdfObject {
         &self.inner
     }
 }
 
-impl<'a> fmt::Display for QpdfDictionary<'a> {
+impl fmt::Display for QpdfDictionary {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.inner.fmt(f)
     }

@@ -3,12 +3,12 @@ use std::fmt;
 use crate::{QpdfObject, QpdfObjectLike};
 
 /// QpdfArray wraps a QpdfObject for array-specific operations
-pub struct QpdfArray<'a> {
-    inner: QpdfObject<'a>,
+pub struct QpdfArray {
+    inner: QpdfObject,
 }
 
-impl<'a> QpdfArray<'a> {
-    fn new(inner: QpdfObject<'a>) -> Self {
+impl QpdfArray {
+    fn new(inner: QpdfObject) -> Self {
         QpdfArray { inner }
     }
 
@@ -32,7 +32,7 @@ impl<'a> QpdfArray<'a> {
         if index < self.len() {
             Some(unsafe {
                 QpdfObject::new(
-                    self.inner.owner,
+                    self.inner.owner.clone(),
                     qpdf_sys::qpdf_oh_get_array_item(self.inner.owner.inner, self.inner.inner, index as _),
                 )
             })
@@ -42,7 +42,7 @@ impl<'a> QpdfArray<'a> {
     }
 
     /// Set array item
-    pub fn set<I: AsRef<QpdfObject<'a>>>(&mut self, index: usize, item: I) {
+    pub fn set<I: AsRef<QpdfObject>>(&mut self, index: usize, item: I) {
         unsafe {
             qpdf_sys::qpdf_oh_set_array_item(
                 self.inner.owner.inner,
@@ -54,14 +54,14 @@ impl<'a> QpdfArray<'a> {
     }
 
     /// Append an item to the array
-    pub fn push<I: AsRef<QpdfObject<'a>>>(&self, item: I) {
+    pub fn push<I: AsRef<QpdfObject>>(&self, item: I) {
         unsafe {
             qpdf_sys::qpdf_oh_append_item(self.inner.owner.inner, self.inner.inner, item.as_ref().inner);
         }
     }
 
     /// Insert an item into array
-    pub fn insert<I: AsRef<QpdfObject<'a>>>(&mut self, index: usize, item: I) {
+    pub fn insert<I: AsRef<QpdfObject>>(&mut self, index: usize, item: I) {
         unsafe {
             qpdf_sys::qpdf_oh_insert_item(
                 self.inner.owner.inner,
@@ -80,26 +80,26 @@ impl<'a> QpdfArray<'a> {
     }
 }
 
-impl<'a> QpdfObjectLike for QpdfArray<'a> {
+impl QpdfObjectLike for QpdfArray {
     fn inner(&self) -> &QpdfObject {
         &self.inner
     }
 }
 
-impl<'a> From<QpdfObject<'a>> for QpdfArray<'a> {
-    fn from(obj: QpdfObject<'a>) -> Self {
+impl From<QpdfObject> for QpdfArray {
+    fn from(obj: QpdfObject) -> Self {
         QpdfArray::new(obj)
     }
 }
 
-impl<'a> From<QpdfArray<'a>> for QpdfObject<'a> {
-    fn from(dict: QpdfArray<'a>) -> Self {
+impl From<QpdfArray> for QpdfObject {
+    fn from(dict: QpdfArray) -> Self {
         dict.inner
     }
 }
 
-impl<'a> AsRef<QpdfObject<'a>> for QpdfArray<'a> {
-    fn as_ref(&self) -> &QpdfObject<'a> {
+impl AsRef<QpdfObject> for QpdfArray {
+    fn as_ref(&self) -> &QpdfObject {
         &self.inner
     }
 }
@@ -107,11 +107,11 @@ impl<'a> AsRef<QpdfObject<'a>> for QpdfArray<'a> {
 /// QpdfArray iterator
 pub struct QpdfArrayIterator<'a> {
     index: usize,
-    inner: &'a QpdfArray<'a>,
+    inner: &'a QpdfArray,
 }
 
 impl<'a> Iterator for QpdfArrayIterator<'a> {
-    type Item = QpdfObject<'a>;
+    type Item = QpdfObject;
 
     fn next(&mut self) -> Option<Self::Item> {
         let item = self.inner.get(self.index);
@@ -120,7 +120,7 @@ impl<'a> Iterator for QpdfArrayIterator<'a> {
     }
 }
 
-impl<'a> fmt::Display for QpdfArray<'a> {
+impl fmt::Display for QpdfArray {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.inner.fmt(f)
     }

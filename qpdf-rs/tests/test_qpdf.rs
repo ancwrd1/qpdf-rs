@@ -1,9 +1,10 @@
 use std::collections::HashSet;
+use std::rc::Rc;
 
 use qpdf::scalar::QpdfScalar;
 use qpdf::*;
 
-fn load_pdf() -> Qpdf {
+fn load_pdf() -> Rc<Qpdf> {
     Qpdf::read("tests/data/test.pdf").unwrap()
 }
 
@@ -52,8 +53,8 @@ fn test_pdf_from_scratch() {
     let procset = qpdf.parse_object("[/PDF /Text]").unwrap();
     let contents = qpdf.new_stream(b"BT /F1 15 Tf 72 720 Td (First Page) Tj ET\n");
     let mediabox = qpdf.parse_object("[0 0 612 792]").unwrap();
-    let rfont = qpdf.new_dictionary_from([("/F1", qpdf.make_indirect(&font))]);
-    let resources = qpdf.new_dictionary_from([("/ProcSet", qpdf.make_indirect(&procset)), ("/Font", rfont.into())]);
+    let rfont = qpdf.new_dictionary_from([("/F1", font.into_indirect())]);
+    let resources = qpdf.new_dictionary_from([("/ProcSet", procset.into_indirect()), ("/Font", rfont.into())]);
     let page = qpdf.new_dictionary_from([
         ("/Type", qpdf.new_name("/Page")),
         ("/MediaBox", mediabox),
@@ -61,7 +62,7 @@ fn test_pdf_from_scratch() {
         ("/Resources", resources.into()),
     ]);
 
-    qpdf.add_page(&qpdf.make_indirect(&page), true).unwrap();
+    qpdf.add_page(&page.into_indirect(), true).unwrap();
 
     let mem = qpdf
         .writer()
@@ -111,7 +112,7 @@ fn test_qpdf_basic_objects() {
     obj.get_dictionary().set("/Type", &qpdf.new_name("/Stream"));
 
     let obj_id = obj.get_id();
-    assert_ne!(qpdf.make_indirect(&QpdfObject::from(obj)).get_id(), obj_id);
+    assert_ne!(obj.into_indirect().get_id(), obj_id);
 }
 
 #[test]
@@ -135,8 +136,7 @@ fn test_qpdf_streams() {
 
     assert_eq!(obj.get_dictionary().get("/Type").unwrap().as_name(), "/Test");
 
-    let obj = QpdfObject::from(obj);
-    let indirect = qpdf.make_indirect(&obj);
+    let indirect = obj.into_indirect();
     assert!(indirect.is_indirect());
     assert_ne!(indirect.get_id(), 0);
     assert_eq!(indirect.get_generation(), 0);

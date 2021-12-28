@@ -1,10 +1,10 @@
 use std::{ffi::CString, path::Path, slice};
 
-use crate::{ObjectStreamMode, Qpdf, Result, StreamDataMode, StreamDecodeLevel};
+use crate::{ObjectStreamMode, QpdfRef, Result, StreamDataMode, StreamDecodeLevel};
 
 /// PDF writer with several customizable parameters
-pub struct QpdfWriter<'a> {
-    owner: &'a Qpdf,
+pub struct QpdfWriter {
+    owner: QpdfRef,
     compress_streams: Option<bool>,
     preserve_unreferenced_objects: Option<bool>,
     normalize_content: Option<bool>,
@@ -19,8 +19,8 @@ pub struct QpdfWriter<'a> {
     stream_data_mode: Option<StreamDataMode>,
 }
 
-impl<'a> QpdfWriter<'a> {
-    pub(crate) fn new(owner: &'a Qpdf) -> Self {
+impl QpdfWriter {
+    pub(crate) fn new(owner: QpdfRef) -> Self {
         QpdfWriter {
             owner,
             compress_streams: None,

@@ -1,6 +1,6 @@
 use std::{cmp::Ordering, ffi::CStr, fmt, slice};
 
-use crate::Qpdf;
+use crate::QpdfRef;
 
 /// Types of the QPDF objects
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
@@ -45,8 +45,8 @@ pub trait QpdfObjectLike {
     /// Return inner object
     fn inner(&self) -> &QpdfObject;
 
-    fn owner(&self) -> &Qpdf {
-        self.inner().owner
+    fn owner(&self) -> QpdfRef {
+        self.inner().owner.clone()
     }
 
     /// Get this object type
@@ -103,21 +103,29 @@ pub trait QpdfObjectLike {
     fn get_generation(&self) -> u32 {
         self.inner().get_generation()
     }
+
+    fn into_indirect(self) -> QpdfObject
+    where
+        Self: Sized + Into<QpdfObject>,
+    {
+        let obj: QpdfObject = self.into();
+        obj.into_indirect()
+    }
 }
 
 /// This structure represents a single PDF object with a lifetime bound to the owning `Qpdf`.
-pub struct QpdfObject<'a> {
-    pub(crate) owner: &'a Qpdf,
+pub struct QpdfObject {
+    pub(crate) owner: QpdfRef,
     pub(crate) inner: qpdf_sys::qpdf_oh,
 }
 
-impl<'a> QpdfObject<'a> {
-    pub(crate) fn new(owner: &'a Qpdf, inner: qpdf_sys::qpdf_oh) -> Self {
+impl QpdfObject {
+    pub(crate) fn new(owner: QpdfRef, inner: qpdf_sys::qpdf_oh) -> Self {
         QpdfObject { owner, inner }
     }
 }
 
-impl<'a> QpdfObjectLike for QpdfObject<'a> {
+impl QpdfObjectLike for QpdfObject {
     fn inner(&self) -> &QpdfObject {
         self
     }
@@ -181,43 +189,53 @@ impl<'a> QpdfObjectLike for QpdfObject<'a> {
     fn get_generation(&self) -> u32 {
         unsafe { qpdf_sys::qpdf_oh_get_generation(self.owner.inner, self.inner) as _ }
     }
+
+    /// convert to indirect object
+    fn into_indirect(self) -> QpdfObject {
+        unsafe {
+            QpdfObject::new(
+                self.owner.clone(),
+                qpdf_sys::qpdf_make_indirect_object(self.owner.inner, self.inner),
+            )
+        }
+    }
 }
 
-impl<'a> AsRef<QpdfObject<'a>> for QpdfObject<'a> {
-    fn as_ref(&self) -> &QpdfObject<'a> {
+impl AsRef<QpdfObject> for QpdfObject {
+    fn as_ref(&self) -> &QpdfObject {
         self
     }
 }
 
-impl<'a> fmt::Debug for QpdfObject<'a> {
+impl fmt::Debug for QpdfObject {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "QpdfObject {{ {} }}", self.to_string())
     }
 }
-impl<'a> Clone for QpdfObject<'a> {
+impl Clone for QpdfObject {
     fn clone(&self) -> Self {
         unsafe {
             QpdfObject {
-                owner: self.owner,
+                owner: self.owner.clone(),
                 inner: qpdf_sys::qpdf_oh_new_object(self.owner.inner, self.inner),
             }
         }
     }
 }
 
-impl<'a> PartialEq for QpdfObject<'a> {
+impl PartialEq for QpdfObject {
     fn eq(&self, other: &Self) -> bool {
         self.inner == other.inner
     }
 }
 
-impl<'a> PartialOrd for QpdfObject<'a> {
+impl PartialOrd for QpdfObject {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.inner.partial_cmp(&other.inner)
     }
 }
 
-impl<'a> Drop for QpdfObject<'a> {
+impl Drop for QpdfObject {
     fn drop(&mut self) {
         unsafe {
             qpdf_sys::qpdf_oh_release(self.owner.inner, self.inner);
@@ -225,7 +243,7 @@ impl<'a> Drop for QpdfObject<'a> {
     }
 }
 
-impl<'a> fmt::Display for QpdfObject<'a> {
+impl fmt::Display for QpdfObject {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         unsafe {
             write!(

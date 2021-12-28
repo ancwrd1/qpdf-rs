@@ -59,20 +59,20 @@ impl StreamDataMode {
 }
 
 /// QpdfStream represents a stream object
-pub struct QpdfStream<'a> {
-    inner: QpdfObject<'a>,
+pub struct QpdfStream {
+    inner: QpdfObject,
 }
 
-impl<'a> QpdfStream<'a> {
-    pub(crate) fn new(inner: QpdfObject<'a>) -> Self {
+impl QpdfStream {
+    pub(crate) fn new(inner: QpdfObject) -> Self {
         QpdfStream { inner }
     }
 
     /// Replace stream data
-    pub fn replace_data<'b, F, P, D>(&self, data: D, filter: F, params: P)
+    pub fn replace_data<F, P, D>(&self, data: D, filter: F, params: P)
     where
-        F: AsRef<QpdfObject<'b>>,
-        P: AsRef<QpdfObject<'b>>,
+        F: AsRef<QpdfObject>,
+        P: AsRef<QpdfObject>,
         D: AsRef<[u8]>,
     {
         unsafe {
@@ -111,7 +111,7 @@ impl<'a> QpdfStream<'a> {
     pub fn get_dictionary(&self) -> QpdfDictionary {
         unsafe {
             QpdfObject::new(
-                self.inner.owner,
+                self.inner.owner.clone(),
                 qpdf_sys::qpdf_oh_get_dict(self.inner.owner.inner, self.inner.inner),
             )
             .into()
@@ -119,31 +119,31 @@ impl<'a> QpdfStream<'a> {
     }
 }
 
-impl<'a> QpdfObjectLike for QpdfStream<'a> {
+impl QpdfObjectLike for QpdfStream {
     fn inner(&self) -> &QpdfObject {
         &self.inner
     }
 }
 
-impl<'a> From<QpdfObject<'a>> for QpdfStream<'a> {
-    fn from(obj: QpdfObject<'a>) -> Self {
+impl From<QpdfObject> for QpdfStream {
+    fn from(obj: QpdfObject) -> Self {
         QpdfStream::new(obj)
     }
 }
 
-impl<'a> From<QpdfStream<'a>> for QpdfObject<'a> {
-    fn from(dict: QpdfStream<'a>) -> Self {
+impl From<QpdfStream> for QpdfObject {
+    fn from(dict: QpdfStream) -> Self {
         dict.inner
     }
 }
 
-impl<'a> AsRef<QpdfObject<'a>> for QpdfStream<'a> {
-    fn as_ref(&self) -> &QpdfObject<'a> {
+impl AsRef<QpdfObject> for QpdfStream {
+    fn as_ref(&self) -> &QpdfObject {
         &self.inner
     }
 }
 
-impl<'a> fmt::Display for QpdfStream<'a> {
+impl fmt::Display for QpdfStream {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.inner.fmt(f)
     }
