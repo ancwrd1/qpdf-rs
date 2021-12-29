@@ -43,65 +43,65 @@ impl QpdfObjectType {
 
 pub trait QpdfObjectLike {
     /// Return inner object
-    fn inner(&self) -> &QpdfObject;
+    fn as_object(&self) -> &QpdfObject;
 
     fn owner(&self) -> QpdfRef {
-        self.inner().owner.clone()
+        self.as_object().owner.clone()
     }
 
     /// Get this object type
     fn get_type(&self) -> QpdfObjectType {
-        self.inner().get_type()
+        self.as_object().get_type()
     }
 
     /// 'Unparse' the object converting it to a binary representation
     fn to_binary(&self) -> String {
-        self.inner().to_binary()
+        self.as_object().to_binary()
     }
 
     /// Return true if this is an operator object
     fn is_operator(&self) -> bool {
-        self.inner().is_operator()
+        self.as_object().is_operator()
     }
 
     /// Return true if this is a scalar object
     fn is_scalar(&self) -> bool {
-        self.inner().is_scalar()
+        self.as_object().is_scalar()
     }
 
     /// Return true if this is an indirect object
     fn is_indirect(&self) -> bool {
-        self.inner().is_indirect()
+        self.as_object().is_indirect()
     }
 
     /// Get boolean value
     fn as_bool(&self) -> bool {
-        self.inner().as_bool()
+        self.as_object().as_bool()
     }
 
     /// Get name value
     fn as_name(&self) -> String {
-        self.inner().as_name()
+        self.as_object().as_name()
     }
 
     /// Get string value
     fn as_string(&self) -> String {
-        self.inner().as_string()
+        self.as_object().as_string()
     }
 
     /// Get binary string value
     fn as_binary_string(&self) -> Vec<u8> {
-        self.inner().as_binary_string()
+        self.as_object().as_binary_string()
     }
 
     /// Get ID of the indirect object
     fn get_id(&self) -> u32 {
-        self.inner().get_id()
+        self.as_object().get_id()
     }
 
     /// Get generation of the indirect object
     fn get_generation(&self) -> u32 {
-        self.inner().get_generation()
+        self.as_object().get_generation()
     }
 
     fn into_indirect(self) -> QpdfObject
@@ -126,7 +126,7 @@ impl QpdfObject {
 }
 
 impl QpdfObjectLike for QpdfObject {
-    fn inner(&self) -> &QpdfObject {
+    fn as_object(&self) -> &QpdfObject {
         self
     }
 

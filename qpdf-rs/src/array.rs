@@ -81,7 +81,7 @@ impl QpdfArray {
 }
 
 impl QpdfObjectLike for QpdfArray {
-    fn inner(&self) -> &QpdfObject {
+    fn as_object(&self) -> &QpdfObject {
         &self.inner
     }
 }

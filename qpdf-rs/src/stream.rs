@@ -120,7 +120,7 @@ impl QpdfStream {
 }
 
 impl QpdfObjectLike for QpdfStream {
-    fn inner(&self) -> &QpdfObject {
+    fn as_object(&self) -> &QpdfObject {
         &self.inner
     }
 }

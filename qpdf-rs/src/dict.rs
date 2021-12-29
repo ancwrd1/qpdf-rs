@@ -88,7 +88,7 @@ impl QpdfDictionary {
 }
 
 impl QpdfObjectLike for QpdfDictionary {
-    fn inner(&self) -> &QpdfObject {
+    fn as_object(&self) -> &QpdfObject {
         &self.inner
     }
 }
