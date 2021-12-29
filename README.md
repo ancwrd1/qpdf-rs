@@ -35,7 +35,10 @@ fn make_pdf_from_scratch() -> qpdf::Result<Vec<u8>> {
     let contents = qpdf.new_stream(b"BT /F1 15 Tf 72 720 Td (First Page) Tj ET\n");
     let mediabox = qpdf.parse_object("[0 0 612 792]")?;
     let rfont = qpdf.new_dictionary_from([("/F1", font.into_indirect())]);
-    let resources = qpdf.new_dictionary_from([("/ProcSet", procset.into_indirect()), ("/Font", rfont.into())]);
+    let resources = qpdf.new_dictionary_from([
+        ("/ProcSet", procset.into_indirect()),
+        ("/Font", rfont.into())
+    ]);
     let page = qpdf.new_dictionary_from([
         ("/Type", qpdf.new_name("/Page")),
         ("/MediaBox", mediabox),
