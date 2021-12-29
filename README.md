@@ -18,43 +18,45 @@ Tested on the following targets:
 
 ```rust,no_run
 fn make_pdf_from_scratch() -> qpdf::Result<Vec<u8>> {
-   let qpdf = Qpdf::empty();
+    let qpdf = Qpdf::empty();
 
-   let font = qpdf
-       .parse_object(
-           r#"<<
-                   /Type /Font
-                   /Subtype /Type1
-                   /Name /F1
-                   /BaseFont /Helvetica
-                   /Encoding /WinAnsiEncoding
-              >>"#,
-       )?;
+    let font = qpdf
+        .parse_object(
+            r#"<<
+                        /Type /Font
+                        /Subtype /Type1
+                        /Name /F1
+                        /BaseFont /Helvetica
+                        /Encoding /WinAnsiEncoding
+                      >>"#,
+        )?;
 
-   let procset = qpdf.parse_object("[/PDF /Text]")?;
-   let contents = qpdf.new_stream(b"BT /F1 15 Tf 72 720 Td (First Page) Tj ET\n");
-   let mediabox = qpdf.parse_object("[0 0 612 792]")?;
-   let rfont = qpdf.new_dictionary_from([("/F1", font.make_indirect())]);
-   let resources = qpdf.new_dictionary_from([
-       ("/ProcSet", procset.make_indirect()),
-       ("/Font", rfont.into())
-   ]);
-   let page = qpdf.new_dictionary_from([
-       ("/Type", qpdf.new_name("/Page")),
-       ("/MediaBox", mediabox),
-       ("/Contents", contents.into()),
-       ("/Resources", resources.into()),
-   ]);
+    let procset = qpdf.parse_object("[/PDF /Text]")?;
+    let contents = qpdf.new_stream(b"BT /F1 15 Tf 72 720 Td (First Page) Tj ET\n");
+    let mediabox = qpdf.parse_object("[0 0 612 792]")?;
+    let rfont = qpdf.new_dictionary_from([("/F1", font.into_indirect())]);
+    let resources = qpdf.new_dictionary_from([("/ProcSet", procset.into_indirect()), ("/Font", rfont.into())]);
+    let page = qpdf.new_dictionary_from([
+        ("/Type", qpdf.new_name("/Page")),
+        ("/MediaBox", mediabox),
+        ("/Contents", contents.into()),
+        ("/Resources", resources.into()),
+    ]);
 
-   qpdf.add_page(&page.make_indirect(), true)?;
+    qpdf.add_page(&page.into_indirect(), true)?;
 
-   let mem = qpdf
-       .writer()
-       .static_id(true)
-       .stream_data_mode(StreamDataMode::Preserve)
-       .write_to_memory()?;
-   
-   Ok(mem.as_ref().to_vec())   
+    let mem = qpdf
+        .writer()
+        .static_id(true)
+        .force_pdf_version("1.7")
+        .normalize_content(true)
+        .preserve_unreferenced_objects(false)
+        .object_stream_mode(ObjectStreamMode::Preserve)
+        .compress_streams(false)
+        .stream_data_mode(StreamDataMode::Preserve)
+        .write_to_memory()?;
+
+    Ok(mem.as_ref().to_vec())
 }
 ```
 
