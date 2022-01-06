@@ -1,4 +1,4 @@
-use std::{env, path::PathBuf};
+use std::{env, fs, path::PathBuf};
 
 const ZLIB_SRC: &[&str] = &[
     "adler32.c",
@@ -203,18 +203,22 @@ fn build_qpdf() {
 
 fn build_bindings() {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
-    let path = root.join("qpdf").join("include");
-    let bindings = bindgen::builder()
-        .clang_arg(format!("-I{}", path.display()))
-        .header(format!("{}/qpdf/qpdf-c.h", path.display()))
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
-        .generate()
-        .unwrap();
+    let target = env::var("TARGET").unwrap();
+    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap()).join("bindings.rs");
+    let existing_binding = root.join("bindings").join(format!("{}.rs", target));
+    if existing_binding.exists() {
+        fs::copy(&existing_binding, &out_path).unwrap();
+    } else {
+        let path = root.join("qpdf").join("include");
+        let bindings = bindgen::builder()
+            .clang_arg(format!("-I{}", path.display()))
+            .header(format!("{}/qpdf/qpdf-c.h", path.display()))
+            .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+            .generate()
+            .unwrap();
 
-    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
-    bindings
-        .write_to_file(out_path.join("bindings.rs"))
-        .expect("Couldn't write bindings!");
+        bindings.write_to_file(out_path).expect("Couldn't write bindings!");
+    }
 }
 
 fn main() {
