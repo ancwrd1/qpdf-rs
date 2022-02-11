@@ -22,25 +22,6 @@ pub mod scalar;
 pub mod stream;
 pub mod writer;
 
-// minimal empty PDF
-const EMPTY_PDF: &[u8] = br#"%PDF-1.3
-1 0 obj
-<< /Type /Catalog /Pages 2 0 R >>
-endobj
-2 0 obj
-<< /Type /Pages /Kids [] /Count 0 >>
-endobj
-xref
-0 3
-0000000000 65535 f
-0000000009 00000 n
-0000000058 00000 n
-trailer << /Size 3 /Root 1 0 R >>
-startxref
-110
-%%EOF
-"#;
-
 pub type Result<T> = std::result::Result<T, QpdfError>;
 pub type QpdfRef = Rc<Qpdf>;
 
@@ -119,7 +100,11 @@ impl Qpdf {
 
     /// Create an empty PDF
     pub fn empty() -> QpdfRef {
-        Qpdf::read_from_memory(EMPTY_PDF).unwrap()
+        let qpdf = Qpdf::new();
+        unsafe {
+            qpdf_sys::qpdf_empty_pdf(qpdf.inner);
+        }
+        qpdf
     }
 
     fn do_read_file(self: &QpdfRef, path: &Path, password: Option<&str>) -> Result<()> {
