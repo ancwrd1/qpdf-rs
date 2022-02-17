@@ -10,7 +10,7 @@ fn load_pdf() -> Rc<Qpdf> {
 
 #[test]
 fn test_qpdf_version() {
-    assert_eq!(Qpdf::library_version(), "10.6.1");
+    assert_eq!(Qpdf::library_version(), "10.6.2");
     println!("{}", Qpdf::library_version());
 }
 
