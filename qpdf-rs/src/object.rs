@@ -209,7 +209,7 @@ impl AsRef<QpdfObject> for QpdfObject {
 
 impl fmt::Debug for QpdfObject {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "QpdfObject {{ {} }}", self.to_string())
+        write!(f, "QpdfObject {{ {} }}", self)
     }
 }
 impl Clone for QpdfObject {

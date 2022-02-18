@@ -359,7 +359,7 @@ impl Qpdf {
     }
 
     /// Create an array object from the iterator
-    pub fn new_array_from<'a, I>(self: &QpdfRef, iter: I) -> QpdfArray
+    pub fn new_array_from<I>(self: &QpdfRef, iter: I) -> QpdfArray
     where
         I: IntoIterator<Item = QpdfObject>,
     {
@@ -413,7 +413,7 @@ impl Qpdf {
     }
 
     /// Create a dictionary object from the iterator
-    pub fn new_dictionary_from<'a, I, S, O>(self: &QpdfRef, iter: I) -> QpdfDictionary
+    pub fn new_dictionary_from<I, S, O>(self: &QpdfRef, iter: I) -> QpdfDictionary
     where
         I: IntoIterator<Item = (S, O)>,
         S: AsRef<str>,
@@ -436,7 +436,7 @@ impl Qpdf {
     }
 
     /// Create a stream object with specified dictionary and contents. The filter and params are not set.
-    pub fn new_stream_with_dictionary<'a, I, S, O, T>(self: &QpdfRef, iter: I, data: T) -> QpdfStream
+    pub fn new_stream_with_dictionary<I, S, O, T>(self: &QpdfRef, iter: I, data: T) -> QpdfStream
     where
         I: IntoIterator<Item = (S, O)>,
         S: AsRef<str>,

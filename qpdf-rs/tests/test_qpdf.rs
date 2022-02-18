@@ -129,7 +129,7 @@ fn test_qpdf_streams() {
         .get_object_by_id(obj.get_id(), obj.get_generation())
         .unwrap()
         .into();
-    println!("{}", by_id.to_string());
+    println!("{}", by_id);
 
     let data = by_id.get_data(StreamDecodeLevel::None).unwrap();
     assert_eq!(data.as_ref(), &[1, 2, 3, 4]);
@@ -148,7 +148,7 @@ fn test_parse_object() {
     let qpdf = Qpdf::empty();
     let obj = qpdf.parse_object(text).unwrap();
     assert_eq!(obj.get_type(), QpdfObjectType::Dictionary);
-    println!("{}", obj.to_string());
+    println!("{}", obj);
     println!("version: {}", qpdf.get_pdf_version());
 }
 
@@ -232,10 +232,10 @@ fn test_pdf_ops() {
     println!("{:?}", qpdf.get_pdf_version());
 
     let trailer = qpdf.get_trailer().unwrap();
-    println!("trailer: {}", trailer.to_string());
+    println!("trailer: {}", trailer);
 
     let root = qpdf.get_root().unwrap();
-    println!("root: {}", root.to_string());
+    println!("root: {}", root);
     assert_eq!(root.get("/Type").unwrap().as_name(), "/Catalog");
     assert!(root.has("/Pages"));
 
@@ -243,15 +243,14 @@ fn test_pdf_ops() {
     assert_eq!(pages.len(), 2);
 
     for page in pages {
-        let dict: QpdfDictionary = page.into();
-        let keys = dict.keys();
+        let keys = page.keys();
         assert!(!keys.is_empty());
         println!("{:?}", keys);
 
-        let data = dict.get_page_content_data().unwrap();
+        let data = page.get_page_content_data().unwrap();
         println!("{}", String::from_utf8_lossy(data.as_ref()));
 
-        qpdf.add_page(&dict, false).unwrap();
+        qpdf.add_page(&page, false).unwrap();
     }
 
     let buffer = qpdf.writer().write_to_memory().unwrap();
