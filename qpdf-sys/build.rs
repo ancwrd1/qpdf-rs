@@ -80,6 +80,7 @@ const QPDF_SRC: &[&str] = &[
     "MD5.cc",
     "NNTree.cc",
     "OffsetInputSource.cc",
+    "PDFVersion.cc",
     "Pipeline.cc",
     "Pl_AES_PDF.cc",
     "Pl_ASCII85Decoder.cc",
