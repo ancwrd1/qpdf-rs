@@ -259,7 +259,7 @@ impl Qpdf {
 
     /// Get all pages from the PDF.
     pub fn get_pages(self: &QpdfRef) -> Result<Vec<QpdfDictionary>> {
-        Ok((0..self.get_num_pages()?).map(|i| self.get_page(i)).flatten().collect())
+        Ok((0..self.get_num_pages()?).filter_map(|i| self.get_page(i)).collect())
     }
 
     /// Remove page object from the PDF.
