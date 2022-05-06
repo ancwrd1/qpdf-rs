@@ -77,7 +77,7 @@ impl QpdfStream {
     {
         unsafe {
             qpdf_sys::qpdf_oh_replace_stream_data(
-                self.inner.owner.inner,
+                self.inner.owner.inner(),
                 self.inner.inner,
                 data.as_ref().as_ptr() as _,
                 data.as_ref().len() as _,
@@ -94,7 +94,7 @@ impl QpdfStream {
             let mut len = 0;
             let mut buffer = ptr::null_mut();
             qpdf_sys::qpdf_oh_get_stream_data(
-                self.inner.owner.inner,
+                self.inner.owner.inner(),
                 self.inner.inner,
                 decode_level.as_qpdf_enum(),
                 &mut filtered,
@@ -112,7 +112,7 @@ impl QpdfStream {
         unsafe {
             QpdfObject::new(
                 self.inner.owner.clone(),
-                qpdf_sys::qpdf_oh_get_dict(self.inner.owner.inner, self.inner.inner),
+                qpdf_sys::qpdf_oh_get_dict(self.inner.owner.inner(), self.inner.inner),
             )
             .into()
         }

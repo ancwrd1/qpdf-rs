@@ -1,17 +1,16 @@
 use std::collections::HashSet;
-use std::rc::Rc;
 
 use qpdf::scalar::QpdfScalar;
 use qpdf::*;
 
-fn load_pdf() -> Rc<Qpdf> {
-    Qpdf::read("tests/data/test.pdf").unwrap()
+fn load_pdf() -> QPdf {
+    QPdf::read("tests/data/test.pdf").unwrap()
 }
 
 #[test]
 fn test_qpdf_version() {
-    assert_eq!(Qpdf::library_version(), "10.6.3");
-    println!("{}", Qpdf::library_version());
+    assert_eq!(QPdf::library_version(), "10.6.3");
+    println!("{}", QPdf::library_version());
 }
 
 #[test]
@@ -29,14 +28,14 @@ fn test_writer() {
 
     let mem = writer.write_to_memory().unwrap();
 
-    let mem_pdf = Qpdf::read_from_memory(&mem).unwrap();
+    let mem_pdf = QPdf::read_from_memory(&mem).unwrap();
     assert_eq!(mem_pdf.get_pdf_version(), "1.7");
     assert!(mem_pdf.is_linearized());
 }
 
 #[test]
 fn test_pdf_from_scratch() {
-    let qpdf = Qpdf::empty();
+    let qpdf = QPdf::empty();
 
     let font = qpdf
         .parse_object(
@@ -77,14 +76,14 @@ fn test_pdf_from_scratch() {
         .write_to_memory()
         .unwrap();
 
-    let mem_pdf = Qpdf::read_from_memory(&mem).unwrap();
+    let mem_pdf = QPdf::read_from_memory(&mem).unwrap();
     assert_eq!(mem_pdf.get_pdf_version(), "1.7");
     assert!(mem_pdf.is_linearized());
 }
 
 #[test]
 fn test_qpdf_basic_objects() {
-    let qpdf = Qpdf::empty();
+    let qpdf = QPdf::empty();
     let obj = qpdf.new_bool(true);
     assert!(obj.get_type() == QpdfObjectType::Boolean && obj.as_bool());
     assert_eq!(obj.to_string(), "true");
@@ -117,7 +116,7 @@ fn test_qpdf_basic_objects() {
 
 #[test]
 fn test_qpdf_streams() {
-    let qpdf = Qpdf::empty();
+    let qpdf = QPdf::empty();
 
     let obj = qpdf.get_object_by_id(1234, 1);
     assert!(obj.is_none());
@@ -145,7 +144,7 @@ fn test_qpdf_streams() {
 #[test]
 fn test_parse_object() {
     let text = "<< /Type /Page /Resources << /XObject null >> /MediaBox null /Contents null >>";
-    let qpdf = Qpdf::empty();
+    let qpdf = QPdf::empty();
     let obj = qpdf.parse_object(text).unwrap();
     assert_eq!(obj.get_type(), QpdfObjectType::Dictionary);
     println!("{}", obj);
@@ -154,7 +153,7 @@ fn test_parse_object() {
 
 #[test]
 fn test_error() {
-    let qpdf = Qpdf::empty();
+    let qpdf = QPdf::empty();
     assert!(qpdf.get_page(0).is_none());
     let result = qpdf.parse_object("<<--< /Type -- null >>");
     assert!(result.is_err());
@@ -163,7 +162,7 @@ fn test_error() {
 
 #[test]
 fn test_array() {
-    let qpdf = Qpdf::empty();
+    let qpdf = QPdf::empty();
     let mut arr = qpdf.new_array();
     arr.push(&qpdf.new_integer(1));
     arr.push(&qpdf.new_integer(2));
@@ -183,7 +182,7 @@ fn test_array() {
 
 #[test]
 fn test_dictionary() {
-    let qpdf = Qpdf::empty();
+    let qpdf = QPdf::empty();
     let dict: QpdfDictionary = qpdf
         .parse_object("<< /Type /Page /Resources << /XObject null >> /MediaBox [1 2 3 4] /Contents (hello) >>")
         .unwrap()
@@ -214,7 +213,7 @@ fn test_dictionary() {
 
 #[test]
 fn test_strings() {
-    let qpdf = Qpdf::empty();
+    let qpdf = QPdf::empty();
     let bin_str = qpdf.new_binary_string(&[1, 2, 3, 4]);
     assert_eq!(bin_str.to_string(), "<01020304>");
 
@@ -254,7 +253,7 @@ fn test_pdf_ops() {
     }
 
     let buffer = qpdf.writer().write_to_memory().unwrap();
-    let saved_pdf = Qpdf::read_from_memory(&buffer).unwrap();
+    let saved_pdf = QPdf::read_from_memory(&buffer).unwrap();
     assert_eq!(saved_pdf.get_num_pages().unwrap(), 4);
 
     let pages = saved_pdf.get_pages().unwrap();
@@ -266,14 +265,14 @@ fn test_pdf_ops() {
 
 #[test]
 fn test_pdf_encrypted() {
-    let qpdf = Qpdf::read("tests/data/encrypted.pdf");
+    let qpdf = QPdf::read("tests/data/encrypted.pdf");
     assert!(qpdf.is_err());
     println!("{:?}", qpdf);
 
-    let qpdf = Qpdf::read_encrypted("tests/data/encrypted.pdf", "test");
+    let qpdf = QPdf::read_encrypted("tests/data/encrypted.pdf", "test");
     assert!(qpdf.is_ok());
 
     let data = std::fs::read("tests/data/encrypted.pdf").unwrap();
-    let qpdf = Qpdf::read_from_memory_encrypted(&data, "test");
+    let qpdf = QPdf::read_from_memory_encrypted(&data, "test");
     assert!(qpdf.is_ok());
 }

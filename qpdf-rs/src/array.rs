@@ -14,7 +14,7 @@ impl QpdfArray {
 
     /// Get array length
     pub fn len(&self) -> usize {
-        unsafe { qpdf_sys::qpdf_oh_get_array_n_items(self.inner.owner.inner, self.inner.inner) as _ }
+        unsafe { qpdf_sys::qpdf_oh_get_array_n_items(self.inner.owner.inner(), self.inner.inner) as _ }
     }
 
     /// Return true if array is empty
@@ -33,7 +33,7 @@ impl QpdfArray {
             Some(unsafe {
                 QpdfObject::new(
                     self.inner.owner.clone(),
-                    qpdf_sys::qpdf_oh_get_array_item(self.inner.owner.inner, self.inner.inner, index as _),
+                    qpdf_sys::qpdf_oh_get_array_item(self.inner.owner.inner(), self.inner.inner, index as _),
                 )
             })
         } else {
@@ -45,7 +45,7 @@ impl QpdfArray {
     pub fn set<I: AsRef<QpdfObject>>(&mut self, index: usize, item: I) {
         unsafe {
             qpdf_sys::qpdf_oh_set_array_item(
-                self.inner.owner.inner,
+                self.inner.owner.inner(),
                 self.inner.inner,
                 index as _,
                 item.as_ref().inner,
@@ -56,7 +56,7 @@ impl QpdfArray {
     /// Append an item to the array
     pub fn push<I: AsRef<QpdfObject>>(&self, item: I) {
         unsafe {
-            qpdf_sys::qpdf_oh_append_item(self.inner.owner.inner, self.inner.inner, item.as_ref().inner);
+            qpdf_sys::qpdf_oh_append_item(self.inner.owner.inner(), self.inner.inner, item.as_ref().inner);
         }
     }
 
@@ -64,7 +64,7 @@ impl QpdfArray {
     pub fn insert<I: AsRef<QpdfObject>>(&mut self, index: usize, item: I) {
         unsafe {
             qpdf_sys::qpdf_oh_insert_item(
-                self.inner.owner.inner,
+                self.inner.owner.inner(),
                 self.inner.inner,
                 index as _,
                 item.as_ref().inner,
@@ -75,7 +75,7 @@ impl QpdfArray {
     /// Remove array item
     pub fn remove(&mut self, index: usize) {
         unsafe {
-            qpdf_sys::qpdf_oh_erase_item(self.inner.owner.inner, self.inner.inner, index as _);
+            qpdf_sys::qpdf_oh_erase_item(self.inner.owner.inner(), self.inner.inner, index as _);
         }
     }
 }

@@ -20,7 +20,7 @@ impl QpdfDictionary {
         unsafe {
             let mut len = 0;
             let mut buffer = ptr::null_mut();
-            qpdf_sys::qpdf_oh_get_page_content_data(self.inner.owner.inner, self.inner.inner, &mut buffer, &mut len);
+            qpdf_sys::qpdf_oh_get_page_content_data(self.inner.owner.inner(), self.inner.inner, &mut buffer, &mut len);
             self.inner
                 .owner
                 .last_error_or_then(|| QpdfStreamData::new(buffer, len as _))
@@ -31,7 +31,7 @@ impl QpdfDictionary {
     pub fn has(&self, key: &str) -> bool {
         unsafe {
             let key_str = CString::new(key).unwrap();
-            qpdf_sys::qpdf_oh_has_key(self.inner.owner.inner, self.inner.inner, key_str.as_ptr()) != 0
+            qpdf_sys::qpdf_oh_has_key(self.inner.owner.inner(), self.inner.inner, key_str.as_ptr()) != 0
         }
     }
 
@@ -39,7 +39,7 @@ impl QpdfDictionary {
     pub fn get(&self, key: &str) -> Option<QpdfObject> {
         unsafe {
             let key_str = CString::new(key).unwrap();
-            let oh = qpdf_sys::qpdf_oh_get_key(self.inner.owner.inner, self.inner.inner, key_str.as_ptr());
+            let oh = qpdf_sys::qpdf_oh_get_key(self.inner.owner.inner(), self.inner.inner, key_str.as_ptr());
             let obj = QpdfObject::new(self.inner.owner.clone(), oh);
             if obj.get_type() != QpdfObjectType::Null {
                 Some(obj)
@@ -54,7 +54,7 @@ impl QpdfDictionary {
         unsafe {
             let key_str = CString::new(key).unwrap();
             qpdf_sys::qpdf_oh_replace_key(
-                self.inner.owner.inner,
+                self.inner.owner.inner(),
                 self.inner.inner,
                 key_str.as_ptr(),
                 value.as_ref().inner,
@@ -66,7 +66,7 @@ impl QpdfDictionary {
     pub fn remove(&self, key: &str) {
         unsafe {
             let key_str = CString::new(key).unwrap();
-            qpdf_sys::qpdf_oh_remove_key(self.inner.owner.inner, self.inner.inner, key_str.as_ptr());
+            qpdf_sys::qpdf_oh_remove_key(self.inner.owner.inner(), self.inner.inner, key_str.as_ptr());
         }
     }
 
@@ -74,10 +74,10 @@ impl QpdfDictionary {
     pub fn keys(&self) -> Vec<String> {
         let mut keys = Vec::new();
         unsafe {
-            qpdf_sys::qpdf_oh_begin_dict_key_iter(self.inner.owner.inner, self.inner.inner);
-            while qpdf_sys::qpdf_oh_dict_more_keys(self.inner.owner.inner) != 0 {
+            qpdf_sys::qpdf_oh_begin_dict_key_iter(self.inner.owner.inner(), self.inner.inner);
+            while qpdf_sys::qpdf_oh_dict_more_keys(self.inner.owner.inner()) != 0 {
                 keys.push(
-                    CStr::from_ptr(qpdf_sys::qpdf_oh_dict_next_key(self.inner.owner.inner))
+                    CStr::from_ptr(qpdf_sys::qpdf_oh_dict_next_key(self.inner.owner.inner()))
                         .to_string_lossy()
                         .into_owned(),
                 );

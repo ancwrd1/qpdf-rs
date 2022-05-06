@@ -1,10 +1,10 @@
 use std::{ffi::CString, path::Path, slice};
 
-use crate::{ObjectStreamMode, QpdfRef, Result, StreamDataMode, StreamDecodeLevel};
+use crate::{ObjectStreamMode, QPdf, Result, StreamDataMode, StreamDecodeLevel};
 
 /// PDF writer with several customizable parameters
 pub struct QpdfWriter {
-    owner: QpdfRef,
+    owner: QPdf,
     compress_streams: Option<bool>,
     preserve_unreferenced_objects: Option<bool>,
     normalize_content: Option<bool>,
@@ -20,7 +20,7 @@ pub struct QpdfWriter {
 }
 
 impl QpdfWriter {
-    pub(crate) fn new(owner: QpdfRef) -> Self {
+    pub(crate) fn new(owner: QPdf) -> Self {
         QpdfWriter {
             owner,
             compress_streams: None,
@@ -41,57 +41,57 @@ impl QpdfWriter {
     fn process_params(&self) -> Result<()> {
         unsafe {
             if let Some(compress_streams) = self.compress_streams {
-                qpdf_sys::qpdf_set_compress_streams(self.owner.inner, compress_streams.into());
+                qpdf_sys::qpdf_set_compress_streams(self.owner.inner(), compress_streams.into());
             }
 
             if let Some(preserve_unreferenced_objects) = self.preserve_unreferenced_objects {
                 qpdf_sys::qpdf_set_preserve_unreferenced_objects(
-                    self.owner.inner,
+                    self.owner.inner(),
                     preserve_unreferenced_objects.into(),
                 );
             }
 
             if let Some(normalize_content) = self.normalize_content {
-                qpdf_sys::qpdf_set_content_normalization(self.owner.inner, normalize_content.into());
+                qpdf_sys::qpdf_set_content_normalization(self.owner.inner(), normalize_content.into());
             }
 
             if let Some(preserve_encryption) = self.preserve_encryption {
-                qpdf_sys::qpdf_set_preserve_encryption(self.owner.inner, preserve_encryption.into());
+                qpdf_sys::qpdf_set_preserve_encryption(self.owner.inner(), preserve_encryption.into());
             }
 
             if let Some(linearize) = self.linearize {
-                qpdf_sys::qpdf_set_linearization(self.owner.inner, linearize.into());
+                qpdf_sys::qpdf_set_linearization(self.owner.inner(), linearize.into());
             }
 
             if let Some(static_id) = self.static_id {
-                qpdf_sys::qpdf_set_static_ID(self.owner.inner, static_id.into());
+                qpdf_sys::qpdf_set_static_ID(self.owner.inner(), static_id.into());
             }
 
             if let Some(deterministic_id) = self.deterministic_id {
-                qpdf_sys::qpdf_set_deterministic_ID(self.owner.inner, deterministic_id.into());
+                qpdf_sys::qpdf_set_deterministic_ID(self.owner.inner(), deterministic_id.into());
             }
 
             if let Some(stream_decode_level) = self.stream_decode_level {
-                qpdf_sys::qpdf_set_decode_level(self.owner.inner, stream_decode_level.as_qpdf_enum());
+                qpdf_sys::qpdf_set_decode_level(self.owner.inner(), stream_decode_level.as_qpdf_enum());
             }
 
             if let Some(object_stream_mode) = self.object_stream_mode {
-                qpdf_sys::qpdf_set_object_stream_mode(self.owner.inner, object_stream_mode.as_qpdf_enum());
+                qpdf_sys::qpdf_set_object_stream_mode(self.owner.inner(), object_stream_mode.as_qpdf_enum());
             }
 
             if let Some(stream_data_mode) = self.stream_data_mode {
-                qpdf_sys::qpdf_set_stream_data_mode(self.owner.inner, stream_data_mode.as_qpdf_enum());
+                qpdf_sys::qpdf_set_stream_data_mode(self.owner.inner(), stream_data_mode.as_qpdf_enum());
             }
 
             if let Some(ref version) = self.min_pdf_version {
                 let version = CString::new(version.as_str())?;
                 self.owner
-                    .wrap_ffi_call(|| qpdf_sys::qpdf_set_minimum_pdf_version(self.owner.inner, version.as_ptr()))?;
+                    .wrap_ffi_call(|| qpdf_sys::qpdf_set_minimum_pdf_version(self.owner.inner(), version.as_ptr()))?;
             }
             if let Some(ref version) = self.force_pdf_version {
                 let version = CString::new(version.as_str())?;
                 self.owner
-                    .wrap_ffi_call(|| qpdf_sys::qpdf_force_pdf_version(self.owner.inner, version.as_ptr()))?;
+                    .wrap_ffi_call(|| qpdf_sys::qpdf_force_pdf_version(self.owner.inner(), version.as_ptr()))?;
             }
         }
         Ok(())
@@ -104,7 +104,7 @@ impl QpdfWriter {
     {
         let filename = CString::new(path.as_ref().to_string_lossy().as_ref())?;
 
-        let inner = self.owner.inner;
+        let inner = self.owner.inner();
 
         self.owner
             .wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_init_write(inner, filename.as_ptr()) })?;
@@ -116,7 +116,7 @@ impl QpdfWriter {
 
     /// Write PDF to a memory and return a reference to it owned by the Qpdf object
     pub fn write_to_memory(&self) -> Result<Vec<u8>> {
-        let inner = self.owner.inner;
+        let inner = self.owner.inner();
         self.owner
             .wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_init_write_memory(inner) })?;
 

@@ -1,6 +1,6 @@
 use std::{cmp::Ordering, ffi::CStr, fmt, slice};
 
-use crate::QpdfRef;
+use crate::QPdf;
 
 /// Types of the QPDF objects
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
@@ -45,7 +45,7 @@ pub trait QpdfObjectLike {
     /// Return inner object
     fn as_object(&self) -> &QpdfObject;
 
-    fn owner(&self) -> QpdfRef {
+    fn owner(&self) -> QPdf {
         self.as_object().owner.clone()
     }
 
@@ -115,12 +115,12 @@ pub trait QpdfObjectLike {
 
 /// This structure represents a single PDF object with a lifetime bound to the owning `Qpdf`.
 pub struct QpdfObject {
-    pub(crate) owner: QpdfRef,
+    pub(crate) owner: QPdf,
     pub(crate) inner: qpdf_sys::qpdf_oh,
 }
 
 impl QpdfObject {
-    pub(crate) fn new(owner: QpdfRef, inner: qpdf_sys::qpdf_oh) -> Self {
+    pub(crate) fn new(owner: QPdf, inner: qpdf_sys::qpdf_oh) -> Self {
         QpdfObject { owner, inner }
     }
 }
@@ -131,36 +131,36 @@ impl QpdfObjectLike for QpdfObject {
     }
 
     fn get_type(&self) -> QpdfObjectType {
-        unsafe { QpdfObjectType::from_qpdf_enum(qpdf_sys::qpdf_oh_get_type_code(self.owner.inner, self.inner)) }
+        unsafe { QpdfObjectType::from_qpdf_enum(qpdf_sys::qpdf_oh_get_type_code(self.owner.inner(), self.inner)) }
     }
 
     fn to_binary(&self) -> String {
         unsafe {
-            CStr::from_ptr(qpdf_sys::qpdf_oh_unparse_binary(self.owner.inner, self.inner))
+            CStr::from_ptr(qpdf_sys::qpdf_oh_unparse_binary(self.owner.inner(), self.inner))
                 .to_string_lossy()
                 .into_owned()
         }
     }
 
     fn is_operator(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_operator(self.owner.inner, self.inner) != 0 }
+        unsafe { qpdf_sys::qpdf_oh_is_operator(self.owner.inner(), self.inner) != 0 }
     }
 
     fn is_scalar(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_scalar(self.owner.inner, self.inner) != 0 }
+        unsafe { qpdf_sys::qpdf_oh_is_scalar(self.owner.inner(), self.inner) != 0 }
     }
 
     fn is_indirect(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_is_indirect(self.owner.inner, self.inner) != 0 }
+        unsafe { qpdf_sys::qpdf_oh_is_indirect(self.owner.inner(), self.inner) != 0 }
     }
 
     fn as_bool(&self) -> bool {
-        unsafe { qpdf_sys::qpdf_oh_get_bool_value(self.owner.inner, self.inner) != 0 }
+        unsafe { qpdf_sys::qpdf_oh_get_bool_value(self.owner.inner(), self.inner) != 0 }
     }
 
     fn as_name(&self) -> String {
         unsafe {
-            CStr::from_ptr(qpdf_sys::qpdf_oh_get_name(self.owner.inner, self.inner))
+            CStr::from_ptr(qpdf_sys::qpdf_oh_get_name(self.owner.inner(), self.inner))
                 .to_string_lossy()
                 .into_owned()
         }
@@ -168,7 +168,7 @@ impl QpdfObjectLike for QpdfObject {
 
     fn as_string(&self) -> String {
         unsafe {
-            CStr::from_ptr(qpdf_sys::qpdf_oh_get_utf8_value(self.owner.inner, self.inner))
+            CStr::from_ptr(qpdf_sys::qpdf_oh_get_utf8_value(self.owner.inner(), self.inner))
                 .to_string_lossy()
                 .into_owned()
         }
@@ -177,17 +177,17 @@ impl QpdfObjectLike for QpdfObject {
     fn as_binary_string(&self) -> Vec<u8> {
         unsafe {
             let mut length = 0;
-            let data = qpdf_sys::qpdf_oh_get_binary_string_value(self.owner.inner, self.inner, &mut length);
+            let data = qpdf_sys::qpdf_oh_get_binary_string_value(self.owner.inner(), self.inner, &mut length);
             slice::from_raw_parts(data as *const u8, length as _).to_vec()
         }
     }
 
     fn get_id(&self) -> u32 {
-        unsafe { qpdf_sys::qpdf_oh_get_object_id(self.owner.inner, self.inner) as _ }
+        unsafe { qpdf_sys::qpdf_oh_get_object_id(self.owner.inner(), self.inner) as _ }
     }
 
     fn get_generation(&self) -> u32 {
-        unsafe { qpdf_sys::qpdf_oh_get_generation(self.owner.inner, self.inner) as _ }
+        unsafe { qpdf_sys::qpdf_oh_get_generation(self.owner.inner(), self.inner) as _ }
     }
 
     /// convert to indirect object
@@ -195,7 +195,7 @@ impl QpdfObjectLike for QpdfObject {
         unsafe {
             QpdfObject::new(
                 self.owner.clone(),
-                qpdf_sys::qpdf_make_indirect_object(self.owner.inner, self.inner),
+                qpdf_sys::qpdf_make_indirect_object(self.owner.inner(), self.inner),
             )
         }
     }
@@ -217,7 +217,7 @@ impl Clone for QpdfObject {
         unsafe {
             QpdfObject {
                 owner: self.owner.clone(),
-                inner: qpdf_sys::qpdf_oh_new_object(self.owner.inner, self.inner),
+                inner: qpdf_sys::qpdf_oh_new_object(self.owner.inner(), self.inner),
             }
         }
     }
@@ -238,7 +238,7 @@ impl PartialOrd for QpdfObject {
 impl Drop for QpdfObject {
     fn drop(&mut self) {
         unsafe {
-            qpdf_sys::qpdf_oh_release(self.owner.inner, self.inner);
+            qpdf_sys::qpdf_oh_release(self.owner.inner(), self.inner);
         }
     }
 }
@@ -249,7 +249,7 @@ impl fmt::Display for QpdfObject {
             write!(
                 f,
                 "{}",
-                CStr::from_ptr(qpdf_sys::qpdf_oh_unparse(self.owner.inner, self.inner)).to_string_lossy()
+                CStr::from_ptr(qpdf_sys::qpdf_oh_unparse(self.owner.inner(), self.inner)).to_string_lossy()
             )
         }
     }
