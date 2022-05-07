@@ -18,7 +18,7 @@ Tested on the following targets:
 
 ```rust,no_run
 fn make_pdf_from_scratch() -> qpdf::Result<Vec<u8>> {
-    let qpdf = Qpdf::empty();
+    let qpdf = QPdf::empty();
 
     let font = qpdf
         .parse_object(

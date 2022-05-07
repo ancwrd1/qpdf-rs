@@ -3,7 +3,7 @@ use std::{ffi::CString, path::Path, slice};
 use crate::{ObjectStreamMode, QPdf, Result, StreamDataMode, StreamDecodeLevel};
 
 /// PDF writer with several customizable parameters
-pub struct QpdfWriter {
+pub struct QPdfWriter {
     owner: QPdf,
     compress_streams: Option<bool>,
     preserve_unreferenced_objects: Option<bool>,
@@ -19,9 +19,9 @@ pub struct QpdfWriter {
     stream_data_mode: Option<StreamDataMode>,
 }
 
-impl QpdfWriter {
+impl QPdfWriter {
     pub(crate) fn new(owner: QPdf) -> Self {
-        QpdfWriter {
+        QPdfWriter {
             owner,
             compress_streams: None,
             preserve_unreferenced_objects: None,
@@ -114,7 +114,7 @@ impl QpdfWriter {
         self.owner.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_write(inner) })
     }
 
-    /// Write PDF to a memory and return a reference to it owned by the Qpdf object
+    /// Write PDF to a memory and return it in a Vec
     pub fn write_to_memory(&self) -> Result<Vec<u8>> {
         let inner = self.owner.inner();
         self.owner

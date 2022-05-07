@@ -1,6 +1,6 @@
 use std::{fmt, ops::Deref, ptr, slice};
 
-use crate::{QpdfDictionary, QpdfObject, QpdfObjectLike, Result};
+use crate::{QPdfDictionary, QPdfObject, QPdfObjectLike, Result};
 
 /// Stream decoding level
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
@@ -58,21 +58,21 @@ impl StreamDataMode {
     }
 }
 
-/// QpdfStream represents a stream object
-pub struct QpdfStream {
-    inner: QpdfObject,
+/// QPdfStream represents a stream object
+pub struct QPdfStream {
+    inner: QPdfObject,
 }
 
-impl QpdfStream {
-    pub(crate) fn new(inner: QpdfObject) -> Self {
-        QpdfStream { inner }
+impl QPdfStream {
+    pub(crate) fn new(inner: QPdfObject) -> Self {
+        QPdfStream { inner }
     }
 
     /// Replace stream data
     pub fn replace_data<F, P, D>(&self, data: D, filter: F, params: P)
     where
-        F: AsRef<QpdfObject>,
-        P: AsRef<QpdfObject>,
+        F: AsRef<QPdfObject>,
+        P: AsRef<QPdfObject>,
         D: AsRef<[u8]>,
     {
         unsafe {
@@ -88,7 +88,7 @@ impl QpdfStream {
     }
 
     /// Get stream data
-    pub fn get_data(&self, decode_level: StreamDecodeLevel) -> Result<QpdfStreamData> {
+    pub fn get_data(&self, decode_level: StreamDecodeLevel) -> Result<QPdfStreamData> {
         unsafe {
             let mut filtered = 0;
             let mut len = 0;
@@ -103,14 +103,14 @@ impl QpdfStream {
             );
             self.inner
                 .owner
-                .last_error_or_then(|| QpdfStreamData::new(buffer, len as _))
+                .last_error_or_then(|| QPdfStreamData::new(buffer, len as _))
         }
     }
 
     /// Return a dictionary associated with the stream
-    pub fn get_dictionary(&self) -> QpdfDictionary {
+    pub fn get_dictionary(&self) -> QPdfDictionary {
         unsafe {
-            QpdfObject::new(
+            QPdfObject::new(
                 self.inner.owner.clone(),
                 qpdf_sys::qpdf_oh_get_dict(self.inner.owner.inner(), self.inner.inner),
             )
@@ -119,45 +119,45 @@ impl QpdfStream {
     }
 }
 
-impl QpdfObjectLike for QpdfStream {
-    fn as_object(&self) -> &QpdfObject {
+impl QPdfObjectLike for QPdfStream {
+    fn as_object(&self) -> &QPdfObject {
         &self.inner
     }
 }
 
-impl From<QpdfObject> for QpdfStream {
-    fn from(obj: QpdfObject) -> Self {
-        QpdfStream::new(obj)
+impl From<QPdfObject> for QPdfStream {
+    fn from(obj: QPdfObject) -> Self {
+        QPdfStream::new(obj)
     }
 }
 
-impl From<QpdfStream> for QpdfObject {
-    fn from(dict: QpdfStream) -> Self {
+impl From<QPdfStream> for QPdfObject {
+    fn from(dict: QPdfStream) -> Self {
         dict.inner
     }
 }
 
-impl AsRef<QpdfObject> for QpdfStream {
-    fn as_ref(&self) -> &QpdfObject {
+impl AsRef<QPdfObject> for QPdfStream {
+    fn as_ref(&self) -> &QPdfObject {
         &self.inner
     }
 }
 
-impl fmt::Display for QpdfStream {
+impl fmt::Display for QPdfStream {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.inner.fmt(f)
     }
 }
 
 /// This structure holds an owned stream data.
-pub struct QpdfStreamData {
+pub struct QPdfStreamData {
     data: *const u8,
     len: usize,
 }
 
-impl QpdfStreamData {
+impl QPdfStreamData {
     pub(crate) fn new(data: *const u8, len: usize) -> Self {
-        QpdfStreamData { data, len }
+        QPdfStreamData { data, len }
     }
 
     /// Get data length
@@ -171,13 +171,13 @@ impl QpdfStreamData {
     }
 }
 
-impl AsRef<[u8]> for QpdfStreamData {
+impl AsRef<[u8]> for QPdfStreamData {
     fn as_ref(&self) -> &[u8] {
         unsafe { slice::from_raw_parts(self.data, self.len) }
     }
 }
 
-impl Deref for QpdfStreamData {
+impl Deref for QPdfStreamData {
     type Target = [u8];
 
     fn deref(&self) -> &Self::Target {
@@ -185,7 +185,7 @@ impl Deref for QpdfStreamData {
     }
 }
 
-impl Drop for QpdfStreamData {
+impl Drop for QPdfStreamData {
     fn drop(&mut self) {
         unsafe {
             libc::free(self.data as _);

@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-use qpdf::scalar::QpdfScalar;
+use qpdf::scalar::QPdfScalar;
 use qpdf::*;
 
 fn load_pdf() -> QPdf {
@@ -85,11 +85,11 @@ fn test_pdf_from_scratch() {
 fn test_qpdf_basic_objects() {
     let qpdf = QPdf::empty();
     let obj = qpdf.new_bool(true);
-    assert!(obj.get_type() == QpdfObjectType::Boolean && obj.as_bool());
+    assert!(obj.get_type() == QPdfObjectType::Boolean && obj.as_bool());
     assert_eq!(obj.to_string(), "true");
 
     let obj = qpdf.new_name("foo");
-    assert!(obj.get_type() == QpdfObjectType::Name && obj.as_name() == "foo");
+    assert!(obj.get_type() == QPdfObjectType::Name && obj.as_name() == "foo");
     assert_eq!(obj.to_string(), "foo");
 
     let obj = qpdf.new_integer(12_3456_7890);
@@ -97,7 +97,7 @@ fn test_qpdf_basic_objects() {
     assert_eq!(obj.to_string(), "1234567890");
 
     let obj = qpdf.new_null();
-    assert_eq!(obj.get_type(), QpdfObjectType::Null);
+    assert_eq!(obj.get_type(), QPdfObjectType::Null);
     assert_eq!(obj.to_string(), "null");
 
     let obj = qpdf.new_real(1.2345, 3);
@@ -105,7 +105,7 @@ fn test_qpdf_basic_objects() {
     assert_eq!(obj.to_string(), "1.234");
 
     let obj = qpdf.new_stream(&[]);
-    assert_eq!(obj.get_type(), QpdfObjectType::Stream);
+    assert_eq!(obj.get_type(), QPdfObjectType::Stream);
     assert_eq!(obj.to_string(), "3 0 R");
 
     obj.get_dictionary().set("/Type", &qpdf.new_name("/Stream"));
@@ -122,9 +122,9 @@ fn test_qpdf_streams() {
     assert!(obj.is_none());
 
     let obj = qpdf.new_stream_with_dictionary([("/Type", qpdf.new_name("/Test"))], &[1, 2, 3, 4]);
-    assert_eq!(obj.get_type(), QpdfObjectType::Stream);
+    assert_eq!(obj.get_type(), QPdfObjectType::Stream);
 
-    let by_id: QpdfStream = qpdf
+    let by_id: QPdfStream = qpdf
         .get_object_by_id(obj.get_id(), obj.get_generation())
         .unwrap()
         .into();
@@ -146,7 +146,7 @@ fn test_parse_object() {
     let text = "<< /Type /Page /Resources << /XObject null >> /MediaBox null /Contents null >>";
     let qpdf = QPdf::empty();
     let obj = qpdf.parse_object(text).unwrap();
-    assert_eq!(obj.get_type(), QpdfObjectType::Dictionary);
+    assert_eq!(obj.get_type(), QPdfObjectType::Dictionary);
     println!("{}", obj);
     println!("version: {}", qpdf.get_pdf_version());
 }
@@ -172,7 +172,7 @@ fn test_array() {
     assert!(arr.get(10).is_none());
 
     assert_eq!(
-        arr.iter().map(|v| QpdfScalar::from(v).as_i32()).collect::<Vec<_>>(),
+        arr.iter().map(|v| QPdfScalar::from(v).as_i32()).collect::<Vec<_>>(),
         vec![1, 2, 3]
     );
 
@@ -183,7 +183,7 @@ fn test_array() {
 #[test]
 fn test_dictionary() {
     let qpdf = QPdf::empty();
-    let dict: QpdfDictionary = qpdf
+    let dict: QPdfDictionary = qpdf
         .parse_object("<< /Type /Page /Resources << /XObject null >> /MediaBox [1 2 3 4] /Contents (hello) >>")
         .unwrap()
         .into();
@@ -197,7 +197,7 @@ fn test_dictionary() {
             .collect::<HashSet<_>>()
     );
 
-    assert_eq!(dict.get("/Type").unwrap().get_type(), QpdfObjectType::Name);
+    assert_eq!(dict.get("/Type").unwrap().get_type(), QPdfObjectType::Name);
     assert_eq!(dict.get("/Contents").unwrap().as_string(), "hello");
 
     let bval = qpdf.new_bool(true);

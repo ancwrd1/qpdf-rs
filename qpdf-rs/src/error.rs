@@ -5,7 +5,7 @@ use crate::Result;
 
 /// Error codes returned by QPDF library calls
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
-pub enum QpdfErrorCode {
+pub enum QPdfErrorCode {
     Unknown,
     InvalidParameter,
     InternalError,
@@ -20,37 +20,37 @@ pub enum QpdfErrorCode {
 pub(crate) fn error_or_ok(error: qpdf_sys::qpdf_error_code_e) -> Result<()> {
     let code = match error as qpdf_sys::qpdf_error_code_e {
         qpdf_sys::qpdf_error_code_e_qpdf_e_success => return Ok(()),
-        qpdf_sys::qpdf_error_code_e_qpdf_e_internal => QpdfErrorCode::InternalError,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_system => QpdfErrorCode::SystemError,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_unsupported => QpdfErrorCode::Unsupported,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_password => QpdfErrorCode::InvalidPassword,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_damaged_pdf => QpdfErrorCode::DamagedPdf,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_pages => QpdfErrorCode::PagesError,
-        qpdf_sys::qpdf_error_code_e_qpdf_e_object => QpdfErrorCode::ObjectError,
-        _ => QpdfErrorCode::Unknown,
+        qpdf_sys::qpdf_error_code_e_qpdf_e_internal => QPdfErrorCode::InternalError,
+        qpdf_sys::qpdf_error_code_e_qpdf_e_system => QPdfErrorCode::SystemError,
+        qpdf_sys::qpdf_error_code_e_qpdf_e_unsupported => QPdfErrorCode::Unsupported,
+        qpdf_sys::qpdf_error_code_e_qpdf_e_password => QPdfErrorCode::InvalidPassword,
+        qpdf_sys::qpdf_error_code_e_qpdf_e_damaged_pdf => QPdfErrorCode::DamagedPdf,
+        qpdf_sys::qpdf_error_code_e_qpdf_e_pages => QPdfErrorCode::PagesError,
+        qpdf_sys::qpdf_error_code_e_qpdf_e_object => QPdfErrorCode::ObjectError,
+        _ => QPdfErrorCode::Unknown,
     };
-    Err(QpdfError {
+    Err(QPdfError {
         error_code: code,
         description: None,
         position: None,
     })
 }
 
-impl Default for QpdfErrorCode {
+impl Default for QPdfErrorCode {
     fn default() -> Self {
-        QpdfErrorCode::Unknown
+        QPdfErrorCode::Unknown
     }
 }
 
-/// QpdfError holds an error code and an optional extra information
+/// QPdfError holds an error code and an optional extra information
 #[derive(Debug, Clone, PartialEq, PartialOrd, Default)]
-pub struct QpdfError {
-    pub(crate) error_code: QpdfErrorCode,
+pub struct QPdfError {
+    pub(crate) error_code: QPdfErrorCode,
     pub(crate) description: Option<String>,
     pub(crate) position: Option<u64>,
 }
 
-impl fmt::Display for QpdfError {
+impl fmt::Display for QPdfError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
@@ -61,10 +61,10 @@ impl fmt::Display for QpdfError {
     }
 }
 
-impl std::error::Error for QpdfError {}
+impl std::error::Error for QPdfError {}
 
-impl QpdfError {
-    pub fn error_code(&self) -> QpdfErrorCode {
+impl QPdfError {
+    pub fn error_code(&self) -> QPdfErrorCode {
         self.error_code
     }
 
@@ -77,10 +77,10 @@ impl QpdfError {
     }
 }
 
-impl From<NulError> for QpdfError {
+impl From<NulError> for QPdfError {
     fn from(_: NulError) -> Self {
-        QpdfError {
-            error_code: QpdfErrorCode::InvalidParameter,
+        QPdfError {
+            error_code: QPdfErrorCode::InvalidParameter,
             description: Some("Unexpected null code in the string parameter".to_owned()),
             position: None,
         }

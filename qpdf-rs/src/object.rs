@@ -4,7 +4,7 @@ use crate::QPdf;
 
 /// Types of the QPDF objects
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
-pub enum QpdfObjectType {
+pub enum QPdfObjectType {
     Uninitialized,
     Reserved,
     Null,
@@ -20,37 +20,37 @@ pub enum QpdfObjectType {
     InlineImage,
 }
 
-impl QpdfObjectType {
+impl QPdfObjectType {
     fn from_qpdf_enum(obj_t: qpdf_sys::qpdf_object_type_e) -> Self {
         match obj_t {
-            qpdf_sys::qpdf_object_type_e_ot_uninitialized => QpdfObjectType::Uninitialized,
-            qpdf_sys::qpdf_object_type_e_ot_reserved => QpdfObjectType::Reserved,
-            qpdf_sys::qpdf_object_type_e_ot_null => QpdfObjectType::Null,
-            qpdf_sys::qpdf_object_type_e_ot_boolean => QpdfObjectType::Boolean,
-            qpdf_sys::qpdf_object_type_e_ot_integer => QpdfObjectType::Integer,
-            qpdf_sys::qpdf_object_type_e_ot_real => QpdfObjectType::Real,
-            qpdf_sys::qpdf_object_type_e_ot_string => QpdfObjectType::String,
-            qpdf_sys::qpdf_object_type_e_ot_name => QpdfObjectType::Name,
-            qpdf_sys::qpdf_object_type_e_ot_array => QpdfObjectType::Array,
-            qpdf_sys::qpdf_object_type_e_ot_dictionary => QpdfObjectType::Dictionary,
-            qpdf_sys::qpdf_object_type_e_ot_stream => QpdfObjectType::Stream,
-            qpdf_sys::qpdf_object_type_e_ot_operator => QpdfObjectType::Operator,
-            qpdf_sys::qpdf_object_type_e_ot_inlineimage => QpdfObjectType::InlineImage,
+            qpdf_sys::qpdf_object_type_e_ot_uninitialized => QPdfObjectType::Uninitialized,
+            qpdf_sys::qpdf_object_type_e_ot_reserved => QPdfObjectType::Reserved,
+            qpdf_sys::qpdf_object_type_e_ot_null => QPdfObjectType::Null,
+            qpdf_sys::qpdf_object_type_e_ot_boolean => QPdfObjectType::Boolean,
+            qpdf_sys::qpdf_object_type_e_ot_integer => QPdfObjectType::Integer,
+            qpdf_sys::qpdf_object_type_e_ot_real => QPdfObjectType::Real,
+            qpdf_sys::qpdf_object_type_e_ot_string => QPdfObjectType::String,
+            qpdf_sys::qpdf_object_type_e_ot_name => QPdfObjectType::Name,
+            qpdf_sys::qpdf_object_type_e_ot_array => QPdfObjectType::Array,
+            qpdf_sys::qpdf_object_type_e_ot_dictionary => QPdfObjectType::Dictionary,
+            qpdf_sys::qpdf_object_type_e_ot_stream => QPdfObjectType::Stream,
+            qpdf_sys::qpdf_object_type_e_ot_operator => QPdfObjectType::Operator,
+            qpdf_sys::qpdf_object_type_e_ot_inlineimage => QPdfObjectType::InlineImage,
             _ => panic!("Unexpected object type!"),
         }
     }
 }
 
-pub trait QpdfObjectLike {
+pub trait QPdfObjectLike {
     /// Return inner object
-    fn as_object(&self) -> &QpdfObject;
+    fn as_object(&self) -> &QPdfObject;
 
     fn owner(&self) -> QPdf {
         self.as_object().owner.clone()
     }
 
     /// Get this object type
-    fn get_type(&self) -> QpdfObjectType {
+    fn get_type(&self) -> QPdfObjectType {
         self.as_object().get_type()
     }
 
@@ -104,34 +104,34 @@ pub trait QpdfObjectLike {
         self.as_object().get_generation()
     }
 
-    fn into_indirect(self) -> QpdfObject
+    fn into_indirect(self) -> QPdfObject
     where
-        Self: Sized + Into<QpdfObject>,
+        Self: Sized + Into<QPdfObject>,
     {
-        let obj: QpdfObject = self.into();
+        let obj: QPdfObject = self.into();
         obj.into_indirect()
     }
 }
 
-/// This structure represents a single PDF object with a lifetime bound to the owning `Qpdf`.
-pub struct QpdfObject {
+/// This structure represents a single PDF object bound to the owning `QPdf`.
+pub struct QPdfObject {
     pub(crate) owner: QPdf,
     pub(crate) inner: qpdf_sys::qpdf_oh,
 }
 
-impl QpdfObject {
+impl QPdfObject {
     pub(crate) fn new(owner: QPdf, inner: qpdf_sys::qpdf_oh) -> Self {
-        QpdfObject { owner, inner }
+        QPdfObject { owner, inner }
     }
 }
 
-impl QpdfObjectLike for QpdfObject {
-    fn as_object(&self) -> &QpdfObject {
+impl QPdfObjectLike for QPdfObject {
+    fn as_object(&self) -> &QPdfObject {
         self
     }
 
-    fn get_type(&self) -> QpdfObjectType {
-        unsafe { QpdfObjectType::from_qpdf_enum(qpdf_sys::qpdf_oh_get_type_code(self.owner.inner(), self.inner)) }
+    fn get_type(&self) -> QPdfObjectType {
+        unsafe { QPdfObjectType::from_qpdf_enum(qpdf_sys::qpdf_oh_get_type_code(self.owner.inner(), self.inner)) }
     }
 
     fn to_binary(&self) -> String {
@@ -191,9 +191,9 @@ impl QpdfObjectLike for QpdfObject {
     }
 
     /// convert to indirect object
-    fn into_indirect(self) -> QpdfObject {
+    fn into_indirect(self) -> QPdfObject {
         unsafe {
-            QpdfObject::new(
+            QPdfObject::new(
                 self.owner.clone(),
                 qpdf_sys::qpdf_make_indirect_object(self.owner.inner(), self.inner),
             )
@@ -201,21 +201,21 @@ impl QpdfObjectLike for QpdfObject {
     }
 }
 
-impl AsRef<QpdfObject> for QpdfObject {
-    fn as_ref(&self) -> &QpdfObject {
+impl AsRef<QPdfObject> for QPdfObject {
+    fn as_ref(&self) -> &QPdfObject {
         self
     }
 }
 
-impl fmt::Debug for QpdfObject {
+impl fmt::Debug for QPdfObject {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "QpdfObject {{ {} }}", self)
     }
 }
-impl Clone for QpdfObject {
+impl Clone for QPdfObject {
     fn clone(&self) -> Self {
         unsafe {
-            QpdfObject {
+            QPdfObject {
                 owner: self.owner.clone(),
                 inner: qpdf_sys::qpdf_oh_new_object(self.owner.inner(), self.inner),
             }
@@ -223,19 +223,19 @@ impl Clone for QpdfObject {
     }
 }
 
-impl PartialEq for QpdfObject {
+impl PartialEq for QPdfObject {
     fn eq(&self, other: &Self) -> bool {
         self.inner == other.inner
     }
 }
 
-impl PartialOrd for QpdfObject {
+impl PartialOrd for QPdfObject {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.inner.partial_cmp(&other.inner)
     }
 }
 
-impl Drop for QpdfObject {
+impl Drop for QPdfObject {
     fn drop(&mut self) {
         unsafe {
             qpdf_sys::qpdf_oh_release(self.owner.inner(), self.inner);
@@ -243,7 +243,7 @@ impl Drop for QpdfObject {
     }
 }
 
-impl fmt::Display for QpdfObject {
+impl fmt::Display for QPdfObject {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         unsafe {
             write!(
