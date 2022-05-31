@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["QPdfScalar","QPdfScalar represents scalar objects such as integer and real"]]});

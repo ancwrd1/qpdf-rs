@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Rust bindings to QPDF C++ library"><meta name="keywords" content="rust, rustlang, rust-lang, qpdf"><title>qpdf - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../dark.css" disabled><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><script defer src="../main.js"></script>
+    <noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../qpdf/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../qpdf/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"><a href="#">Crate qpdf</a></h2><div class="sidebar-elems"><div class="block"><ul><li class="version">Version 0.1.0</li><li><a id="all-types" href="all.html">All Items</a></li></div></ul><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#types">Type Definitions</a></li></ul></div></section><div id="sidebar-vars" data-name="qpdf" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../qpdf/index.html"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="main-heading">
+    <h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">qpdf</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span></h1><span class="out-of-band"><a class="srclink" href="../src/qpdf/lib.rs.html#1-480">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="rust-bindings-to-qpdf-c-library"><a href="#rust-bindings-to-qpdf-c-library">Rust bindings to QPDF C++ library</a></h2><h3 id="overview"><a href="#overview">Overview</a></h3>
+<p>This project contains Rust safe bindings to a popular <a href="https://github.com/qpdf/qpdf">QPDF C++ library</a>.
+It uses the QPDF C API exposed via <code>qpdf-c.h</code> header.</p>
+<p>Tested on the following targets:</p>
+<ul>
+<li>x86_64-unknown-linux-gnu</li>
+<li>aarch64-unknown-linux-gnu</li>
+<li>x86_64-pc-windows-gnu</li>
+<li>x86_64-pc-windows-msvc</li>
+<li>x86_64-apple-darwin</li>
+<li>aarch64-apple-darwin</li>
+</ul>
+<h3 id="usage-example"><a href="#usage-example">Usage example</a></h3>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">qpdf</span>::<span class="kw-2">*</span>;
+
+<span class="kw">fn</span> <span class="ident">make_pdf_from_scratch</span>() -&gt; <span class="ident">qpdf::Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">qpdf</span> <span class="op">=</span> <span class="ident">QPdf::empty</span>();
+
+    <span class="kw">let</span> <span class="ident">font</span> <span class="op">=</span> <span class="ident">qpdf</span>
+        .<span class="ident">parse_object</span>(
+            <span class="string">r#&quot;&lt;&lt;
+                        /Type /Font
+                        /Subtype /Type1
+                        /Name /F1
+                        /BaseFont /Helvetica
+                        /Encoding /WinAnsiEncoding
+                      &gt;&gt;&quot;#</span>,
+        )<span class="question-mark">?</span>;
+
+    <span class="kw">let</span> <span class="ident">procset</span> <span class="op">=</span> <span class="ident">qpdf</span>.<span class="ident">parse_object</span>(<span class="string">&quot;[/PDF /Text]&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">contents</span> <span class="op">=</span> <span class="ident">qpdf</span>.<span class="ident">new_stream</span>(<span class="string">b&quot;BT /F1 15 Tf 72 720 Td (First Page) Tj ET\n&quot;</span>);
+    <span class="kw">let</span> <span class="ident">mediabox</span> <span class="op">=</span> <span class="ident">qpdf</span>.<span class="ident">parse_object</span>(<span class="string">&quot;[0 0 612 792]&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let</span> <span class="ident">rfont</span> <span class="op">=</span> <span class="ident">qpdf</span>.<span class="ident">new_dictionary_from</span>([(<span class="string">&quot;/F1&quot;</span>, <span class="ident">font</span>.<span class="ident">into_indirect</span>())]);
+    <span class="kw">let</span> <span class="ident">resources</span> <span class="op">=</span> <span class="ident">qpdf</span>.<span class="ident">new_dictionary_from</span>([
+        (<span class="string">&quot;/ProcSet&quot;</span>, <span class="ident">procset</span>.<span class="ident">into_indirect</span>()),
+        (<span class="string">&quot;/Font&quot;</span>, <span class="ident">rfont</span>.<span class="ident">into</span>())
+    ]);
+    <span class="kw">let</span> <span class="ident">page</span> <span class="op">=</span> <span class="ident">qpdf</span>.<span class="ident">new_dictionary_from</span>([
+        (<span class="string">&quot;/Type&quot;</span>, <span class="ident">qpdf</span>.<span class="ident">new_name</span>(<span class="string">&quot;/Page&quot;</span>)),
+        (<span class="string">&quot;/MediaBox&quot;</span>, <span class="ident">mediabox</span>),
+        (<span class="string">&quot;/Contents&quot;</span>, <span class="ident">contents</span>.<span class="ident">into</span>()),
+        (<span class="string">&quot;/Resources&quot;</span>, <span class="ident">resources</span>.<span class="ident">into</span>()),
+    ]);
+
+    <span class="ident">qpdf</span>.<span class="ident">add_page</span>(<span class="kw-2">&amp;</span><span class="ident">page</span>.<span class="ident">into_indirect</span>(), <span class="bool-val">true</span>)<span class="question-mark">?</span>;
+
+    <span class="kw">let</span> <span class="ident">mem</span> <span class="op">=</span> <span class="ident">qpdf</span>
+        .<span class="ident">writer</span>()
+        .<span class="ident">static_id</span>(<span class="bool-val">true</span>)
+        .<span class="ident">force_pdf_version</span>(<span class="string">&quot;1.7&quot;</span>)
+        .<span class="ident">normalize_content</span>(<span class="bool-val">true</span>)
+        .<span class="ident">preserve_unreferenced_objects</span>(<span class="bool-val">false</span>)
+        .<span class="ident">object_stream_mode</span>(<span class="ident">ObjectStreamMode::Preserve</span>)
+        .<span class="ident">compress_streams</span>(<span class="bool-val">false</span>)
+        .<span class="ident">stream_data_mode</span>(<span class="ident">StreamDataMode::Preserve</span>)
+        .<span class="ident">write_to_memory</span>()<span class="question-mark">?</span>;
+
+    <span class="prelude-val">Ok</span>(<span class="ident">mem</span>)
+}</code></pre></div>
+<h3 id="additional-build-requirements"><a href="#additional-build-requirements">Additional build requirements</a></h3>
+<ul>
+<li>C/C++ compiler</li>
+<li>Installed clang/llvm (with <code>libclang</code> shared library) for bindgen build-time invocation</li>
+<li>For cross-compilation a custom sysroot must be passed to clang via <code>BINDGEN_EXTRA_CLANG_ARGS</code>
+environment variable, for example: <code>BINDGEN_EXTRA_CLANG_ARGS=&quot;--sysroot=/usr/x86_64-w64-mingw32/sys-root&quot;</code></li>
+</ul>
+<h3 id="license"><a href="#license">License</a></h3>
+<p>Licensed under <a href="https://opensource.org/licenses/Apache-2.0">Apache 2.0</a> license.</p>
+</div></details><h2 id="reexports" class="small-section-header"><a href="#reexports">Re-exports</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left import-item"><code>pub use <a class="mod" href="array/index.html" title="mod qpdf::array">array</a>::*;</code></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left import-item"><code>pub use <a class="mod" href="dict/index.html" title="mod qpdf::dict">dict</a>::*;</code></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left import-item"><code>pub use <a class="mod" href="error/index.html" title="mod qpdf::error">error</a>::*;</code></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left import-item"><code>pub use <a class="mod" href="object/index.html" title="mod qpdf::object">object</a>::*;</code></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left import-item"><code>pub use <a class="mod" href="scalar/index.html" title="mod qpdf::scalar">scalar</a>::*;</code></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left import-item"><code>pub use <a class="mod" href="stream/index.html" title="mod qpdf::stream">stream</a>::*;</code></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left import-item"><code>pub use <a class="mod" href="writer/index.html" title="mod qpdf::writer">writer</a>::*;</code></div><div class="item-right docblock-short"></div></div></div><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="array/index.html" title="qpdf::array mod">array</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="dict/index.html" title="qpdf::dict mod">dict</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="error/index.html" title="qpdf::error mod">error</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="object/index.html" title="qpdf::object mod">object</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="scalar/index.html" title="qpdf::scalar mod">scalar</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="stream/index.html" title="qpdf::stream mod">stream</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="writer/index.html" title="qpdf::writer mod">writer</a></div><div class="item-right docblock-short"></div></div></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.QPdf.html" title="qpdf::QPdf struct">QPdf</a></div><div class="item-right docblock-short"><p>QPdf is a data structure which represents a PDF file</p>
+</div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Result.html" title="qpdf::Result type">Result</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="qpdf" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0 (fe5b13d68 2022-05-18)" ></div>
+</body></html>

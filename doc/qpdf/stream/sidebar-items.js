@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["ObjectStreamMode","Object stream mode"],["StreamDataMode","Object stream mode"],["StreamDecodeLevel","Stream decoding level"]],"struct":[["QPdfStream","QPdfStream represents a stream object"],["QPdfStreamData","This structure holds an owned stream data."]]});

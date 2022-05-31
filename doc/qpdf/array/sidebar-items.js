@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["QPdfArray","QPdfArray wraps a QPdfObject for array-specific operations"],["QPdfArrayIterator","QPdfArray iterator"]]});

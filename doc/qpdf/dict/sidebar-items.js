@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["QPdfDictionary","QPdfDictionary wraps a QPdfObject for dictionary-related operations"]]});
