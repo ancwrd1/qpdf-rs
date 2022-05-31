@@ -17,6 +17,8 @@ Tested on the following targets:
 ## Usage example
 
 ```rust,no_run
+use qpdf::*;
+
 fn make_pdf_from_scratch() -> qpdf::Result<Vec<u8>> {
     let qpdf = QPdf::empty();
 
@@ -59,7 +61,7 @@ fn make_pdf_from_scratch() -> qpdf::Result<Vec<u8>> {
         .stream_data_mode(StreamDataMode::Preserve)
         .write_to_memory()?;
 
-    Ok(mem.as_ref().to_vec())
+    Ok(mem)
 }
 ```
 

@@ -1,9 +1,11 @@
-use std::rc::Rc;
+#![doc = include_str!("../README.md")]
+
 use std::{
     ffi::{CStr, CString},
     fmt,
     path::Path,
     ptr,
+    rc::Rc,
 };
 
 pub use array::*;
@@ -377,7 +379,7 @@ impl QPdf {
     /// Create an array object from the iterator
     pub fn new_array_from<I>(self: &QPdf, iter: I) -> QPdfArray
     where
-        I: IntoIterator<Item =QPdfObject>,
+        I: IntoIterator<Item = QPdfObject>,
     {
         let oh = unsafe { qpdf_sys::qpdf_oh_new_array(self.inner()) };
         let array: QPdfArray = QPdfObject::new(self.clone(), oh).into();

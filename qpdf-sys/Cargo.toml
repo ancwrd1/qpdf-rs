@@ -2,11 +2,11 @@
 name = "qpdf-sys"
 version = "0.1.0"
 authors = ["Dmitry Pankratov <dmitry@pankratov.net>"]
-description = "Rust bindings to QPDF C++ library"
+description = "Rust bindings to QPDF C++ library via FFI and bindgen"
 license = "MIT/Apache-2.0"
 repository = "https://github.com/ancwrd1/qpdf-rs"
 documentation = "https://docs.rs/qpdf"
-readme = "../README.md"
+readme = "README.md"
 keywords = ["PDF", "QPDF"]
 edition = "2021"
 
