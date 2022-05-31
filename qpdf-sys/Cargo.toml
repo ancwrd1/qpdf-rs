@@ -9,6 +9,13 @@ documentation = "https://docs.rs/qpdf"
 readme = "README.md"
 keywords = ["PDF", "QPDF"]
 edition = "2021"
+exclude = [
+    'qpdf/qpdf/*',
+    'qpdf/appimage/*',
+    'qpdf/examples/*',
+    'qpdf/fuzz/*',
+    'qpdf/libtests/*'
+]
 
 [build-dependencies]
 cc = { version = "1",  features = ["parallel"] }
