@@ -14,6 +14,8 @@ Tested on the following targets:
 * x86_64-apple-darwin
 * aarch64-apple-darwin
 
+They also have prebuilt bindgen bindings included in the sources.
+
 ## Usage example
 
 ```rust,no_run
@@ -68,9 +70,10 @@ fn make_pdf_from_scratch() -> qpdf::Result<Vec<u8>> {
 ## Additional build requirements
 
 * C/C++ compiler
-* Installed clang/llvm (with `libclang` shared library) for bindgen build-time invocation
-* For cross-compilation a custom sysroot must be passed to clang via `BINDGEN_EXTRA_CLANG_ARGS`
-   environment variable, for example: `BINDGEN_EXTRA_CLANG_ARGS="--sysroot=/usr/x86_64-w64-mingw32/sys-root"`
+* For the targets which do not have prebuilt bindgen bindings:
+  * Installed clang/llvm (with `libclang` shared library) for bindgen build-time invocation
+  * For cross-compilation a custom sysroot must be passed to clang via `BINDGEN_EXTRA_CLANG_ARGS`
+    environment variable, for example: `BINDGEN_EXTRA_CLANG_ARGS="--sysroot=/usr/x86_64-w64-mingw32/sys-root"`
 
 ## License
 

@@ -167,10 +167,22 @@ fn base_build() -> cc::Build {
     build
 }
 
+fn is_msvc() -> bool {
+    env::var("TARGET").unwrap().ends_with("-msvc")
+}
+
 fn build_cc(name: &str, dir: &str, files: &[&str]) {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let path = root.join(dir);
-    base_build()
+
+    let cpp_flags: &[&str] = if is_msvc() { &["/D_CRT_SECURE_NO_WARNINGS"] } else { &[] };
+
+    let mut build = base_build();
+    for flag in cpp_flags {
+        build.flag(flag);
+    }
+
+    build
         .include(&path)
         .files(files.iter().map(|f| path.join(f)).collect::<Vec<_>>())
         .compile(name);
@@ -178,15 +190,19 @@ fn build_cc(name: &str, dir: &str, files: &[&str]) {
 
 fn build_qpdf() {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
-    let cpp_flag = if env::var("TARGET").unwrap().ends_with("-msvc") {
-        "/std:c++14"
+    let cpp_flags: &[&str] = if is_msvc() {
+        &["/std:c++14", "/EHsc"]
     } else {
-        "-std=c++14"
+        &["-std=c++14"]
     };
 
-    base_build()
+    let mut build = base_build();
+    for flag in cpp_flags {
+        build.flag(flag);
+    }
+
+    build
         .cpp(true)
-        .flag(cpp_flag)
         .include(root.join("zlib-1.2.11"))
         .include(root.join("jpeg-9d"))
         .include(root.join("qpdf").join("include"))
@@ -204,18 +220,24 @@ fn build_qpdf() {
 
 fn build_bindings() {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
-    let path = root.join("qpdf").join("include");
-    let bindings = bindgen::builder()
-        .clang_arg(format!("-I{}", path.display()))
-        .header(format!("{}/qpdf/qpdf-c.h", path.display()))
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
-        .generate()
-        .unwrap();
+    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap()).join("bindings.rs");
+    let existing = root
+        .join("bindings")
+        .join(format!("{}.rs", env::var("TARGET").unwrap()));
 
-    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
-    bindings
-        .write_to_file(out_path.join("bindings.rs"))
-        .expect("Couldn't write bindings!");
+    if existing.exists() {
+        std::fs::copy(&existing, &out_path).unwrap();
+    } else {
+        let path = root.join("qpdf").join("include");
+        let bindings = bindgen::builder()
+            .clang_arg(format!("-I{}", path.display()))
+            .header(format!("{}/qpdf/qpdf-c.h", path.display()))
+            .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+            .generate()
+            .unwrap();
+
+        bindings.write_to_file(&out_path).expect("Couldn't write bindings!");
+    }
 }
 
 fn main() {
