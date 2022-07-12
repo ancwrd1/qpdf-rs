@@ -6,8 +6,6 @@ jobs:
   windows:
     runs-on: windows-latest
     steps:
-        with:
-          version: "13.0"
       - uses: actions/checkout@v2
       - run: git submodule update --init
         shell: bash
@@ -29,8 +27,6 @@ jobs:
   macos:
     runs-on: macos-latest
     steps:
-        with:
-          version: "13.0"
       - uses: actions/checkout@v2
       - run: git submodule update --init
       - run: ci/set_rust_version.bash ${{ matrix.channel }} ${{ matrix.target }}
@@ -47,8 +43,6 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-        with:
-          version: "13.0"
       - uses: actions/checkout@v2
       - run: git submodule update --init
       - run: ci/set_rust_version.bash ${{ matrix.channel }} ${{ matrix.target }}
