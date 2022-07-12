@@ -5,9 +5,7 @@ on: [push, pull_request]
 jobs:
   windows:
     runs-on: windows-latest
-    if: ${{ false }}
     steps:
-      - uses: KyleMayes/install-llvm-action@v1
         with:
           version: "13.0"
       - uses: actions/checkout@v2
@@ -30,9 +28,7 @@ jobs:
 
   macos:
     runs-on: macos-latest
-    if: ${{ false }}
     steps:
-      - uses: KyleMayes/install-llvm-action@v1
         with:
           version: "13.0"
       - uses: actions/checkout@v2
@@ -50,9 +46,7 @@ jobs:
 
   linux:
     runs-on: ubuntu-latest
-    if: ${{ false }}
     steps:
-      - uses: KyleMayes/install-llvm-action@v1
         with:
           version: "13.0"
       - uses: actions/checkout@v2
