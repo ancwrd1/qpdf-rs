@@ -3,7 +3,7 @@ use std::{cmp::Ordering, ffi::CStr, fmt, slice};
 use crate::QPdf;
 
 /// Types of the QPDF objects
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Hash)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Hash)]
 pub enum QPdfObjectType {
     Uninitialized,
     Reserved,
