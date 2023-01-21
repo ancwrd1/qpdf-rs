@@ -492,11 +492,27 @@
 <span id="492">492</span>
 <span id="493">493</span>
 <span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
 </pre><pre class="rust"><code><span class="attribute">#![doc = <span class="macro">include_str!</span>(<span class="string">&quot;../README.md&quot;</span>)]
 
 </span><span class="kw">use </span>std::{
+    cell::RefCell,
+    collections::HashSet,
     ffi::{CStr, CString},
     fmt,
+    hash::{<span class="self">self</span>, Hasher},
     path::Path,
     ptr,
     rc::Rc,
@@ -520,12 +536,15 @@
 
 <span class="kw">pub type </span><span class="prelude-ty">Result</span>&lt;T&gt; = std::result::Result&lt;T, QPdfError&gt;;
 
-<span class="kw">struct </span>Handle(qpdf_sys::qpdf_data);
+<span class="kw">struct </span>Handle {
+    handle: qpdf_sys::qpdf_data,
+    buffer: Vec&lt;u8&gt;,
+}
 
 <span class="kw">impl </span>Drop <span class="kw">for </span>Handle {
     <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="kw">unsafe </span>{
-            qpdf_sys::qpdf_cleanup(<span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0</span>);
+            qpdf_sys::qpdf_cleanup(<span class="kw-2">&amp;mut </span><span class="self">self</span>.handle);
         }
     }
 }
@@ -534,8 +553,22 @@
 </span><span class="attribute">#[derive(Clone)]
 </span><span class="kw">pub struct </span>QPdf {
     inner: Rc&lt;Handle&gt;,
-    buffer: Vec&lt;u8&gt;,
+    foreign: Rc&lt;RefCell&lt;HashSet&lt;QPdf&gt;&gt;&gt;,
 }
+
+<span class="kw">impl </span>hash::Hash <span class="kw">for </span>QPdf {
+    <span class="kw">fn </span>hash&lt;H: Hasher&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, state: <span class="kw-2">&amp;mut </span>H) {
+        <span class="self">self</span>.inner.handle.hash(state)
+    }
+}
+
+<span class="kw">impl </span>PartialEq&lt;<span class="self">Self</span>&gt; <span class="kw">for </span>QPdf {
+    <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
+        <span class="self">self</span>.inner.handle.eq(<span class="kw-2">&amp;</span>other.inner.handle)
+    }
+}
+
+<span class="kw">impl </span>Eq <span class="kw">for </span>QPdf {}
 
 <span class="kw">impl </span>fmt::Debug <span class="kw">for </span>QPdf {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
@@ -545,8 +578,8 @@
 
 <span class="kw">impl </span>QPdf {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>inner(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; qpdf_sys::qpdf_data {
-        <span class="self">self</span>.inner.<span class="number">0
-    </span>}
+        <span class="self">self</span>.inner.handle
+    }
 
     <span class="kw">fn </span>wrap_ffi_call&lt;F, R&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, f: F) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;
     <span class="kw">where
@@ -601,15 +634,7 @@
     }
 
     <span class="kw">fn </span>new() -&gt; QPdf {
-        <span class="kw">unsafe </span>{
-            <span class="kw">let </span>inner = qpdf_sys::qpdf_init();
-            qpdf_sys::qpdf_set_suppress_warnings(inner, <span class="bool-val">true</span>.into());
-            qpdf_sys::qpdf_silence_errors(inner);
-            QPdf {
-                inner: Rc::new(Handle(inner)),
-                buffer: Vec::new(),
-            }
-        }
+        <span class="self">Self</span>::new_with_buffer(Vec::new())
     }
 
     <span class="kw">fn </span>new_with_buffer(buffer: Vec&lt;u8&gt;) -&gt; QPdf {
@@ -618,8 +643,8 @@
             qpdf_sys::qpdf_set_suppress_warnings(inner, <span class="bool-val">true</span>.into());
             qpdf_sys::qpdf_silence_errors(inner);
             QPdf {
-                inner: Rc::new(Handle(inner)),
-                buffer,
+                inner: Rc::new(Handle { handle: inner, buffer }),
+                foreign: Rc::new(RefCell::new(HashSet::new())),
             }
         }
     }
@@ -651,8 +676,8 @@
             qpdf_sys::qpdf_read_memory(
                 <span class="self">self</span>.inner(),
                 <span class="string">b&quot;memory\0&quot;</span>.as_ptr() <span class="kw">as _</span>,
-                <span class="self">self</span>.buffer.as_ptr() <span class="kw">as _</span>,
-                <span class="self">self</span>.buffer.len() <span class="kw">as _</span>,
+                <span class="self">self</span>.inner.buffer.as_ptr() <span class="kw">as _</span>,
+                <span class="self">self</span>.inner.buffer.len() <span class="kw">as _</span>,
                 raw_password,
             );
         })
@@ -983,6 +1008,7 @@
         <span class="kw">let </span>oh = <span class="kw">unsafe </span>{
             qpdf_sys::qpdf_oh_copy_foreign_object(<span class="self">self</span>.inner(), foreign.as_ref().owner.inner(), foreign.as_ref().inner)
         };
+        <span class="self">self</span>.foreign.borrow_mut().insert(foreign.as_ref().owner.clone());
         QPdfObject::new(<span class="self">self</span>.clone(), oh)
     }
 }
