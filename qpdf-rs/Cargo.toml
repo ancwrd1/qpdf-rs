@@ -1,6 +1,6 @@
 [package]
 name = "qpdf"
-version = "0.1.3"
+version = "0.1.4"
 authors = ["Dmitry Pankratov <dmitry@pankratov.net>"]
 description = "Rust bindings to QPDF C++ library"
 license = "MIT/Apache-2.0"
