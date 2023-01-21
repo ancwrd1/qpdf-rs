@@ -1,9 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `qpdf-rs/src/object.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>object.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../qpdf/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../qpdf/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../qpdf/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `qpdf-rs/src/object.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>object.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../qpdf/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -259,262 +254,261 @@
 <span id="254">254</span>
 <span id="255">255</span>
 <span id="256">256</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp::Ordering</span>, <span class="ident">ffi::CStr</span>, <span class="ident">fmt</span>, <span class="ident">slice</span>};
+</pre><pre class="rust"><code><span class="kw">use </span>std::{cmp::Ordering, ffi::CStr, fmt, slice};
 
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::QPdf</span>;
+<span class="kw">use </span><span class="kw">crate</span>::QPdf;
 
-<span class="doccomment">/// Types of the QPDF objects</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Hash</span>)]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">QPdfObjectType</span> {
-    <span class="ident">Uninitialized</span>,
-    <span class="ident">Reserved</span>,
-    <span class="ident">Null</span>,
-    <span class="ident">Boolean</span>,
-    <span class="ident">Integer</span>,
-    <span class="ident">Real</span>,
-    <span class="ident">String</span>,
-    <span class="ident">Name</span>,
-    <span class="ident">Array</span>,
-    <span class="ident">Dictionary</span>,
-    <span class="ident">Stream</span>,
-    <span class="ident">Operator</span>,
-    <span class="ident">InlineImage</span>,
+<span class="doccomment">/// Types of the QPDF objects
+</span><span class="attribute">#[derive(Debug, Clone, Copy, Eq, PartialEq, PartialOrd, Hash)]
+</span><span class="kw">pub enum </span>QPdfObjectType {
+    Uninitialized,
+    Reserved,
+    Null,
+    Boolean,
+    Integer,
+    Real,
+    String,
+    Name,
+    Array,
+    Dictionary,
+    Stream,
+    Operator,
+    InlineImage,
 }
 
-<span class="kw">impl</span> <span class="ident">QPdfObjectType</span> {
-    <span class="kw">fn</span> <span class="ident">from_qpdf_enum</span>(<span class="ident">obj_t</span>: <span class="ident">qpdf_sys::qpdf_object_type_e</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">match</span> <span class="ident">obj_t</span> {
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_uninitialized</span> =&gt; <span class="ident">QPdfObjectType::Uninitialized</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_reserved</span> =&gt; <span class="ident">QPdfObjectType::Reserved</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_null</span> =&gt; <span class="ident">QPdfObjectType::Null</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_boolean</span> =&gt; <span class="ident">QPdfObjectType::Boolean</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_integer</span> =&gt; <span class="ident">QPdfObjectType::Integer</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_real</span> =&gt; <span class="ident">QPdfObjectType::Real</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_string</span> =&gt; <span class="ident">QPdfObjectType::String</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_name</span> =&gt; <span class="ident">QPdfObjectType::Name</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_array</span> =&gt; <span class="ident">QPdfObjectType::Array</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_dictionary</span> =&gt; <span class="ident">QPdfObjectType::Dictionary</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_stream</span> =&gt; <span class="ident">QPdfObjectType::Stream</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_operator</span> =&gt; <span class="ident">QPdfObjectType::Operator</span>,
-            <span class="ident">qpdf_sys::qpdf_object_type_e_ot_inlineimage</span> =&gt; <span class="ident">QPdfObjectType::InlineImage</span>,
-            <span class="kw">_</span> =&gt; <span class="macro">panic!</span>(<span class="string">&quot;Unexpected object type!&quot;</span>),
+<span class="kw">impl </span>QPdfObjectType {
+    <span class="kw">fn </span>from_qpdf_enum(obj_t: qpdf_sys::qpdf_object_type_e) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span>obj_t {
+            qpdf_sys::qpdf_object_type_e_ot_uninitialized =&gt; QPdfObjectType::Uninitialized,
+            qpdf_sys::qpdf_object_type_e_ot_reserved =&gt; QPdfObjectType::Reserved,
+            qpdf_sys::qpdf_object_type_e_ot_null =&gt; QPdfObjectType::Null,
+            qpdf_sys::qpdf_object_type_e_ot_boolean =&gt; QPdfObjectType::Boolean,
+            qpdf_sys::qpdf_object_type_e_ot_integer =&gt; QPdfObjectType::Integer,
+            qpdf_sys::qpdf_object_type_e_ot_real =&gt; QPdfObjectType::Real,
+            qpdf_sys::qpdf_object_type_e_ot_string =&gt; QPdfObjectType::String,
+            qpdf_sys::qpdf_object_type_e_ot_name =&gt; QPdfObjectType::Name,
+            qpdf_sys::qpdf_object_type_e_ot_array =&gt; QPdfObjectType::Array,
+            qpdf_sys::qpdf_object_type_e_ot_dictionary =&gt; QPdfObjectType::Dictionary,
+            qpdf_sys::qpdf_object_type_e_ot_stream =&gt; QPdfObjectType::Stream,
+            qpdf_sys::qpdf_object_type_e_ot_operator =&gt; QPdfObjectType::Operator,
+            qpdf_sys::qpdf_object_type_e_ot_inlineimage =&gt; QPdfObjectType::InlineImage,
+            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Unexpected object type!&quot;</span>),
         }
     }
 }
 
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">QPdfObjectLike</span> {
-    <span class="doccomment">/// Return inner object</span>
-    <span class="kw">fn</span> <span class="ident">as_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">QPdfObject</span>;
+<span class="kw">pub trait </span>QPdfObjectLike {
+    <span class="doccomment">/// Return inner object
+    </span><span class="kw">fn </span>as_object(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>QPdfObject;
 
-    <span class="kw">fn</span> <span class="ident">owner</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">QPdf</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">owner</span>.<span class="ident">clone</span>()
+    <span class="kw">fn </span>owner(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; QPdf {
+        <span class="self">self</span>.as_object().owner.clone()
     }
 
-    <span class="doccomment">/// Get this object type</span>
-    <span class="kw">fn</span> <span class="ident">get_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">QPdfObjectType</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">get_type</span>()
+    <span class="doccomment">/// Get this object type
+    </span><span class="kw">fn </span>get_type(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; QPdfObjectType {
+        <span class="self">self</span>.as_object().get_type()
     }
 
-    <span class="doccomment">/// &#39;Unparse&#39; the object converting it to a binary representation</span>
-    <span class="kw">fn</span> <span class="ident">to_binary</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">to_binary</span>()
+    <span class="doccomment">/// &#39;Unparse&#39; the object converting it to a binary representation
+    </span><span class="kw">fn </span>to_binary(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
+        <span class="self">self</span>.as_object().to_binary()
     }
 
-    <span class="doccomment">/// Return true if this is an operator object</span>
-    <span class="kw">fn</span> <span class="ident">is_operator</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">is_operator</span>()
+    <span class="doccomment">/// Return true if this is an operator object
+    </span><span class="kw">fn </span>is_operator(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.as_object().is_operator()
     }
 
-    <span class="doccomment">/// Return true if this is a scalar object</span>
-    <span class="kw">fn</span> <span class="ident">is_scalar</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">is_scalar</span>()
+    <span class="doccomment">/// Return true if this is a scalar object
+    </span><span class="kw">fn </span>is_scalar(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.as_object().is_scalar()
     }
 
-    <span class="doccomment">/// Return true if this is an indirect object</span>
-    <span class="kw">fn</span> <span class="ident">is_indirect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">is_indirect</span>()
+    <span class="doccomment">/// Return true if this is an indirect object
+    </span><span class="kw">fn </span>is_indirect(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.as_object().is_indirect()
     }
 
-    <span class="doccomment">/// Get boolean value</span>
-    <span class="kw">fn</span> <span class="ident">as_bool</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">as_bool</span>()
+    <span class="doccomment">/// Get boolean value
+    </span><span class="kw">fn </span>as_bool(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.as_object().as_bool()
     }
 
-    <span class="doccomment">/// Get name value</span>
-    <span class="kw">fn</span> <span class="ident">as_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">as_name</span>()
+    <span class="doccomment">/// Get name value
+    </span><span class="kw">fn </span>as_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
+        <span class="self">self</span>.as_object().as_name()
     }
 
-    <span class="doccomment">/// Get string value</span>
-    <span class="kw">fn</span> <span class="ident">as_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">as_string</span>()
+    <span class="doccomment">/// Get string value
+    </span><span class="kw">fn </span>as_string(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
+        <span class="self">self</span>.as_object().as_string()
     }
 
-    <span class="doccomment">/// Get binary string value</span>
-    <span class="kw">fn</span> <span class="ident">as_binary_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">as_binary_string</span>()
+    <span class="doccomment">/// Get binary string value
+    </span><span class="kw">fn </span>as_binary_string(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+        <span class="self">self</span>.as_object().as_binary_string()
     }
 
-    <span class="doccomment">/// Get ID of the indirect object</span>
-    <span class="kw">fn</span> <span class="ident">get_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u32</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">get_id</span>()
+    <span class="doccomment">/// Get ID of the indirect object
+    </span><span class="kw">fn </span>get_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32 {
+        <span class="self">self</span>.as_object().get_id()
     }
 
-    <span class="doccomment">/// Get generation of the indirect object</span>
-    <span class="kw">fn</span> <span class="ident">get_generation</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u32</span> {
-        <span class="self">self</span>.<span class="ident">as_object</span>().<span class="ident">get_generation</span>()
+    <span class="doccomment">/// Get generation of the indirect object
+    </span><span class="kw">fn </span>get_generation(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32 {
+        <span class="self">self</span>.as_object().get_generation()
     }
 
-    <span class="kw">fn</span> <span class="ident">into_indirect</span>(<span class="self">self</span>) -&gt; <span class="ident">QPdfObject</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="ident">Sized</span> <span class="op">+</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span>,
+    <span class="kw">fn </span>into_indirect(<span class="self">self</span>) -&gt; QPdfObject
+    <span class="kw">where
+        </span><span class="self">Self</span>: Sized + Into&lt;QPdfObject&gt;,
     {
-        <span class="kw">let</span> <span class="ident">obj</span>: <span class="ident">QPdfObject</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">into</span>();
-        <span class="ident">obj</span>.<span class="ident">into_indirect</span>()
+        <span class="kw">let </span>obj: QPdfObject = <span class="self">self</span>.into();
+        obj.into_indirect()
     }
 }
 
-<span class="doccomment">/// This structure represents a single PDF object bound to the owning `QPdf`.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">QPdfObject</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">owner</span>: <span class="ident">QPdf</span>,
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="ident">inner</span>: <span class="ident">qpdf_sys::qpdf_oh</span>,
+<span class="doccomment">/// This structure represents a single PDF object bound to the owning `QPdf`.
+</span><span class="kw">pub struct </span>QPdfObject {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) owner: QPdf,
+    <span class="kw">pub</span>(<span class="kw">crate</span>) inner: qpdf_sys::qpdf_oh,
 }
 
-<span class="kw">impl</span> <span class="ident">QPdfObject</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">owner</span>: <span class="ident">QPdf</span>, <span class="ident">inner</span>: <span class="ident">qpdf_sys::qpdf_oh</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">QPdfObject</span> { <span class="ident">owner</span>, <span class="ident">inner</span> }
+<span class="kw">impl </span>QPdfObject {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(owner: QPdf, inner: qpdf_sys::qpdf_oh) -&gt; <span class="self">Self </span>{
+        QPdfObject { owner, inner }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">QPdfObjectLike</span> <span class="kw">for</span> <span class="ident">QPdfObject</span> {
-    <span class="kw">fn</span> <span class="ident">as_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">QPdfObject</span> {
-        <span class="self">self</span>
+<span class="kw">impl </span>QPdfObjectLike <span class="kw">for </span>QPdfObject {
+    <span class="kw">fn </span>as_object(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>QPdfObject {
+        <span class="self">self
+    </span>}
+
+    <span class="kw">fn </span>get_type(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; QPdfObjectType {
+        <span class="kw">unsafe </span>{ QPdfObjectType::from_qpdf_enum(qpdf_sys::qpdf_oh_get_type_code(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner)) }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">QPdfObjectType</span> {
-        <span class="kw">unsafe</span> { <span class="ident">QPdfObjectType::from_qpdf_enum</span>(<span class="ident">qpdf_sys::qpdf_oh_get_type_code</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>)) }
-    }
-
-    <span class="kw">fn</span> <span class="ident">to_binary</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
-        <span class="kw">unsafe</span> {
-            <span class="ident">CStr::from_ptr</span>(<span class="ident">qpdf_sys::qpdf_oh_unparse_binary</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>))
-                .<span class="ident">to_string_lossy</span>()
-                .<span class="ident">into_owned</span>()
+    <span class="kw">fn </span>to_binary(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
+        <span class="kw">unsafe </span>{
+            CStr::from_ptr(qpdf_sys::qpdf_oh_unparse_binary(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner))
+                .to_string_lossy()
+                .into_owned()
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">is_operator</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_is_operator</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> }
+    <span class="kw">fn </span>is_operator(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_is_operator(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner) != <span class="number">0 </span>}
     }
 
-    <span class="kw">fn</span> <span class="ident">is_scalar</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_is_scalar</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> }
+    <span class="kw">fn </span>is_scalar(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_is_scalar(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner) != <span class="number">0 </span>}
     }
 
-    <span class="kw">fn</span> <span class="ident">is_indirect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_is_indirect</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> }
+    <span class="kw">fn </span>is_indirect(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_is_indirect(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner) != <span class="number">0 </span>}
     }
 
-    <span class="kw">fn</span> <span class="ident">as_bool</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_get_bool_value</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> }
+    <span class="kw">fn </span>as_bool(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_get_bool_value(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner) != <span class="number">0 </span>}
     }
 
-    <span class="kw">fn</span> <span class="ident">as_name</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
-        <span class="kw">unsafe</span> {
-            <span class="ident">CStr::from_ptr</span>(<span class="ident">qpdf_sys::qpdf_oh_get_name</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>))
-                .<span class="ident">to_string_lossy</span>()
-                .<span class="ident">into_owned</span>()
+    <span class="kw">fn </span>as_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
+        <span class="kw">unsafe </span>{
+            CStr::from_ptr(qpdf_sys::qpdf_oh_get_name(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner))
+                .to_string_lossy()
+                .into_owned()
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">as_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">String</span> {
-        <span class="kw">unsafe</span> {
-            <span class="ident">CStr::from_ptr</span>(<span class="ident">qpdf_sys::qpdf_oh_get_utf8_value</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>))
-                .<span class="ident">to_string_lossy</span>()
-                .<span class="ident">into_owned</span>()
+    <span class="kw">fn </span>as_string(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
+        <span class="kw">unsafe </span>{
+            CStr::from_ptr(qpdf_sys::qpdf_oh_get_utf8_value(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner))
+                .to_string_lossy()
+                .into_owned()
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">as_binary_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">length</span> <span class="op">=</span> <span class="number">0</span>;
-            <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">qpdf_sys::qpdf_oh_get_binary_string_value</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>, <span class="kw-2">&amp;mut</span> <span class="ident">length</span>);
-            <span class="ident">slice::from_raw_parts</span>(<span class="ident">data</span> <span class="kw">as</span> <span class="kw-2">*const</span> <span class="ident">u8</span>, <span class="ident">length</span> <span class="kw">as</span> <span class="kw">_</span>).<span class="ident">to_vec</span>()
+    <span class="kw">fn </span>as_binary_string(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>length = <span class="number">0</span>;
+            <span class="kw">let </span>data = qpdf_sys::qpdf_oh_get_binary_string_value(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner, <span class="kw-2">&amp;mut </span>length);
+            slice::from_raw_parts(data <span class="kw">as </span><span class="kw-2">*const </span>u8, length <span class="kw">as _</span>).to_vec()
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">get_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u32</span> {
-        <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_get_object_id</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>) <span class="kw">as</span> <span class="kw">_</span> }
+    <span class="kw">fn </span>get_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32 {
+        <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_get_object_id(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner) <span class="kw">as _ </span>}
     }
 
-    <span class="kw">fn</span> <span class="ident">get_generation</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">u32</span> {
-        <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_get_generation</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>) <span class="kw">as</span> <span class="kw">_</span> }
+    <span class="kw">fn </span>get_generation(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u32 {
+        <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_get_generation(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner) <span class="kw">as _ </span>}
     }
 
-    <span class="doccomment">/// convert to indirect object</span>
-    <span class="kw">fn</span> <span class="ident">into_indirect</span>(<span class="self">self</span>) -&gt; <span class="ident">QPdfObject</span> {
-        <span class="kw">unsafe</span> {
-            <span class="ident">QPdfObject::new</span>(
-                <span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">clone</span>(),
-                <span class="ident">qpdf_sys::qpdf_make_indirect_object</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>),
+    <span class="doccomment">/// convert to indirect object
+    </span><span class="kw">fn </span>into_indirect(<span class="self">self</span>) -&gt; QPdfObject {
+        <span class="kw">unsafe </span>{
+            QPdfObject::new(
+                <span class="self">self</span>.owner.clone(),
+                qpdf_sys::qpdf_make_indirect_object(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner),
             )
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">QPdfObject</span> {
-    <span class="kw">fn</span> <span class="ident">as_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">QPdfObject</span> {
-        <span class="self">self</span>
-    }
+<span class="kw">impl </span>AsRef&lt;QPdfObject&gt; <span class="kw">for </span>QPdfObject {
+    <span class="kw">fn </span>as_ref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>QPdfObject {
+        <span class="self">self
+    </span>}
 }
 
-<span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">QPdfObject</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;QpdfObject {{ {} }}&quot;</span>, <span class="self">self</span>)
+<span class="kw">impl </span>fmt::Debug <span class="kw">for </span>QPdfObject {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="string">&quot;QpdfObject {{ {} }}&quot;</span>, <span class="self">self</span>)
     }
 }
-<span class="kw">impl</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">QPdfObject</span> {
-    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span> {
-        <span class="kw">unsafe</span> {
-            <span class="ident">QPdfObject</span> {
-                <span class="ident">owner</span>: <span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">clone</span>(),
-                <span class="ident">inner</span>: <span class="ident">qpdf_sys::qpdf_oh_new_object</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>),
+<span class="kw">impl </span>Clone <span class="kw">for </span>QPdfObject {
+    <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="kw">unsafe </span>{
+            QPdfObject {
+                owner: <span class="self">self</span>.owner.clone(),
+                inner: qpdf_sys::qpdf_oh_new_object(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner),
             }
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">QPdfObject</span> {
-    <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">inner</span> <span class="op">==</span> <span class="ident">other</span>.<span class="ident">inner</span>
+<span class="kw">impl </span>PartialEq <span class="kw">for </span>QPdfObject {
+    <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
+        <span class="self">self</span>.inner == other.inner
     }
 }
 
-<span class="kw">impl</span> <span class="ident">PartialOrd</span> <span class="kw">for</span> <span class="ident">QPdfObject</span> {
-    <span class="kw">fn</span> <span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Ordering</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="ident">other</span>.<span class="ident">inner</span>)
+<span class="kw">impl </span>PartialOrd <span class="kw">for </span>QPdfObject {
+    <span class="kw">fn </span>partial_cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Ordering&gt; {
+        <span class="self">self</span>.inner.partial_cmp(<span class="kw-2">&amp;</span>other.inner)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">QPdfObject</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="kw">unsafe</span> {
-            <span class="ident">qpdf_sys::qpdf_oh_release</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>);
+<span class="kw">impl </span>Drop <span class="kw">for </span>QPdfObject {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">unsafe </span>{
+            qpdf_sys::qpdf_oh_release(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner);
         }
     }
 }
 
-<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">QPdfObject</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="kw">unsafe</span> {
+<span class="kw">impl </span>fmt::Display <span class="kw">for </span>QPdfObject {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        <span class="kw">unsafe </span>{
             <span class="macro">write!</span>(
-                <span class="ident">f</span>,
+                f,
                 <span class="string">&quot;{}&quot;</span>,
-                <span class="ident">CStr::from_ptr</span>(<span class="ident">qpdf_sys::qpdf_oh_unparse</span>(<span class="self">self</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>)).<span class="ident">to_string_lossy</span>()
+                CStr::from_ptr(qpdf_sys::qpdf_oh_unparse(<span class="self">self</span>.owner.inner(), <span class="self">self</span>.inner)).to_string_lossy()
             )
         }
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="qpdf" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0 (fe5b13d68 2022-05-18)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="qpdf" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0 (69f9c33d7 2022-12-12)" ></div></body></html>

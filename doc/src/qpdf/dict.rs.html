@@ -1,9 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `qpdf-rs/src/dict.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>dict.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../qpdf/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../qpdf/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../qpdf/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `qpdf-rs/src/dict.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>dict.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../qpdf/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -121,124 +116,123 @@
 <span id="116">116</span>
 <span id="117">117</span>
 <span id="118">118</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">ffi</span>::{<span class="ident">CStr</span>, <span class="ident">CString</span>},
-    <span class="ident">fmt</span>, <span class="ident">ptr</span>,
+</pre><pre class="rust"><code><span class="kw">use </span>std::{
+    ffi::{CStr, CString},
+    fmt, ptr,
 };
 
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">QPdfObject</span>, <span class="ident">QPdfObjectLike</span>, <span class="ident">QPdfObjectType</span>, <span class="ident">QPdfStreamData</span>, <span class="prelude-ty">Result</span>};
+<span class="kw">use crate</span>::{QPdfObject, QPdfObjectLike, QPdfObjectType, QPdfStreamData, <span class="prelude-ty">Result</span>};
 
-<span class="doccomment">/// QPdfDictionary wraps a QPdfObject for dictionary-related operations</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">QPdfDictionary</span> {
-    <span class="ident">inner</span>: <span class="ident">QPdfObject</span>,
+<span class="doccomment">/// QPdfDictionary wraps a QPdfObject for dictionary-related operations
+</span><span class="kw">pub struct </span>QPdfDictionary {
+    inner: QPdfObject,
 }
 
-<span class="kw">impl</span> <span class="ident">QPdfDictionary</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">inner</span>: <span class="ident">QPdfObject</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">QPdfDictionary</span> { <span class="ident">inner</span> }
+<span class="kw">impl </span>QPdfDictionary {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(inner: QPdfObject) -&gt; <span class="self">Self </span>{
+        QPdfDictionary { inner }
     }
 
-    <span class="doccomment">/// Get contents from the page object</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_page_content_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">QPdfStreamData</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">len</span> <span class="op">=</span> <span class="number">0</span>;
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="ident">ptr::null_mut</span>();
-            <span class="ident">qpdf_sys::qpdf_oh_get_page_content_data</span>(<span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">inner</span>, <span class="kw-2">&amp;mut</span> <span class="ident">buffer</span>, <span class="kw-2">&amp;mut</span> <span class="ident">len</span>);
-            <span class="self">self</span>.<span class="ident">inner</span>
-                .<span class="ident">owner</span>
-                .<span class="ident">last_error_or_then</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">QPdfStreamData::new</span>(<span class="ident">buffer</span>, <span class="ident">len</span> <span class="kw">as</span> <span class="kw">_</span>))
+    <span class="doccomment">/// Get contents from the page object
+    </span><span class="kw">pub fn </span>get_page_content_data(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;QPdfStreamData&gt; {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>len = <span class="number">0</span>;
+            <span class="kw">let </span><span class="kw-2">mut </span>buffer = ptr::null_mut();
+            qpdf_sys::qpdf_oh_get_page_content_data(<span class="self">self</span>.inner.owner.inner(), <span class="self">self</span>.inner.inner, <span class="kw-2">&amp;mut </span>buffer, <span class="kw-2">&amp;mut </span>len);
+            <span class="self">self</span>.inner
+                .owner
+                .last_error_or_then(|| QPdfStreamData::new(buffer, len <span class="kw">as _</span>))
         }
     }
 
-    <span class="doccomment">/// Check whether there is a key in the dictionary</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">has</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">key_str</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">key</span>).<span class="ident">unwrap</span>();
-            <span class="ident">qpdf_sys::qpdf_oh_has_key</span>(<span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">inner</span>, <span class="ident">key_str</span>.<span class="ident">as_ptr</span>()) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
+    <span class="doccomment">/// Check whether there is a key in the dictionary
+    </span><span class="kw">pub fn </span>has(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; bool {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span>key_str = CString::new(key).unwrap();
+            qpdf_sys::qpdf_oh_has_key(<span class="self">self</span>.inner.owner.inner(), <span class="self">self</span>.inner.inner, key_str.as_ptr()) != <span class="number">0
+        </span>}
+    }
+
+    <span class="doccomment">/// Get dictionary element for the specified key
+    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;QPdfObject&gt; {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span>key_str = CString::new(key).unwrap();
+            <span class="kw">let </span>oh = qpdf_sys::qpdf_oh_get_key(<span class="self">self</span>.inner.owner.inner(), <span class="self">self</span>.inner.inner, key_str.as_ptr());
+            <span class="kw">let </span>obj = QPdfObject::new(<span class="self">self</span>.inner.owner.clone(), oh);
+            <span class="kw">if </span>obj.get_type() != QPdfObjectType::Null {
+                <span class="prelude-val">Some</span>(obj)
+            } <span class="kw">else </span>{
+                <span class="prelude-val">None
+            </span>}
         }
     }
 
-    <span class="doccomment">/// Get dictionary element for the specified key</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">key_str</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">key</span>).<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="ident">qpdf_sys::qpdf_oh_get_key</span>(<span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">inner</span>, <span class="ident">key_str</span>.<span class="ident">as_ptr</span>());
-            <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">owner</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>);
-            <span class="kw">if</span> <span class="ident">obj</span>.<span class="ident">get_type</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">QPdfObjectType::Null</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">obj</span>)
-            } <span class="kw">else</span> {
-                <span class="prelude-val">None</span>
-            }
-        }
-    }
-
-    <span class="doccomment">/// Set dictionary element for the specified key</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">value</span>: <span class="ident">V</span>) {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">key_str</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">key</span>).<span class="ident">unwrap</span>();
-            <span class="ident">qpdf_sys::qpdf_oh_replace_key</span>(
-                <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(),
-                <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">inner</span>,
-                <span class="ident">key_str</span>.<span class="ident">as_ptr</span>(),
-                <span class="ident">value</span>.<span class="ident">as_ref</span>().<span class="ident">inner</span>,
+    <span class="doccomment">/// Set dictionary element for the specified key
+    </span><span class="kw">pub fn </span>set&lt;V: AsRef&lt;QPdfObject&gt;&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str, value: V) {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span>key_str = CString::new(key).unwrap();
+            qpdf_sys::qpdf_oh_replace_key(
+                <span class="self">self</span>.inner.owner.inner(),
+                <span class="self">self</span>.inner.inner,
+                key_str.as_ptr(),
+                value.as_ref().inner,
             );
         }
     }
 
-    <span class="doccomment">/// Remove dictionary element</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">key_str</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">key</span>).<span class="ident">unwrap</span>();
-            <span class="ident">qpdf_sys::qpdf_oh_remove_key</span>(<span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">inner</span>, <span class="ident">key_str</span>.<span class="ident">as_ptr</span>());
+    <span class="doccomment">/// Remove dictionary element
+    </span><span class="kw">pub fn </span>remove(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>str) {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span>key_str = CString::new(key).unwrap();
+            qpdf_sys::qpdf_oh_remove_key(<span class="self">self</span>.inner.owner.inner(), <span class="self">self</span>.inner.inner, key_str.as_ptr());
         }
     }
 
-    <span class="doccomment">/// Return all keys from the dictionary</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keys</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">keys</span> <span class="op">=</span> <span class="ident">Vec::new</span>();
-        <span class="kw">unsafe</span> {
-            <span class="ident">qpdf_sys::qpdf_oh_begin_dict_key_iter</span>(<span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">inner</span>);
-            <span class="kw">while</span> <span class="ident">qpdf_sys::qpdf_oh_dict_more_keys</span>(<span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">owner</span>.<span class="ident">inner</span>()) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-                <span class="ident">keys</span>.<span class="ident">push</span>(
-                    <span class="ident">CStr::from_ptr</span>(<span class="ident">qpdf_sys::qpdf_oh_dict_next_key</span>(<span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">owner</span>.<span class="ident">inner</span>()))
-                        .<span class="ident">to_string_lossy</span>()
-                        .<span class="ident">into_owned</span>(),
+    <span class="doccomment">/// Return all keys from the dictionary
+    </span><span class="kw">pub fn </span>keys(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;String&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>keys = Vec::new();
+        <span class="kw">unsafe </span>{
+            qpdf_sys::qpdf_oh_begin_dict_key_iter(<span class="self">self</span>.inner.owner.inner(), <span class="self">self</span>.inner.inner);
+            <span class="kw">while </span>qpdf_sys::qpdf_oh_dict_more_keys(<span class="self">self</span>.inner.owner.inner()) != <span class="number">0 </span>{
+                keys.push(
+                    CStr::from_ptr(qpdf_sys::qpdf_oh_dict_next_key(<span class="self">self</span>.inner.owner.inner()))
+                        .to_string_lossy()
+                        .into_owned(),
                 );
             }
         }
-        <span class="ident">keys</span>
+        keys
     }
 }
 
-<span class="kw">impl</span> <span class="ident">QPdfObjectLike</span> <span class="kw">for</span> <span class="ident">QPdfDictionary</span> {
-    <span class="kw">fn</span> <span class="ident">as_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">QPdfObject</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">inner</span>
+<span class="kw">impl </span>QPdfObjectLike <span class="kw">for </span>QPdfDictionary {
+    <span class="kw">fn </span>as_object(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>QPdfObject {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.inner
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">QPdfDictionary</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">obj</span>: <span class="ident">QPdfObject</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">QPdfDictionary::new</span>(<span class="ident">obj</span>)
+<span class="kw">impl </span>From&lt;QPdfObject&gt; <span class="kw">for </span>QPdfDictionary {
+    <span class="kw">fn </span>from(obj: QPdfObject) -&gt; <span class="self">Self </span>{
+        QPdfDictionary::new(obj)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">QPdfDictionary</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">QPdfObject</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">dict</span>: <span class="ident">QPdfDictionary</span>) -&gt; <span class="self">Self</span> {
-        <span class="ident">dict</span>.<span class="ident">inner</span>
+<span class="kw">impl </span>From&lt;QPdfDictionary&gt; <span class="kw">for </span>QPdfObject {
+    <span class="kw">fn </span>from(dict: QPdfDictionary) -&gt; <span class="self">Self </span>{
+        dict.inner
     }
 }
 
-<span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">QPdfDictionary</span> {
-    <span class="kw">fn</span> <span class="ident">as_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="ident">QPdfObject</span> {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">inner</span>
+<span class="kw">impl </span>AsRef&lt;QPdfObject&gt; <span class="kw">for </span>QPdfDictionary {
+    <span class="kw">fn </span>as_ref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>QPdfObject {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.inner
     }
 }
 
-<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">QPdfDictionary</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)
+<span class="kw">impl </span>fmt::Display <span class="kw">for </span>QPdfDictionary {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        <span class="self">self</span>.inner.fmt(f)
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="qpdf" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0 (fe5b13d68 2022-05-18)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="qpdf" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0 (69f9c33d7 2022-12-12)" ></div></body></html>

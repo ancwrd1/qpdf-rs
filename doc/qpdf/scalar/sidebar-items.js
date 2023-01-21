@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["QPdfScalar","QPdfScalar represents scalar objects such as integer and real"]]});
+window.SIDEBAR_ITEMS = {"struct":[["QPdfScalar","QPdfScalar represents scalar objects such as integer and real"]]};

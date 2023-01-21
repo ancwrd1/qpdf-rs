@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["QPdfWriter","PDF writer with several customizable parameters"]]});
+window.SIDEBAR_ITEMS = {"struct":[["QPdfWriter","PDF writer with several customizable parameters"]]};

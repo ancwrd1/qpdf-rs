@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["QPdfArray","QPdfArray wraps a QPdfObject for array-specific operations"],["QPdfArrayIterator","QPdfArray iterator"]]});
+window.SIDEBAR_ITEMS = {"struct":[["QPdfArray","QPdfArray wraps a QPdfObject for array-specific operations"],["QPdfArrayIterator","QPdfArray iterator"]]};

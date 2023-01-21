@@ -1,9 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `qpdf-rs/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script src="../../crates.js"></script><script defer src="../../main.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../qpdf/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a><h2 class="location"></h2>
-    </nav>
-    <nav class="sidebar"><a class="sidebar-logo" href="../../qpdf/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../qpdf/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `qpdf-rs/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../qpdf/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -483,486 +478,513 @@
 <span id="478">478</span>
 <span id="479">479</span>
 <span id="480">480</span>
-</pre><pre class="rust"><code><span class="attribute">#![<span class="ident">doc</span> <span class="op">=</span> <span class="macro">include_str!</span>(<span class="string">&quot;../README.md&quot;</span>)]</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+</pre><pre class="rust"><code><span class="attribute">#![doc = <span class="macro">include_str!</span>(<span class="string">&quot;../README.md&quot;</span>)]
 
-<span class="kw">use</span> <span class="ident">std</span>::{
-    <span class="ident">ffi</span>::{<span class="ident">CStr</span>, <span class="ident">CString</span>},
-    <span class="ident">fmt</span>,
-    <span class="ident">path::Path</span>,
-    <span class="ident">ptr</span>,
-    <span class="ident">rc::Rc</span>,
+</span><span class="kw">use </span>std::{
+    ffi::{CStr, CString},
+    fmt,
+    path::Path,
+    ptr,
+    rc::Rc,
 };
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">array</span>::<span class="kw-2">*</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dict</span>::<span class="kw-2">*</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">error</span>::<span class="kw-2">*</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">object</span>::<span class="kw-2">*</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">scalar</span>::<span class="kw-2">*</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">stream</span>::<span class="kw-2">*</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">writer</span>::<span class="kw-2">*</span>;
+<span class="kw">pub use </span>array::<span class="kw-2">*</span>;
+<span class="kw">pub use </span>dict::<span class="kw-2">*</span>;
+<span class="kw">pub use </span>error::<span class="kw-2">*</span>;
+<span class="kw">pub use </span>object::<span class="kw-2">*</span>;
+<span class="kw">pub use </span>scalar::<span class="kw-2">*</span>;
+<span class="kw">pub use </span>stream::<span class="kw-2">*</span>;
+<span class="kw">pub use </span>writer::<span class="kw-2">*</span>;
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">array</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">dict</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">error</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">object</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">scalar</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">stream</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">writer</span>;
+<span class="kw">pub mod </span>array;
+<span class="kw">pub mod </span>dict;
+<span class="kw">pub mod </span>error;
+<span class="kw">pub mod </span>object;
+<span class="kw">pub mod </span>scalar;
+<span class="kw">pub mod </span>stream;
+<span class="kw">pub mod </span>writer;
 
-<span class="kw">pub</span> <span class="kw">type</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">std::result::Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">QPdfError</span><span class="op">&gt;</span>;
+<span class="kw">pub type </span><span class="prelude-ty">Result</span>&lt;T&gt; = std::result::Result&lt;T, QPdfError&gt;;
 
-<span class="kw">struct</span> <span class="ident">Handle</span>(<span class="ident">qpdf_sys::qpdf_data</span>);
+<span class="kw">struct </span>Handle(qpdf_sys::qpdf_data);
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Handle</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) {
-        <span class="kw">unsafe</span> {
-            <span class="ident">qpdf_sys::qpdf_cleanup</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="number">0</span>);
+<span class="kw">impl </span>Drop <span class="kw">for </span>Handle {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">unsafe </span>{
+            qpdf_sys::qpdf_cleanup(<span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0</span>);
         }
     }
 }
 
-<span class="doccomment">/// QPdf is a data structure which represents a PDF file</span>
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">QPdf</span> {
-    <span class="ident">inner</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">Handle</span><span class="op">&gt;</span>,
+<span class="doccomment">/// QPdf is a data structure which represents a PDF file
+</span><span class="attribute">#[derive(Clone)]
+</span><span class="kw">pub struct </span>QPdf {
+    inner: Rc&lt;Handle&gt;,
+    buffer: Vec&lt;u8&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">fmt::Debug</span> <span class="kw">for</span> <span class="ident">QPdf</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;mut</span> <span class="ident">fmt::Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) -&gt; <span class="ident">fmt::Result</span> {
-        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;QPDF version {}&quot;</span>, <span class="ident">QPdf::library_version</span>())
+<span class="kw">impl </span>fmt::Debug <span class="kw">for </span>QPdf {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="string">&quot;QPDF version {}&quot;</span>, QPdf::library_version())
     }
 }
 
-<span class="kw">impl</span> <span class="ident">QPdf</span> {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">inner</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">qpdf_sys::qpdf_data</span> {
-        <span class="self">self</span>.<span class="ident">inner</span>.<span class="number">0</span>
+<span class="kw">impl </span>QPdf {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>inner(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; qpdf_sys::qpdf_data {
+        <span class="self">self</span>.inner.<span class="number">0
+    </span>}
+
+    <span class="kw">fn </span>wrap_ffi_call&lt;F, R&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, f: F) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;
+    <span class="kw">where
+        </span>F: FnOnce() -&gt; R,
+    {
+        f();
+        <span class="self">self</span>.last_error_or_then(|| ())
     }
 
-    <span class="kw">fn</span> <span class="ident">wrap_ffi_call</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>() -&gt; <span class="ident">R</span>,
+    <span class="kw">fn </span>last_error_or_then&lt;F, T&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, f: F) -&gt; <span class="prelude-ty">Result</span>&lt;T&gt;
+    <span class="kw">where
+        </span>F: FnOnce() -&gt; T,
     {
-        <span class="ident">f</span>();
-        <span class="self">self</span>.<span class="ident">last_error_or_then</span>(<span class="op">|</span><span class="op">|</span> ())
-    }
-
-    <span class="kw">fn</span> <span class="ident">last_error_or_then</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>() -&gt; <span class="ident">T</span>,
-    {
-        <span class="kw">unsafe</span> {
-            <span class="kw">if</span> <span class="ident">qpdf_sys::qpdf_has_error</span>(<span class="self">self</span>.<span class="ident">inner</span>()) <span class="op">==</span> <span class="number">0</span> {
-                <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">f</span>());
+        <span class="kw">unsafe </span>{
+            <span class="kw">if </span>qpdf_sys::qpdf_has_error(<span class="self">self</span>.inner()) == <span class="number">0 </span>{
+                <span class="kw">return </span><span class="prelude-val">Ok</span>(f());
             }
 
-            <span class="kw">let</span> <span class="ident">qpdf_error</span> <span class="op">=</span> <span class="ident">qpdf_sys::qpdf_get_error</span>(<span class="self">self</span>.<span class="ident">inner</span>());
-            <span class="kw">let</span> <span class="ident">code</span> <span class="op">=</span> <span class="ident">qpdf_sys::qpdf_get_error_code</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">qpdf_error</span>);
+            <span class="kw">let </span>qpdf_error = qpdf_sys::qpdf_get_error(<span class="self">self</span>.inner());
+            <span class="kw">let </span>code = qpdf_sys::qpdf_get_error_code(<span class="self">self</span>.inner(), qpdf_error);
 
-            <span class="kw">match</span> <span class="ident">error_or_ok</span>(<span class="ident">code</span>) {
-                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="ident">f</span>()),
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; {
-                    <span class="kw">let</span> <span class="ident">error_detail</span> <span class="op">=</span> <span class="ident">qpdf_sys::qpdf_get_error_message_detail</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">qpdf_error</span>);
+            <span class="kw">match </span>error_or_ok(code) {
+                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(f()),
+                <span class="prelude-val">Err</span>(e) =&gt; {
+                    <span class="kw">let </span>error_detail = qpdf_sys::qpdf_get_error_message_detail(<span class="self">self</span>.inner(), qpdf_error);
 
-                    <span class="kw">let</span> <span class="ident">description</span> <span class="op">=</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">error_detail</span>.<span class="ident">is_null</span>() {
-                        <span class="prelude-val">Some</span>(<span class="ident">CStr::from_ptr</span>(<span class="ident">error_detail</span>).<span class="ident">to_string_lossy</span>().<span class="ident">into_owned</span>())
-                    } <span class="kw">else</span> {
-                        <span class="prelude-val">None</span>
-                    };
+                    <span class="kw">let </span>description = <span class="kw">if </span>!error_detail.is_null() {
+                        <span class="prelude-val">Some</span>(CStr::from_ptr(error_detail).to_string_lossy().into_owned())
+                    } <span class="kw">else </span>{
+                        <span class="prelude-val">None
+                    </span>};
 
-                    <span class="kw">let</span> <span class="ident">position</span> <span class="op">=</span> <span class="ident">qpdf_sys::qpdf_get_error_file_position</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">qpdf_error</span>);
+                    <span class="kw">let </span>position = qpdf_sys::qpdf_get_error_file_position(<span class="self">self</span>.inner(), qpdf_error);
 
-                    <span class="prelude-val">Err</span>(<span class="ident">QPdfError</span> {
-                        <span class="ident">description</span>,
-                        <span class="ident">position</span>: <span class="prelude-val">Some</span>(<span class="ident">position</span>),
-                        ..<span class="ident">e</span>
+                    <span class="prelude-val">Err</span>(QPdfError {
+                        description,
+                        position: <span class="prelude-val">Some</span>(position),
+                        ..e
                     })
                 }
             }
         }
     }
 
-    <span class="doccomment">/// Get QPDF library version</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">library_version</span>() -&gt; <span class="ident">String</span> {
-        <span class="kw">unsafe</span> {
-            <span class="ident">CStr::from_ptr</span>(<span class="ident">qpdf_sys::qpdf_get_qpdf_version</span>())
-                .<span class="ident">to_string_lossy</span>()
-                .<span class="ident">into_owned</span>()
+    <span class="doccomment">/// Get QPDF library version
+    </span><span class="kw">pub fn </span>library_version() -&gt; String {
+        <span class="kw">unsafe </span>{
+            CStr::from_ptr(qpdf_sys::qpdf_get_qpdf_version())
+                .to_string_lossy()
+                .into_owned()
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">new</span>() -&gt; <span class="ident">QPdf</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">qpdf_sys::qpdf_init</span>();
-            <span class="ident">qpdf_sys::qpdf_set_suppress_warnings</span>(<span class="ident">inner</span>, <span class="bool-val">true</span>.<span class="ident">into</span>());
-            <span class="ident">qpdf_sys::qpdf_silence_errors</span>(<span class="ident">inner</span>);
-            <span class="ident">QPdf</span> {
-                <span class="ident">inner</span>: <span class="ident">Rc::new</span>(<span class="ident">Handle</span>(<span class="ident">inner</span>)),
+    <span class="kw">fn </span>new() -&gt; QPdf {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span>inner = qpdf_sys::qpdf_init();
+            qpdf_sys::qpdf_set_suppress_warnings(inner, <span class="bool-val">true</span>.into());
+            qpdf_sys::qpdf_silence_errors(inner);
+            QPdf {
+                inner: Rc::new(Handle(inner)),
+                buffer: Vec::new(),
             }
         }
     }
 
-    <span class="doccomment">/// Create an empty PDF</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">empty</span>() -&gt; <span class="ident">QPdf</span> {
-        <span class="kw">let</span> <span class="ident">qpdf</span> <span class="op">=</span> <span class="ident">QPdf::new</span>();
-        <span class="kw">unsafe</span> {
-            <span class="ident">qpdf_sys::qpdf_empty_pdf</span>(<span class="ident">qpdf</span>.<span class="ident">inner</span>());
+    <span class="kw">fn </span>new_with_buffer(buffer: Vec&lt;u8&gt;) -&gt; QPdf {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span>inner = qpdf_sys::qpdf_init();
+            qpdf_sys::qpdf_set_suppress_warnings(inner, <span class="bool-val">true</span>.into());
+            qpdf_sys::qpdf_silence_errors(inner);
+            QPdf {
+                inner: Rc::new(Handle(inner)),
+                buffer,
+            }
         }
-        <span class="ident">qpdf</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">do_read_file</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">password</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">filename</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">path</span>.<span class="ident">to_string_lossy</span>().<span class="ident">as_ref</span>())<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">password</span> <span class="op">=</span> <span class="ident">password</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">CString::new</span>(<span class="ident">p</span>).<span class="ident">ok</span>());
-
-        <span class="kw">let</span> <span class="ident">raw_password</span> <span class="op">=</span> <span class="ident">password</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">as_ptr</span>()).<span class="ident">unwrap_or_else</span>(<span class="ident">ptr::null</span>);
-
-        <span class="self">self</span>.<span class="ident">wrap_ffi_call</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_read</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">filename</span>.<span class="ident">as_ptr</span>(), <span class="ident">raw_password</span>) })
+    <span class="doccomment">/// Create an empty PDF
+    </span><span class="kw">pub fn </span>empty() -&gt; QPdf {
+        <span class="kw">let </span>qpdf = QPdf::new();
+        <span class="kw">unsafe </span>{
+            qpdf_sys::qpdf_empty_pdf(qpdf.inner());
+        }
+        qpdf
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">do_read_from_memory</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">password</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">password</span> <span class="op">=</span> <span class="ident">password</span>.<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">CString::new</span>(<span class="ident">p</span>).<span class="ident">ok</span>());
+    <span class="kw">fn </span>do_read_file(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, path: <span class="kw-2">&amp;</span>Path, password: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="kw">let </span>filename = CString::new(path.to_string_lossy().as_ref())<span class="question-mark">?</span>;
+        <span class="kw">let </span>password = password.and_then(|p| CString::new(p).ok());
 
-        <span class="kw">let</span> <span class="ident">raw_password</span> <span class="op">=</span> <span class="ident">password</span>.<span class="ident">as_ref</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">as_ptr</span>()).<span class="ident">unwrap_or_else</span>(<span class="ident">ptr::null</span>);
+        <span class="kw">let </span>raw_password = password.as_ref().map(|p| p.as_ptr()).unwrap_or_else(ptr::null);
 
-        <span class="self">self</span>.<span class="ident">wrap_ffi_call</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">unsafe</span> {
-            <span class="ident">qpdf_sys::qpdf_read_memory</span>(
-                <span class="self">self</span>.<span class="ident">inner</span>(),
-                <span class="string">b&quot;memory\0&quot;</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw">_</span>,
-                <span class="ident">buf</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw">_</span>,
-                <span class="ident">buf</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>,
-                <span class="ident">raw_password</span>,
+        <span class="self">self</span>.wrap_ffi_call(|| <span class="kw">unsafe </span>{ qpdf_sys::qpdf_read(<span class="self">self</span>.inner(), filename.as_ptr(), raw_password) })
+    }
+
+    <span class="kw">pub fn </span>do_read_from_memory(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, password: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="kw">let </span>password = password.and_then(|p| CString::new(p).ok());
+
+        <span class="kw">let </span>raw_password = password.as_ref().map(|p| p.as_ptr()).unwrap_or_else(ptr::null);
+
+        <span class="self">self</span>.wrap_ffi_call(|| <span class="kw">unsafe </span>{
+            qpdf_sys::qpdf_read_memory(
+                <span class="self">self</span>.inner(),
+                <span class="string">b&quot;memory\0&quot;</span>.as_ptr() <span class="kw">as _</span>,
+                <span class="self">self</span>.buffer.as_ptr() <span class="kw">as _</span>,
+                <span class="self">self</span>.buffer.len() <span class="kw">as _</span>,
+                raw_password,
             );
         })
     }
 
-    <span class="doccomment">/// Read PDF from the file</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">QPdf</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">qpdf</span> <span class="op">=</span> <span class="ident">QPdf::new</span>();
-        <span class="ident">qpdf</span>.<span class="ident">do_read_file</span>(<span class="ident">path</span>.<span class="ident">as_ref</span>(), <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">qpdf</span>)
+    <span class="doccomment">/// Read PDF from the file
+    </span><span class="kw">pub fn </span>read&lt;P: AsRef&lt;Path&gt;&gt;(path: P) -&gt; <span class="prelude-ty">Result</span>&lt;QPdf&gt; {
+        <span class="kw">let </span>qpdf = QPdf::new();
+        qpdf.do_read_file(path.as_ref(), <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(qpdf)
     }
 
-    <span class="doccomment">/// Load encrypted PDF from the file</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read_encrypted</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>, <span class="ident">password</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">QPdf</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">qpdf</span> <span class="op">=</span> <span class="ident">QPdf::new</span>();
-        <span class="ident">qpdf</span>.<span class="ident">do_read_file</span>(<span class="ident">path</span>.<span class="ident">as_ref</span>(), <span class="prelude-val">Some</span>(<span class="ident">password</span>))<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">qpdf</span>)
+    <span class="doccomment">/// Load encrypted PDF from the file
+    </span><span class="kw">pub fn </span>read_encrypted&lt;P: AsRef&lt;Path&gt;&gt;(path: P, password: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;QPdf&gt; {
+        <span class="kw">let </span>qpdf = QPdf::new();
+        qpdf.do_read_file(path.as_ref(), <span class="prelude-val">Some</span>(password))<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(qpdf)
     }
 
-    <span class="doccomment">/// Read PDF from memory</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read_from_memory</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">buffer</span>: <span class="ident">T</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">QPdf</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">qpdf</span> <span class="op">=</span> <span class="ident">QPdf::new</span>();
-        <span class="ident">qpdf</span>.<span class="ident">do_read_from_memory</span>(<span class="ident">buffer</span>.<span class="ident">as_ref</span>(), <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">qpdf</span>)
+    <span class="doccomment">/// Read PDF from memory
+    </span><span class="kw">pub fn </span>read_from_memory&lt;T: AsRef&lt;[u8]&gt;&gt;(buffer: T) -&gt; <span class="prelude-ty">Result</span>&lt;QPdf&gt; {
+        <span class="kw">let </span>qpdf = QPdf::new_with_buffer(buffer.as_ref().into());
+        qpdf.do_read_from_memory(<span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(qpdf)
     }
 
-    <span class="doccomment">/// Read encrypted PDF from memory</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read_from_memory_encrypted</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">buffer</span>: <span class="ident">T</span>, <span class="ident">password</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">QPdf</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">qpdf</span> <span class="op">=</span> <span class="ident">QPdf::new</span>();
-        <span class="ident">qpdf</span>.<span class="ident">do_read_from_memory</span>(<span class="ident">buffer</span>.<span class="ident">as_ref</span>(), <span class="prelude-val">Some</span>(<span class="ident">password</span>))<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(<span class="ident">qpdf</span>)
+    <span class="doccomment">/// Read encrypted PDF from memory
+    </span><span class="kw">pub fn </span>read_from_memory_encrypted&lt;T: AsRef&lt;[u8]&gt;&gt;(buffer: T, password: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;QPdf&gt; {
+        <span class="kw">let </span>qpdf = QPdf::new_with_buffer(buffer.as_ref().into());
+        qpdf.do_read_from_memory(<span class="prelude-val">Some</span>(password))<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(qpdf)
     }
 
-    <span class="doccomment">/// Return QPdfWriter used to write PDF to file or memory</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">writer</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="ident">QPdfWriter</span> {
-        <span class="ident">QPdfWriter::new</span>(<span class="self">self</span>.<span class="ident">clone</span>())
+    <span class="doccomment">/// Return QPdfWriter used to write PDF to file or memory
+    </span><span class="kw">pub fn </span>writer(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; QPdfWriter {
+        QPdfWriter::new(<span class="self">self</span>.clone())
     }
 
-    <span class="doccomment">/// Check PDF for errors</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">check_pdf</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">wrap_ffi_call</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_check_pdf</span>(<span class="self">self</span>.<span class="ident">inner</span>()) })
+    <span class="doccomment">/// Check PDF for errors
+    </span><span class="kw">pub fn </span>check_pdf(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="self">self</span>.wrap_ffi_call(|| <span class="kw">unsafe </span>{ qpdf_sys::qpdf_check_pdf(<span class="self">self</span>.inner()) })
     }
 
-    <span class="doccomment">/// Enable or disable automatic PDF recovery</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enable_recovery</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">flag</span>: <span class="ident">bool</span>) {
-        <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_set_attempt_recovery</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">flag</span>.<span class="ident">into</span>()) }
+    <span class="doccomment">/// Enable or disable automatic PDF recovery
+    </span><span class="kw">pub fn </span>enable_recovery(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, flag: bool) {
+        <span class="kw">unsafe </span>{ qpdf_sys::qpdf_set_attempt_recovery(<span class="self">self</span>.inner(), flag.into()) }
     }
 
-    <span class="doccomment">/// Enable or disable xref streams ignorance</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ignore_xref_streams</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">flag</span>: <span class="ident">bool</span>) {
-        <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_set_ignore_xref_streams</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">flag</span>.<span class="ident">into</span>()) }
+    <span class="doccomment">/// Enable or disable xref streams ignorance
+    </span><span class="kw">pub fn </span>ignore_xref_streams(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, flag: bool) {
+        <span class="kw">unsafe </span>{ qpdf_sys::qpdf_set_ignore_xref_streams(<span class="self">self</span>.inner(), flag.into()) }
     }
 
-    <span class="doccomment">/// Get PDF version as a string</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_pdf_version</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="ident">String</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">version</span> <span class="op">=</span> <span class="ident">qpdf_sys::qpdf_get_pdf_version</span>(<span class="self">self</span>.<span class="ident">inner</span>());
-            <span class="kw">if</span> <span class="ident">version</span>.<span class="ident">is_null</span>() {
-                <span class="ident">String::new</span>()
-            } <span class="kw">else</span> {
-                <span class="ident">CStr::from_ptr</span>(<span class="ident">version</span>).<span class="ident">to_string_lossy</span>().<span class="ident">into_owned</span>()
+    <span class="doccomment">/// Get PDF version as a string
+    </span><span class="kw">pub fn </span>get_pdf_version(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; String {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span>version = qpdf_sys::qpdf_get_pdf_version(<span class="self">self</span>.inner());
+            <span class="kw">if </span>version.is_null() {
+                String::new()
+            } <span class="kw">else </span>{
+                CStr::from_ptr(version).to_string_lossy().into_owned()
             }
         }
     }
 
-    <span class="doccomment">/// Get PDF extension level</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_pdf_extension_level</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="ident">u32</span> {
-        <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_get_pdf_extension_level</span>(<span class="self">self</span>.<span class="ident">inner</span>()) <span class="kw">as</span> <span class="kw">_</span> }
+    <span class="doccomment">/// Get PDF extension level
+    </span><span class="kw">pub fn </span>get_pdf_extension_level(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; u32 {
+        <span class="kw">unsafe </span>{ qpdf_sys::qpdf_get_pdf_extension_level(<span class="self">self</span>.inner()) <span class="kw">as _ </span>}
     }
 
-    <span class="doccomment">/// Return true if PDF is linearized</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_linearized</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_is_linearized</span>(<span class="self">self</span>.<span class="ident">inner</span>()) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> }
+    <span class="doccomment">/// Return true if PDF is linearized
+    </span><span class="kw">pub fn </span>is_linearized(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; bool {
+        <span class="kw">unsafe </span>{ qpdf_sys::qpdf_is_linearized(<span class="self">self</span>.inner()) != <span class="number">0 </span>}
     }
 
-    <span class="doccomment">/// Return true if PDF is encrypted</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_encrypted</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="ident">bool</span> {
-        <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_is_encrypted</span>(<span class="self">self</span>.<span class="ident">inner</span>()) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> }
+    <span class="doccomment">/// Return true if PDF is encrypted
+    </span><span class="kw">pub fn </span>is_encrypted(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; bool {
+        <span class="kw">unsafe </span>{ qpdf_sys::qpdf_is_encrypted(<span class="self">self</span>.inner()) != <span class="number">0 </span>}
     }
 
-    <span class="doccomment">/// Add a page object to PDF. The `first` parameter indicates whether to prepend or append it.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_page</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">new_page</span>: <span class="ident">T</span>, <span class="ident">first</span>: <span class="ident">bool</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">wrap_ffi_call</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">unsafe</span> {
-            <span class="ident">qpdf_sys::qpdf_add_page</span>(
-                <span class="self">self</span>.<span class="ident">inner</span>(),
-                <span class="ident">new_page</span>.<span class="ident">as_ref</span>().<span class="ident">owner</span>.<span class="ident">inner</span>(),
-                <span class="ident">new_page</span>.<span class="ident">as_ref</span>().<span class="ident">inner</span>,
-                <span class="ident">first</span>.<span class="ident">into</span>(),
+    <span class="doccomment">/// Add a page object to PDF. The `first` parameter indicates whether to prepend or append it.
+    </span><span class="kw">pub fn </span>add_page&lt;T: AsRef&lt;QPdfObject&gt;&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, new_page: T, first: bool) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="self">self</span>.wrap_ffi_call(|| <span class="kw">unsafe </span>{
+            qpdf_sys::qpdf_add_page(
+                <span class="self">self</span>.inner(),
+                new_page.as_ref().owner.inner(),
+                new_page.as_ref().inner,
+                first.into(),
             )
         })
     }
 
-    <span class="doccomment">/// Add a page object to PDF before or after a specified `ref_page`. A page may belong to another PDF.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_page_at</span><span class="op">&lt;</span><span class="ident">N</span>, <span class="ident">R</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">new_page</span>: <span class="ident">N</span>, <span class="ident">before</span>: <span class="ident">bool</span>, <span class="ident">ref_page</span>: <span class="ident">R</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">N</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span>,
-        <span class="ident">R</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Add a page object to PDF before or after a specified `ref_page`. A page may belong to another PDF.
+    </span><span class="kw">pub fn </span>add_page_at&lt;N, R&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, new_page: N, before: bool, ref_page: R) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt;
+    <span class="kw">where
+        </span>N: AsRef&lt;QPdfObject&gt;,
+        R: AsRef&lt;QPdfObject&gt;,
     {
-        <span class="self">self</span>.<span class="ident">wrap_ffi_call</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">unsafe</span> {
-            <span class="ident">qpdf_sys::qpdf_add_page_at</span>(
-                <span class="self">self</span>.<span class="ident">inner</span>(),
-                <span class="ident">new_page</span>.<span class="ident">as_ref</span>().<span class="ident">owner</span>.<span class="ident">inner</span>(),
-                <span class="ident">new_page</span>.<span class="ident">as_ref</span>().<span class="ident">inner</span>,
-                <span class="ident">before</span>.<span class="ident">into</span>(),
-                <span class="ident">ref_page</span>.<span class="ident">as_ref</span>().<span class="ident">inner</span>,
+        <span class="self">self</span>.wrap_ffi_call(|| <span class="kw">unsafe </span>{
+            qpdf_sys::qpdf_add_page_at(
+                <span class="self">self</span>.inner(),
+                new_page.as_ref().owner.inner(),
+                new_page.as_ref().inner,
+                before.into(),
+                ref_page.as_ref().inner,
             )
         })
     }
 
-    <span class="doccomment">/// Get number of page objects in the PDF.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_num_pages</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">qpdf_sys::qpdf_get_num_pages</span>(<span class="self">self</span>.<span class="ident">inner</span>());
-            <span class="self">self</span>.<span class="ident">last_error_or_then</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">n</span> <span class="kw">as</span> <span class="kw">_</span>)
+    <span class="doccomment">/// Get number of page objects in the PDF.
+    </span><span class="kw">pub fn </span>get_num_pages(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; <span class="prelude-ty">Result</span>&lt;u32&gt; {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span>n = qpdf_sys::qpdf_get_num_pages(<span class="self">self</span>.inner());
+            <span class="self">self</span>.last_error_or_then(|| n <span class="kw">as _</span>)
         }
     }
 
-    <span class="doccomment">/// Get a page object from the PDF with a given zero-based index</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_page</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">zero_based_index</span>: <span class="ident">u32</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QPdfDictionary</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="ident">qpdf_sys::qpdf_get_page_n</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">zero_based_index</span> <span class="kw">as</span> <span class="kw">_</span>);
-            <span class="self">self</span>.<span class="ident">last_error_or_then</span>(<span class="op">|</span><span class="op">|</span> ()).<span class="ident">ok</span>()<span class="question-mark">?</span>;
-            <span class="kw">if</span> <span class="ident">oh</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>).<span class="ident">into</span>())
-            } <span class="kw">else</span> {
-                <span class="prelude-val">None</span>
-            }
+    <span class="doccomment">/// Get a page object from the PDF with a given zero-based index
+    </span><span class="kw">pub fn </span>get_page(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, zero_based_index: u32) -&gt; <span class="prelude-ty">Option</span>&lt;QPdfDictionary&gt; {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span>oh = qpdf_sys::qpdf_get_page_n(<span class="self">self</span>.inner(), zero_based_index <span class="kw">as _</span>);
+            <span class="self">self</span>.last_error_or_then(|| ()).ok()<span class="question-mark">?</span>;
+            <span class="kw">if </span>oh != <span class="number">0 </span>{
+                <span class="prelude-val">Some</span>(QPdfObject::new(<span class="self">self</span>.clone(), oh).into())
+            } <span class="kw">else </span>{
+                <span class="prelude-val">None
+            </span>}
         }
     }
 
-    <span class="doccomment">/// Get all pages from the PDF.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_pages</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">QPdfDictionary</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-        <span class="prelude-val">Ok</span>((<span class="number">0</span>..<span class="self">self</span>.<span class="ident">get_num_pages</span>()<span class="question-mark">?</span>).<span class="ident">filter_map</span>(<span class="op">|</span><span class="ident">i</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">get_page</span>(<span class="ident">i</span>)).<span class="ident">collect</span>())
+    <span class="doccomment">/// Get all pages from the PDF.
+    </span><span class="kw">pub fn </span>get_pages(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;QPdfDictionary&gt;&gt; {
+        <span class="prelude-val">Ok</span>((<span class="number">0</span>..<span class="self">self</span>.get_num_pages()<span class="question-mark">?</span>).filter_map(|i| <span class="self">self</span>.get_page(i)).collect())
     }
 
-    <span class="doccomment">/// Remove page object from the PDF.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove_page</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">page</span>: <span class="ident">P</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">wrap_ffi_call</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_remove_page</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">page</span>.<span class="ident">as_ref</span>().<span class="ident">inner</span>) })
+    <span class="doccomment">/// Remove page object from the PDF.
+    </span><span class="kw">pub fn </span>remove_page&lt;P: AsRef&lt;QPdfObject&gt;&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, page: P) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="self">self</span>.wrap_ffi_call(|| <span class="kw">unsafe </span>{ qpdf_sys::qpdf_remove_page(<span class="self">self</span>.inner(), page.as_ref().inner) })
     }
 
-    <span class="doccomment">/// Parse textual representation of PDF object.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_object</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">object</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">object</span>)<span class="question-mark">?</span>;
-            <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="ident">qpdf_sys::qpdf_oh_parse</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">s</span>.<span class="ident">as_ptr</span>());
-            <span class="self">self</span>.<span class="ident">last_error_or_then</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>))
+    <span class="doccomment">/// Parse textual representation of PDF object.
+    </span><span class="kw">pub fn </span>parse_object(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, object: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;QPdfObject&gt; {
+        <span class="kw">unsafe </span>{
+            <span class="kw">let </span>s = CString::new(object)<span class="question-mark">?</span>;
+            <span class="kw">let </span>oh = qpdf_sys::qpdf_oh_parse(<span class="self">self</span>.inner(), s.as_ptr());
+            <span class="self">self</span>.last_error_or_then(|| QPdfObject::new(<span class="self">self</span>.clone(), oh))
         }
     }
 
-    <span class="doccomment">/// Get trailer object.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_trailer</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QPdfDictionary</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_get_trailer</span>(<span class="self">self</span>.<span class="ident">inner</span>()) };
-        <span class="self">self</span>.<span class="ident">last_error_or_then</span>(<span class="op">|</span><span class="op">|</span> ()).<span class="ident">ok</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>);
-        <span class="kw">if</span> <span class="ident">obj</span>.<span class="ident">get_type</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">QPdfObjectType::Uninitialized</span> <span class="op">&amp;&amp;</span> <span class="ident">obj</span>.<span class="ident">get_type</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">QPdfObjectType::Null</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">obj</span>.<span class="ident">into</span>())
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
+    <span class="doccomment">/// Get trailer object.
+    </span><span class="kw">pub fn </span>get_trailer(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; <span class="prelude-ty">Option</span>&lt;QPdfDictionary&gt; {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_get_trailer(<span class="self">self</span>.inner()) };
+        <span class="self">self</span>.last_error_or_then(|| ()).ok()<span class="question-mark">?</span>;
+        <span class="kw">let </span>obj = QPdfObject::new(<span class="self">self</span>.clone(), oh);
+        <span class="kw">if </span>obj.get_type() != QPdfObjectType::Uninitialized &amp;&amp; obj.get_type() != QPdfObjectType::Null {
+            <span class="prelude-val">Some</span>(obj.into())
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
     }
 
-    <span class="doccomment">/// Get root object.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_root</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QPdfDictionary</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_get_root</span>(<span class="self">self</span>.<span class="ident">inner</span>()) };
-        <span class="self">self</span>.<span class="ident">last_error_or_then</span>(<span class="op">|</span><span class="op">|</span> ()).<span class="ident">ok</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>);
-        <span class="kw">if</span> <span class="ident">obj</span>.<span class="ident">get_type</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">QPdfObjectType::Uninitialized</span> <span class="op">&amp;&amp;</span> <span class="ident">obj</span>.<span class="ident">get_type</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">QPdfObjectType::Null</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">obj</span>.<span class="ident">into</span>())
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
+    <span class="doccomment">/// Get root object.
+    </span><span class="kw">pub fn </span>get_root(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; <span class="prelude-ty">Option</span>&lt;QPdfDictionary&gt; {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_get_root(<span class="self">self</span>.inner()) };
+        <span class="self">self</span>.last_error_or_then(|| ()).ok()<span class="question-mark">?</span>;
+        <span class="kw">let </span>obj = QPdfObject::new(<span class="self">self</span>.clone(), oh);
+        <span class="kw">if </span>obj.get_type() != QPdfObjectType::Uninitialized &amp;&amp; obj.get_type() != QPdfObjectType::Null {
+            <span class="prelude-val">Some</span>(obj.into())
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
     }
 
-    <span class="doccomment">/// Find indirect object by object id and generation</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_object_by_id</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">obj_id</span>: <span class="ident">u32</span>, <span class="ident">gen</span>: <span class="ident">u32</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_get_object_by_id</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">obj_id</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">gen</span> <span class="kw">as</span> <span class="kw">_</span>) };
-        <span class="self">self</span>.<span class="ident">last_error_or_then</span>(<span class="op">|</span><span class="op">|</span> ()).<span class="ident">ok</span>()<span class="question-mark">?</span>;
-        <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>);
-        <span class="kw">if</span> <span class="ident">obj</span>.<span class="ident">get_type</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">QPdfObjectType::Uninitialized</span> <span class="op">&amp;&amp;</span> <span class="ident">obj</span>.<span class="ident">get_type</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">QPdfObjectType::Null</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">obj</span>)
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
+    <span class="doccomment">/// Find indirect object by object id and generation
+    </span><span class="kw">pub fn </span>get_object_by_id(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, obj_id: u32, gen: u32) -&gt; <span class="prelude-ty">Option</span>&lt;QPdfObject&gt; {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_get_object_by_id(<span class="self">self</span>.inner(), obj_id <span class="kw">as _</span>, gen <span class="kw">as _</span>) };
+        <span class="self">self</span>.last_error_or_then(|| ()).ok()<span class="question-mark">?</span>;
+        <span class="kw">let </span>obj = QPdfObject::new(<span class="self">self</span>.clone(), oh);
+        <span class="kw">if </span>obj.get_type() != QPdfObjectType::Uninitialized &amp;&amp; obj.get_type() != QPdfObjectType::Null {
+            <span class="prelude-val">Some</span>(obj)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>}
     }
 
-    <span class="doccomment">/// Replace indirect object by object id and generation</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">replace_object</span><span class="op">&lt;</span><span class="ident">O</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">obj_id</span>: <span class="ident">u32</span>, <span class="ident">gen</span>: <span class="ident">u32</span>, <span class="ident">object</span>: <span class="ident">O</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">wrap_ffi_call</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">unsafe</span> {
-            <span class="ident">qpdf_sys::qpdf_replace_object</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">obj_id</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">gen</span> <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">object</span>.<span class="ident">as_ref</span>().<span class="ident">inner</span>)
+    <span class="doccomment">/// Replace indirect object by object id and generation
+    </span><span class="kw">pub fn </span>replace_object&lt;O: AsRef&lt;QPdfObject&gt;&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, obj_id: u32, gen: u32, object: O) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="self">self</span>.wrap_ffi_call(|| <span class="kw">unsafe </span>{
+            qpdf_sys::qpdf_replace_object(<span class="self">self</span>.inner(), obj_id <span class="kw">as _</span>, gen <span class="kw">as _</span>, object.as_ref().inner)
         })
     }
 
-    <span class="doccomment">/// Create a bool object</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_bool</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">value</span>: <span class="ident">bool</span>) -&gt; <span class="ident">QPdfObject</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_new_bool</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">value</span>.<span class="ident">into</span>()) };
-        <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>)
+    <span class="doccomment">/// Create a bool object
+    </span><span class="kw">pub fn </span>new_bool(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, value: bool) -&gt; QPdfObject {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_new_bool(<span class="self">self</span>.inner(), value.into()) };
+        QPdfObject::new(<span class="self">self</span>.clone(), oh)
     }
 
-    <span class="doccomment">/// Create a null object</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_null</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="ident">QPdfObject</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_new_null</span>(<span class="self">self</span>.<span class="ident">inner</span>()) };
-        <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>)
+    <span class="doccomment">/// Create a null object
+    </span><span class="kw">pub fn </span>new_null(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; QPdfObject {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_new_null(<span class="self">self</span>.inner()) };
+        QPdfObject::new(<span class="self">self</span>.clone(), oh)
     }
 
-    <span class="doccomment">/// Create an integer object</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_integer</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">value</span>: <span class="ident">i64</span>) -&gt; <span class="ident">QPdfScalar</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_new_integer</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">value</span>) };
-        <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>).<span class="ident">into</span>()
+    <span class="doccomment">/// Create an integer object
+    </span><span class="kw">pub fn </span>new_integer(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, value: i64) -&gt; QPdfScalar {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_new_integer(<span class="self">self</span>.inner(), value) };
+        QPdfObject::new(<span class="self">self</span>.clone(), oh).into()
     }
 
-    <span class="doccomment">/// Create a real object from the textual representation</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_real_from_string</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">QPdfScalar</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">value_str</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">value</span>).<span class="ident">unwrap</span>();
-            <span class="ident">qpdf_sys::qpdf_oh_new_real_from_string</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">value_str</span>.<span class="ident">as_ptr</span>())
+    <span class="doccomment">/// Create a real object from the textual representation
+    </span><span class="kw">pub fn </span>new_real_from_string(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, value: <span class="kw-2">&amp;</span>str) -&gt; QPdfScalar {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{
+            <span class="kw">let </span>value_str = CString::new(value).unwrap();
+            qpdf_sys::qpdf_oh_new_real_from_string(<span class="self">self</span>.inner(), value_str.as_ptr())
         };
-        <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>).<span class="ident">into</span>()
+        QPdfObject::new(<span class="self">self</span>.clone(), oh).into()
     }
 
-    <span class="doccomment">/// Create a real object from the double value</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_real</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">value</span>: <span class="ident">f64</span>, <span class="ident">decimal_places</span>: <span class="ident">u32</span>) -&gt; <span class="ident">QPdfScalar</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_new_real_from_double</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">value</span>, <span class="ident">decimal_places</span> <span class="kw">as</span> <span class="kw">_</span>) };
-        <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>).<span class="ident">into</span>()
+    <span class="doccomment">/// Create a real object from the double value
+    </span><span class="kw">pub fn </span>new_real(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, value: f64, decimal_places: u32) -&gt; QPdfScalar {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_new_real_from_double(<span class="self">self</span>.inner(), value, decimal_places <span class="kw">as _</span>) };
+        QPdfObject::new(<span class="self">self</span>.clone(), oh).into()
     }
 
-    <span class="doccomment">/// Create an empty array object</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_array</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="ident">QPdfArray</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_new_array</span>(<span class="self">self</span>.<span class="ident">inner</span>()) };
-        <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>).<span class="ident">into</span>()
+    <span class="doccomment">/// Create an empty array object
+    </span><span class="kw">pub fn </span>new_array(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; QPdfArray {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_new_array(<span class="self">self</span>.inner()) };
+        QPdfObject::new(<span class="self">self</span>.clone(), oh).into()
     }
 
-    <span class="doccomment">/// Create an array object from the iterator</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_array_from</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">iter</span>: <span class="ident">I</span>) -&gt; <span class="ident">QPdfArray</span>
-    <span class="kw">where</span>
-        <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">QPdfObject</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Create an array object from the iterator
+    </span><span class="kw">pub fn </span>new_array_from&lt;I&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, iter: I) -&gt; QPdfArray
+    <span class="kw">where
+        </span>I: IntoIterator&lt;Item = QPdfObject&gt;,
     {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_new_array</span>(<span class="self">self</span>.<span class="ident">inner</span>()) };
-        <span class="kw">let</span> <span class="ident">array</span>: <span class="ident">QPdfArray</span> <span class="op">=</span> <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>).<span class="ident">into</span>();
-        <span class="kw">for</span> <span class="ident">item</span> <span class="kw">in</span> <span class="ident">iter</span>.<span class="ident">into_iter</span>() {
-            <span class="ident">array</span>.<span class="ident">push</span>(<span class="kw-2">&amp;</span><span class="ident">item</span>);
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_new_array(<span class="self">self</span>.inner()) };
+        <span class="kw">let </span>array: QPdfArray = QPdfObject::new(<span class="self">self</span>.clone(), oh).into();
+        <span class="kw">for </span>item <span class="kw">in </span>iter.into_iter() {
+            array.push(<span class="kw-2">&amp;</span>item);
         }
-        <span class="ident">array</span>
+        array
     }
 
-    <span class="doccomment">/// Create a name object</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_name</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">QPdfObject</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">value_str</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">value</span>).<span class="ident">unwrap</span>();
-            <span class="ident">qpdf_sys::qpdf_oh_new_name</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">value_str</span>.<span class="ident">as_ptr</span>())
+    <span class="doccomment">/// Create a name object
+    </span><span class="kw">pub fn </span>new_name(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, value: <span class="kw-2">&amp;</span>str) -&gt; QPdfObject {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{
+            <span class="kw">let </span>value_str = CString::new(value).unwrap();
+            qpdf_sys::qpdf_oh_new_name(<span class="self">self</span>.inner(), value_str.as_ptr())
         };
-        <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>)
+        QPdfObject::new(<span class="self">self</span>.clone(), oh)
     }
 
-    <span class="doccomment">/// Create a string object encoded as a PDF string or binary string</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_utf8_string</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">QPdfObject</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">value_str</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">value</span>).<span class="ident">unwrap</span>();
-            <span class="ident">qpdf_sys::qpdf_oh_new_unicode_string</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">value_str</span>.<span class="ident">as_ptr</span>())
+    <span class="doccomment">/// Create a string object encoded as a PDF string or binary string
+    </span><span class="kw">pub fn </span>new_utf8_string(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, value: <span class="kw-2">&amp;</span>str) -&gt; QPdfObject {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{
+            <span class="kw">let </span>value_str = CString::new(value).unwrap();
+            qpdf_sys::qpdf_oh_new_unicode_string(<span class="self">self</span>.inner(), value_str.as_ptr())
         };
-        <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>)
+        QPdfObject::new(<span class="self">self</span>.clone(), oh)
     }
 
-    <span class="doccomment">/// Create a PDF string object enclosed in parentheses</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_string</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">QPdfObject</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">value_str</span> <span class="op">=</span> <span class="ident">CString::new</span>(<span class="ident">value</span>).<span class="ident">unwrap</span>();
-            <span class="ident">qpdf_sys::qpdf_oh_new_string</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">value_str</span>.<span class="ident">as_ptr</span>())
+    <span class="doccomment">/// Create a PDF string object enclosed in parentheses
+    </span><span class="kw">pub fn </span>new_string(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, value: <span class="kw-2">&amp;</span>str) -&gt; QPdfObject {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{
+            <span class="kw">let </span>value_str = CString::new(value).unwrap();
+            qpdf_sys::qpdf_oh_new_string(<span class="self">self</span>.inner(), value_str.as_ptr())
         };
-        <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>)
+        QPdfObject::new(<span class="self">self</span>.clone(), oh)
     }
 
-    <span class="doccomment">/// Create a binary string object enclosed in angle brackets</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_binary_string</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">value</span>: <span class="ident">V</span>) -&gt; <span class="ident">QPdfObject</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="ident">qpdf_sys::qpdf_oh_new_binary_string</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">value</span>.<span class="ident">as_ref</span>().<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw">_</span>, <span class="ident">value</span>.<span class="ident">as_ref</span>().<span class="ident">len</span>() <span class="kw">as</span> <span class="kw">_</span>)
+    <span class="doccomment">/// Create a binary string object enclosed in angle brackets
+    </span><span class="kw">pub fn </span>new_binary_string&lt;V: AsRef&lt;[u8]&gt;&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, value: V) -&gt; QPdfObject {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{
+            qpdf_sys::qpdf_oh_new_binary_string(<span class="self">self</span>.inner(), value.as_ref().as_ptr() <span class="kw">as _</span>, value.as_ref().len() <span class="kw">as _</span>)
         };
-        <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>)
+        QPdfObject::new(<span class="self">self</span>.clone(), oh)
     }
 
-    <span class="doccomment">/// Create an empty dictionary object</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_dictionary</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>) -&gt; <span class="ident">QPdfDictionary</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_new_dictionary</span>(<span class="self">self</span>.<span class="ident">inner</span>()) };
-        <span class="ident">QPdfDictionary::new</span>(<span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>))
+    <span class="doccomment">/// Create an empty dictionary object
+    </span><span class="kw">pub fn </span>new_dictionary(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf) -&gt; QPdfDictionary {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_new_dictionary(<span class="self">self</span>.inner()) };
+        QPdfDictionary::new(QPdfObject::new(<span class="self">self</span>.clone(), oh))
     }
 
-    <span class="doccomment">/// Create a dictionary object from the iterator</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_dictionary_from</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">S</span>, <span class="ident">O</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">iter</span>: <span class="ident">I</span>) -&gt; <span class="ident">QPdfDictionary</span>
-    <span class="kw">where</span>
-        <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> (<span class="ident">S</span>, <span class="ident">O</span>)<span class="op">&gt;</span>,
-        <span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>,
-        <span class="ident">O</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Create a dictionary object from the iterator
+    </span><span class="kw">pub fn </span>new_dictionary_from&lt;I, S, O&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, iter: I) -&gt; QPdfDictionary
+    <span class="kw">where
+        </span>I: IntoIterator&lt;Item = (S, O)&gt;,
+        S: AsRef&lt;str&gt;,
+        O: Into&lt;QPdfObject&gt;,
     {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_new_dictionary</span>(<span class="self">self</span>.<span class="ident">inner</span>()) };
-        <span class="kw">let</span> <span class="ident">dict</span> <span class="op">=</span> <span class="ident">QPdfDictionary::new</span>(<span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>));
-        <span class="kw">for</span> <span class="ident">item</span> <span class="kw">in</span> <span class="ident">iter</span>.<span class="ident">into_iter</span>() {
-            <span class="ident">dict</span>.<span class="ident">set</span>(<span class="ident">item</span>.<span class="number">0</span>.<span class="ident">as_ref</span>(), <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="number">1</span>.<span class="ident">into</span>());
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_new_dictionary(<span class="self">self</span>.inner()) };
+        <span class="kw">let </span>dict = QPdfDictionary::new(QPdfObject::new(<span class="self">self</span>.clone(), oh));
+        <span class="kw">for </span>item <span class="kw">in </span>iter.into_iter() {
+            dict.set(item.<span class="number">0</span>.as_ref(), <span class="kw-2">&amp;</span>item.<span class="number">1</span>.into());
         }
-        <span class="ident">dict</span>
+        dict
     }
 
-    <span class="doccomment">/// Create a stream object with the specified contents. The filter and params are not set.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_stream</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">data</span>: <span class="ident">D</span>) -&gt; <span class="ident">QPdfStream</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">qpdf_sys::qpdf_oh_new_stream</span>(<span class="self">self</span>.<span class="ident">inner</span>()) };
-        <span class="kw">let</span> <span class="ident">obj</span>: <span class="ident">QPdfStream</span> <span class="op">=</span> <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>).<span class="ident">into</span>();
-        <span class="ident">obj</span>.<span class="ident">replace_data</span>(<span class="ident">data</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">new_null</span>(), <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">new_null</span>());
-        <span class="ident">obj</span>
+    <span class="doccomment">/// Create a stream object with the specified contents. The filter and params are not set.
+    </span><span class="kw">pub fn </span>new_stream&lt;D: AsRef&lt;[u8]&gt;&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, data: D) -&gt; QPdfStream {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{ qpdf_sys::qpdf_oh_new_stream(<span class="self">self</span>.inner()) };
+        <span class="kw">let </span>obj: QPdfStream = QPdfObject::new(<span class="self">self</span>.clone(), oh).into();
+        obj.replace_data(data, <span class="kw-2">&amp;</span><span class="self">self</span>.new_null(), <span class="kw-2">&amp;</span><span class="self">self</span>.new_null());
+        obj
     }
 
-    <span class="doccomment">/// Create a stream object with specified dictionary and contents. The filter and params are not set.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_stream_with_dictionary</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">S</span>, <span class="ident">O</span>, <span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">iter</span>: <span class="ident">I</span>, <span class="ident">data</span>: <span class="ident">T</span>) -&gt; <span class="ident">QPdfStream</span>
-    <span class="kw">where</span>
-        <span class="ident">I</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> (<span class="ident">S</span>, <span class="ident">O</span>)<span class="op">&gt;</span>,
-        <span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>,
-        <span class="ident">O</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span>,
-        <span class="ident">T</span>: <span class="ident">AsRef</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span>,
+    <span class="doccomment">/// Create a stream object with specified dictionary and contents. The filter and params are not set.
+    </span><span class="kw">pub fn </span>new_stream_with_dictionary&lt;I, S, O, T&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, iter: I, data: T) -&gt; QPdfStream
+    <span class="kw">where
+        </span>I: IntoIterator&lt;Item = (S, O)&gt;,
+        S: AsRef&lt;str&gt;,
+        O: Into&lt;QPdfObject&gt;,
+        T: AsRef&lt;[u8]&gt;,
     {
-        <span class="kw">let</span> <span class="ident">stream</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">new_stream</span>(<span class="ident">data</span>.<span class="ident">as_ref</span>());
-        <span class="kw">let</span> <span class="ident">dict</span> <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">get_dictionary</span>();
-        <span class="kw">for</span> <span class="ident">item</span> <span class="kw">in</span> <span class="ident">iter</span>.<span class="ident">into_iter</span>() {
-            <span class="ident">dict</span>.<span class="ident">set</span>(<span class="ident">item</span>.<span class="number">0</span>.<span class="ident">as_ref</span>(), <span class="kw-2">&amp;</span><span class="ident">item</span>.<span class="number">1</span>.<span class="ident">into</span>());
+        <span class="kw">let </span>stream = <span class="self">self</span>.new_stream(data.as_ref());
+        <span class="kw">let </span>dict = stream.get_dictionary();
+        <span class="kw">for </span>item <span class="kw">in </span>iter.into_iter() {
+            dict.set(item.<span class="number">0</span>.as_ref(), <span class="kw-2">&amp;</span>item.<span class="number">1</span>.into());
         }
-        <span class="ident">drop</span>(<span class="ident">dict</span>);
-        <span class="ident">stream</span>
+        drop(dict);
+        stream
     }
 
-    <span class="doccomment">/// Copy object from the foreign PDF</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">copy_from_foreign</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">QPdfObject</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="self">self</span>: <span class="kw-2">&amp;</span><span class="ident">QPdf</span>, <span class="ident">foreign</span>: <span class="ident">F</span>) -&gt; <span class="ident">QPdfObject</span> {
-        <span class="kw">let</span> <span class="ident">oh</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="ident">qpdf_sys::qpdf_oh_copy_foreign_object</span>(<span class="self">self</span>.<span class="ident">inner</span>(), <span class="ident">foreign</span>.<span class="ident">as_ref</span>().<span class="ident">owner</span>.<span class="ident">inner</span>(), <span class="ident">foreign</span>.<span class="ident">as_ref</span>().<span class="ident">inner</span>)
+    <span class="doccomment">/// Copy object from the foreign PDF
+    </span><span class="kw">pub fn </span>copy_from_foreign&lt;F: AsRef&lt;QPdfObject&gt;&gt;(<span class="self">self</span>: <span class="kw-2">&amp;</span>QPdf, foreign: F) -&gt; QPdfObject {
+        <span class="kw">let </span>oh = <span class="kw">unsafe </span>{
+            qpdf_sys::qpdf_oh_copy_foreign_object(<span class="self">self</span>.inner(), foreign.as_ref().owner.inner(), foreign.as_ref().inner)
         };
-        <span class="ident">QPdfObject::new</span>(<span class="self">self</span>.<span class="ident">clone</span>(), <span class="ident">oh</span>)
+        QPdfObject::new(<span class="self">self</span>.clone(), oh)
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="qpdf" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.61.0 (fe5b13d68 2022-05-18)" ></div>
-</body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="qpdf" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0 (69f9c33d7 2022-12-12)" ></div></body></html>
