@@ -1,8 +1,11 @@
 #![doc = include_str!("../README.md")]
 
 use std::{
+    cell::RefCell,
+    collections::HashSet,
     ffi::{CStr, CString},
     fmt,
+    hash::{self, Hasher},
     path::Path,
     ptr,
     rc::Rc,
@@ -26,12 +29,15 @@ pub mod writer;
 
 pub type Result<T> = std::result::Result<T, QPdfError>;
 
-struct Handle(qpdf_sys::qpdf_data);
+struct Handle {
+    handle: qpdf_sys::qpdf_data,
+    buffer: Vec<u8>,
+}
 
 impl Drop for Handle {
     fn drop(&mut self) {
         unsafe {
-            qpdf_sys::qpdf_cleanup(&mut self.0);
+            qpdf_sys::qpdf_cleanup(&mut self.handle);
         }
     }
 }
@@ -40,8 +46,22 @@ impl Drop for Handle {
 #[derive(Clone)]
 pub struct QPdf {
     inner: Rc<Handle>,
-    buffer: Vec<u8>,
+    foreign: Rc<RefCell<HashSet<QPdf>>>,
 }
+
+impl hash::Hash for QPdf {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.inner.handle.hash(state)
+    }
+}
+
+impl PartialEq<Self> for QPdf {
+    fn eq(&self, other: &Self) -> bool {
+        self.inner.handle.eq(&other.inner.handle)
+    }
+}
+
+impl Eq for QPdf {}
 
 impl fmt::Debug for QPdf {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -51,7 +71,7 @@ impl fmt::Debug for QPdf {
 
 impl QPdf {
     pub(crate) fn inner(&self) -> qpdf_sys::qpdf_data {
-        self.inner.0
+        self.inner.handle
     }
 
     fn wrap_ffi_call<F, R>(self: &QPdf, f: F) -> Result<()>
@@ -107,15 +127,7 @@ impl QPdf {
     }
 
     fn new() -> QPdf {
-        unsafe {
-            let inner = qpdf_sys::qpdf_init();
-            qpdf_sys::qpdf_set_suppress_warnings(inner, true.into());
-            qpdf_sys::qpdf_silence_errors(inner);
-            QPdf {
-                inner: Rc::new(Handle(inner)),
-                buffer: Vec::new(),
-            }
-        }
+        Self::new_with_buffer(Vec::new())
     }
 
     fn new_with_buffer(buffer: Vec<u8>) -> QPdf {
@@ -124,8 +136,8 @@ impl QPdf {
             qpdf_sys::qpdf_set_suppress_warnings(inner, true.into());
             qpdf_sys::qpdf_silence_errors(inner);
             QPdf {
-                inner: Rc::new(Handle(inner)),
-                buffer,
+                inner: Rc::new(Handle { handle: inner, buffer }),
+                foreign: Rc::new(RefCell::new(HashSet::new())),
             }
         }
     }
@@ -157,8 +169,8 @@ impl QPdf {
             qpdf_sys::qpdf_read_memory(
                 self.inner(),
                 b"memory\0".as_ptr() as _,
-                self.buffer.as_ptr() as _,
-                self.buffer.len() as _,
+                self.inner.buffer.as_ptr() as _,
+                self.inner.buffer.len() as _,
                 raw_password,
             );
         })
@@ -489,6 +501,7 @@ impl QPdf {
         let oh = unsafe {
             qpdf_sys::qpdf_oh_copy_foreign_object(self.inner(), foreign.as_ref().owner.inner(), foreign.as_ref().inner)
         };
+        self.foreign.borrow_mut().insert(foreign.as_ref().owner.clone());
         QPdfObject::new(self.clone(), oh)
     }
 }

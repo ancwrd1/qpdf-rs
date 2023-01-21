@@ -281,3 +281,26 @@ fn test_pdf_encrypted() {
     let qpdf = QPdf::read_from_memory_encrypted(&data, "test");
     assert!(qpdf.is_ok());
 }
+
+#[test]
+fn test_foreign_objects() {
+    let source = load_pdf_from_memory();
+    let sink = QPdf::empty();
+
+    let page = sink.copy_from_foreign(&source.get_pages().unwrap()[0]);
+    drop(source);
+
+    sink.add_page(page, false).unwrap();
+
+    // shouldn't crash
+    sink.writer()
+        .static_id(true)
+        .force_pdf_version("1.7")
+        .normalize_content(true)
+        .preserve_unreferenced_objects(false)
+        .object_stream_mode(ObjectStreamMode::Preserve)
+        .compress_streams(false)
+        .stream_data_mode(StreamDataMode::Preserve)
+        .write_to_memory()
+        .unwrap();
+}
