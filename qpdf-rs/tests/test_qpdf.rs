@@ -7,6 +7,11 @@ fn load_pdf() -> QPdf {
     QPdf::read("tests/data/test.pdf").unwrap()
 }
 
+fn load_pdf_from_memory() -> QPdf {
+    let data = std::fs::read("tests/data/test.pdf").unwrap();
+    QPdf::read_from_memory(&data).unwrap()
+}
+
 #[test]
 fn test_qpdf_version() {
     assert_eq!(QPdf::library_version(), "10.6.3");
@@ -227,7 +232,7 @@ fn test_strings() {
 
 #[test]
 fn test_pdf_ops() {
-    let qpdf = load_pdf();
+    let qpdf = load_pdf_from_memory();
     println!("{:?}", qpdf.get_pdf_version());
 
     let trailer = qpdf.get_trailer().unwrap();

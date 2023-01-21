@@ -40,6 +40,7 @@ impl Drop for Handle {
 #[derive(Clone)]
 pub struct QPdf {
     inner: Rc<Handle>,
+    buffer: Vec<u8>,
 }
 
 impl fmt::Debug for QPdf {
@@ -112,6 +113,19 @@ impl QPdf {
             qpdf_sys::qpdf_silence_errors(inner);
             QPdf {
                 inner: Rc::new(Handle(inner)),
+                buffer: Vec::new(),
+            }
+        }
+    }
+
+    fn new_with_buffer(buffer: Vec<u8>) -> QPdf {
+        unsafe {
+            let inner = qpdf_sys::qpdf_init();
+            qpdf_sys::qpdf_set_suppress_warnings(inner, true.into());
+            qpdf_sys::qpdf_silence_errors(inner);
+            QPdf {
+                inner: Rc::new(Handle(inner)),
+                buffer,
             }
         }
     }
@@ -134,7 +148,7 @@ impl QPdf {
         self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_read(self.inner(), filename.as_ptr(), raw_password) })
     }
 
-    pub fn do_read_from_memory(self: &QPdf, buf: &[u8], password: Option<&str>) -> Result<()> {
+    pub fn do_read_from_memory(self: &QPdf, password: Option<&str>) -> Result<()> {
         let password = password.and_then(|p| CString::new(p).ok());
 
         let raw_password = password.as_ref().map(|p| p.as_ptr()).unwrap_or_else(ptr::null);
@@ -143,8 +157,8 @@ impl QPdf {
             qpdf_sys::qpdf_read_memory(
                 self.inner(),
                 b"memory\0".as_ptr() as _,
-                buf.as_ptr() as _,
-                buf.len() as _,
+                self.buffer.as_ptr() as _,
+                self.buffer.len() as _,
                 raw_password,
             );
         })
@@ -166,15 +180,15 @@ impl QPdf {
 
     /// Read PDF from memory
     pub fn read_from_memory<T: AsRef<[u8]>>(buffer: T) -> Result<QPdf> {
-        let qpdf = QPdf::new();
-        qpdf.do_read_from_memory(buffer.as_ref(), None)?;
+        let qpdf = QPdf::new_with_buffer(buffer.as_ref().into());
+        qpdf.do_read_from_memory(None)?;
         Ok(qpdf)
     }
 
     /// Read encrypted PDF from memory
     pub fn read_from_memory_encrypted<T: AsRef<[u8]>>(buffer: T, password: &str) -> Result<QPdf> {
-        let qpdf = QPdf::new();
-        qpdf.do_read_from_memory(buffer.as_ref(), Some(password))?;
+        let qpdf = QPdf::new_with_buffer(buffer.as_ref().into());
+        qpdf.do_read_from_memory(Some(password))?;
         Ok(qpdf)
     }
 
