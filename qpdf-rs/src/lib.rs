@@ -160,7 +160,7 @@ impl QPdf {
         self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_read(self.inner(), filename.as_ptr(), raw_password) })
     }
 
-    pub fn do_read_from_memory(self: &QPdf, password: Option<&str>) -> Result<()> {
+    fn do_read_from_memory(self: &QPdf, password: Option<&str>) -> Result<()> {
         let password = password.and_then(|p| CString::new(p).ok());
 
         let raw_password = password.as_ref().map(|p| p.as_ptr()).unwrap_or_else(ptr::null);
