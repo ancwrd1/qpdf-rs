@@ -9,7 +9,7 @@ fn load_pdf() -> QPdf {
 
 fn load_pdf_from_memory() -> QPdf {
     let data = std::fs::read("tests/data/test.pdf").unwrap();
-    QPdf::read_from_memory(&data).unwrap()
+    QPdf::read_from_memory(data).unwrap()
 }
 
 #[test]
@@ -33,7 +33,7 @@ fn test_writer() {
 
     let mem = writer.write_to_memory().unwrap();
 
-    let mem_pdf = QPdf::read_from_memory(&mem).unwrap();
+    let mem_pdf = QPdf::read_from_memory(mem).unwrap();
     assert_eq!(mem_pdf.get_pdf_version(), "1.7");
     assert!(mem_pdf.is_linearized());
 }
@@ -81,7 +81,7 @@ fn test_pdf_from_scratch() {
         .write_to_memory()
         .unwrap();
 
-    let mem_pdf = QPdf::read_from_memory(&mem).unwrap();
+    let mem_pdf = QPdf::read_from_memory(mem).unwrap();
     assert_eq!(mem_pdf.get_pdf_version(), "1.7");
     assert!(mem_pdf.is_linearized());
 }
@@ -109,7 +109,7 @@ fn test_qpdf_basic_objects() {
     assert_eq!(obj.as_real(), "1.234");
     assert_eq!(obj.to_string(), "1.234");
 
-    let obj = qpdf.new_stream(&[]);
+    let obj = qpdf.new_stream([]);
     assert_eq!(obj.get_type(), QPdfObjectType::Stream);
     assert_eq!(obj.to_string(), "3 0 R");
 
@@ -126,14 +126,14 @@ fn test_qpdf_streams() {
     let obj = qpdf.get_object_by_id(1234, 1);
     assert!(obj.is_none());
 
-    let obj = qpdf.new_stream_with_dictionary([("/Type", qpdf.new_name("/Test"))], &[1, 2, 3, 4]);
+    let obj = qpdf.new_stream_with_dictionary([("/Type", qpdf.new_name("/Test"))], [1, 2, 3, 4]);
     assert_eq!(obj.get_type(), QPdfObjectType::Stream);
 
     let by_id: QPdfStream = qpdf
         .get_object_by_id(obj.get_id(), obj.get_generation())
         .unwrap()
         .into();
-    println!("{}", by_id);
+    println!("{by_id}");
 
     let data = by_id.get_data(StreamDecodeLevel::None).unwrap();
     assert_eq!(data.as_ref(), &[1, 2, 3, 4]);
@@ -152,7 +152,7 @@ fn test_parse_object() {
     let qpdf = QPdf::empty();
     let obj = qpdf.parse_object(text).unwrap();
     assert_eq!(obj.get_type(), QPdfObjectType::Dictionary);
-    println!("{}", obj);
+    println!("{obj}");
     println!("version: {}", qpdf.get_pdf_version());
 }
 
@@ -162,7 +162,7 @@ fn test_error() {
     assert!(qpdf.get_page(0).is_none());
     let result = qpdf.parse_object("<<--< /Type -- null >>");
     assert!(result.is_err());
-    println!("{:?}", result);
+    println!("{result:?}");
 }
 
 #[test]
@@ -219,7 +219,7 @@ fn test_dictionary() {
 #[test]
 fn test_strings() {
     let qpdf = QPdf::empty();
-    let bin_str = qpdf.new_binary_string(&[1, 2, 3, 4]);
+    let bin_str = qpdf.new_binary_string([1, 2, 3, 4]);
     assert_eq!(bin_str.to_string(), "<01020304>");
 
     let utf8_str = qpdf.new_utf8_string("привет");
@@ -236,10 +236,10 @@ fn test_pdf_ops() {
     println!("{:?}", qpdf.get_pdf_version());
 
     let trailer = qpdf.get_trailer().unwrap();
-    println!("trailer: {}", trailer);
+    println!("trailer: {trailer}");
 
     let root = qpdf.get_root().unwrap();
-    println!("root: {}", root);
+    println!("root: {root}");
     assert_eq!(root.get("/Type").unwrap().as_name(), "/Catalog");
     assert!(root.has("/Pages"));
 
@@ -249,7 +249,7 @@ fn test_pdf_ops() {
     for page in pages {
         let keys = page.keys();
         assert!(!keys.is_empty());
-        println!("{:?}", keys);
+        println!("{keys:?}");
 
         let data = page.get_page_content_data().unwrap();
         println!("{}", String::from_utf8_lossy(data.as_ref()));
@@ -272,13 +272,13 @@ fn test_pdf_ops() {
 fn test_pdf_encrypted() {
     let qpdf = QPdf::read("tests/data/encrypted.pdf");
     assert!(qpdf.is_err());
-    println!("{:?}", qpdf);
+    println!("{qpdf:?}");
 
     let qpdf = QPdf::read_encrypted("tests/data/encrypted.pdf", "test");
     assert!(qpdf.is_ok());
 
     let data = std::fs::read("tests/data/encrypted.pdf").unwrap();
-    let qpdf = QPdf::read_from_memory_encrypted(&data, "test");
+    let qpdf = QPdf::read_from_memory_encrypted(data, "test");
     assert!(qpdf.is_ok());
 }
 
