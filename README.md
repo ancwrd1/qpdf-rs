@@ -14,7 +14,7 @@ Tested on the following targets:
 * x86_64-apple-darwin
 * aarch64-apple-darwin
 
-They also have prebuilt bindgen bindings included in the sources.
+The prebuilt bindings for those targets are included in the source tree.
 
 ## Usage example
 
