@@ -2,6 +2,97 @@ use std::{ffi::CString, path::Path, slice};
 
 use crate::{ObjectStreamMode, QPdf, Result, StreamDataMode, StreamDecodeLevel};
 
+/// Print permissions
+#[derive(Debug, Default, Clone, Copy, Eq, PartialEq, PartialOrd)]
+pub enum PrintPermission {
+    #[default]
+    Full,
+    Low,
+    None,
+}
+
+impl From<PrintPermission> for qpdf_sys::qpdf_r3_print_e {
+    fn from(value: PrintPermission) -> Self {
+        match value {
+            PrintPermission::Full => qpdf_sys::qpdf_r3_print_e_qpdf_r3p_full,
+            PrintPermission::Low => qpdf_sys::qpdf_r3_print_e_qpdf_r3p_low,
+            PrintPermission::None => qpdf_sys::qpdf_r3_print_e_qpdf_r3p_none,
+        }
+    }
+}
+
+/// Encryption using RC4 with key length of 40 bits
+#[derive(Debug, Default, Clone, Eq, PartialEq)]
+pub struct EncryptionParamsR2 {
+    pub user_password: String,
+    pub owner_password: String,
+    pub allow_print: bool,
+    pub allow_modify: bool,
+    pub allow_extract: bool,
+    pub allow_annotate: bool,
+}
+
+/// Encryption using RC4 with key length of 128 bits.
+/// Minimal PDF version: 1.4.
+#[derive(Debug, Default, Clone, Eq, PartialEq)]
+pub struct EncryptionParamsR3 {
+    pub user_password: String,
+    pub owner_password: String,
+    pub allow_accessibility: bool,
+    pub allow_extract: bool,
+    pub allow_assemble: bool,
+    pub allow_annotate_and_form: bool,
+    pub allow_form_filling: bool,
+    pub allow_modify_other: bool,
+    pub allow_print: PrintPermission,
+}
+
+/// Encryption using RC4-128 or AES-256 algorithm and additional flag to encrypt metadata.
+/// Minimal PDF version: 1.5.
+#[derive(Debug, Default, Clone, Eq, PartialEq)]
+pub struct EncryptionParamsR4 {
+    pub user_password: String,
+    pub owner_password: String,
+    pub allow_accessibility: bool,
+    pub allow_extract: bool,
+    pub allow_assemble: bool,
+    pub allow_annotate_and_form: bool,
+    pub allow_form_filling: bool,
+    pub allow_modify_other: bool,
+    pub allow_print: PrintPermission,
+    pub encrypt_metadata: bool,
+    pub use_aes: bool,
+}
+
+/// Encryption using AES-256 algorithm and additional flag to encrypt metadata
+/// Minimal PDF version: 1.7. Is required for PDF 2.0.
+#[derive(Debug, Default, Clone, Eq, PartialEq)]
+pub struct EncryptionParamsR6 {
+    pub user_password: String,
+    pub owner_password: String,
+    pub allow_accessibility: bool,
+    pub allow_extract: bool,
+    pub allow_assemble: bool,
+    pub allow_annotate_and_form: bool,
+    pub allow_form_filling: bool,
+    pub allow_modify_other: bool,
+    pub allow_print: PrintPermission,
+    pub encrypt_metadata: bool,
+}
+
+/// Encryption parameters selector
+#[derive(Debug, Clone, Eq, PartialEq)]
+pub enum EncryptionParams {
+    /// R2 level, any PDF version
+    R2(EncryptionParamsR2),
+    /// R3 level, PDF version >= 1.4
+    R3(EncryptionParamsR3),
+    /// R4 level, PDF version >= 1.5
+    R4(EncryptionParamsR4),
+    /// R6 level, PDF version >= 1.7
+    R6(EncryptionParamsR6),
+}
+
 /// PDF writer with several customizable parameters
 pub struct QPdfWriter {
     owner: QPdf,
@@ -17,6 +108,7 @@ pub struct QPdfWriter {
     stream_decode_level: Option<StreamDecodeLevel>,
     object_stream_mode: Option<ObjectStreamMode>,
     stream_data_mode: Option<StreamDataMode>,
+    encryption_params: Option<EncryptionParams>,
 }
 
 impl QPdfWriter {
@@ -35,6 +127,7 @@ impl QPdfWriter {
             stream_decode_level: None,
             object_stream_mode: None,
             stream_data_mode: None,
+            encryption_params: None,
         }
     }
 
@@ -92,6 +185,95 @@ impl QPdfWriter {
                 let version = CString::new(version.as_str())?;
                 self.owner
                     .wrap_ffi_call(|| qpdf_sys::qpdf_force_pdf_version(self.owner.inner(), version.as_ptr()))?;
+            }
+            if let Some(ref params) = self.encryption_params {
+                self.set_encryption_params(params)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn set_encryption_params(&self, params: &EncryptionParams) -> Result<()> {
+        match params {
+            EncryptionParams::R2(r2) => {
+                let user_password = CString::new(r2.user_password.as_str())?;
+                let owner_password = CString::new(r2.owner_password.as_str())?;
+                unsafe {
+                    self.owner.wrap_ffi_call(|| {
+                        qpdf_sys::qpdf_set_r2_encryption_parameters(
+                            self.owner.inner(),
+                            user_password.as_ptr(),
+                            owner_password.as_ptr(),
+                            r2.allow_print.into(),
+                            r2.allow_modify.into(),
+                            r2.allow_extract.into(),
+                            r2.allow_annotate.into(),
+                        )
+                    })?;
+                }
+            }
+            EncryptionParams::R3(r3) => {
+                let user_password = CString::new(r3.user_password.as_str())?;
+                let owner_password = CString::new(r3.owner_password.as_str())?;
+                unsafe {
+                    self.owner.wrap_ffi_call(|| {
+                        qpdf_sys::qpdf_set_r3_encryption_parameters2(
+                            self.owner.inner(),
+                            user_password.as_ptr(),
+                            owner_password.as_ptr(),
+                            r3.allow_accessibility.into(),
+                            r3.allow_extract.into(),
+                            r3.allow_assemble.into(),
+                            r3.allow_annotate_and_form.into(),
+                            r3.allow_form_filling.into(),
+                            r3.allow_modify_other.into(),
+                            r3.allow_print.into(),
+                        )
+                    })?;
+                }
+            }
+            EncryptionParams::R4(r4) => {
+                let user_password = CString::new(r4.user_password.as_str())?;
+                let owner_password = CString::new(r4.owner_password.as_str())?;
+                unsafe {
+                    self.owner.wrap_ffi_call(|| {
+                        qpdf_sys::qpdf_set_r4_encryption_parameters2(
+                            self.owner.inner(),
+                            user_password.as_ptr(),
+                            owner_password.as_ptr(),
+                            r4.allow_accessibility.into(),
+                            r4.allow_extract.into(),
+                            r4.allow_assemble.into(),
+                            r4.allow_annotate_and_form.into(),
+                            r4.allow_form_filling.into(),
+                            r4.allow_modify_other.into(),
+                            r4.allow_print.into(),
+                            r4.encrypt_metadata.into(),
+                            r4.use_aes.into(),
+                        )
+                    })?;
+                }
+            }
+            EncryptionParams::R6(r6) => {
+                let user_password = CString::new(r6.user_password.as_str())?;
+                let owner_password = CString::new(r6.owner_password.as_str())?;
+                unsafe {
+                    self.owner.wrap_ffi_call(|| {
+                        qpdf_sys::qpdf_set_r6_encryption_parameters2(
+                            self.owner.inner(),
+                            user_password.as_ptr(),
+                            owner_password.as_ptr(),
+                            r6.allow_accessibility.into(),
+                            r6.allow_extract.into(),
+                            r6.allow_assemble.into(),
+                            r6.allow_annotate_and_form.into(),
+                            r6.allow_form_filling.into(),
+                            r6.allow_modify_other.into(),
+                            r6.allow_print.into(),
+                            r6.encrypt_metadata.into(),
+                        )
+                    })?;
+                }
             }
         }
         Ok(())
@@ -199,6 +381,12 @@ impl QPdfWriter {
     // Enable or disable deterministic ID
     pub fn deterministic_id(&mut self, flag: bool) -> &mut Self {
         self.deterministic_id = Some(flag);
+        self
+    }
+
+    // Set encryption parameters
+    pub fn encryption_params(&mut self, params: EncryptionParams) -> &mut Self {
+        self.encryption_params = Some(params);
         self
     }
 }

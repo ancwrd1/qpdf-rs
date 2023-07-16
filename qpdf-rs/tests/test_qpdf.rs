@@ -269,7 +269,7 @@ fn test_pdf_ops() {
 }
 
 #[test]
-fn test_pdf_encrypted() {
+fn test_pdf_encrypted_read() {
     let qpdf = QPdf::read("tests/data/encrypted.pdf");
     assert!(qpdf.is_err());
     println!("{qpdf:?}");
@@ -280,6 +280,78 @@ fn test_pdf_encrypted() {
     let data = std::fs::read("tests/data/encrypted.pdf").unwrap();
     let qpdf = QPdf::read_from_memory_encrypted(data, "test");
     assert!(qpdf.is_ok());
+}
+
+fn test_pdf_encrypted_write(params: EncryptionParams) {
+    let qpdf = QPdf::read("tests/data/test.pdf").unwrap();
+
+    let data = qpdf.writer().encryption_params(params).write_to_memory().unwrap();
+
+    let qpdf = QPdf::read_from_memory_encrypted(&data, "foo");
+    assert!(qpdf.is_ok());
+
+    let qpdf = QPdf::read_from_memory_encrypted(&data, "foo2");
+    assert!(qpdf.is_err());
+}
+
+#[test]
+fn test_pdf_encrypted_r2_write() {
+    test_pdf_encrypted_write(EncryptionParams::R2(EncryptionParamsR2 {
+        user_password: "foo".to_string(),
+        owner_password: "foo".to_string(),
+        allow_print: true,
+        allow_modify: true,
+        allow_extract: true,
+        allow_annotate: true,
+    }))
+}
+
+#[test]
+fn test_pdf_encrypted_r3_write() {
+    test_pdf_encrypted_write(EncryptionParams::R3(EncryptionParamsR3 {
+        user_password: "foo".to_string(),
+        owner_password: "foo".to_string(),
+        allow_accessibility: true,
+        allow_extract: true,
+        allow_assemble: true,
+        allow_annotate_and_form: true,
+        allow_form_filling: true,
+        allow_modify_other: true,
+        allow_print: Default::default(),
+    }))
+}
+
+#[test]
+fn test_pdf_encrypted_r4_write() {
+    test_pdf_encrypted_write(EncryptionParams::R4(EncryptionParamsR4 {
+        user_password: "foo".to_string(),
+        owner_password: "foo".to_string(),
+        allow_accessibility: true,
+        allow_extract: true,
+        allow_assemble: true,
+        allow_annotate_and_form: true,
+        allow_form_filling: true,
+        allow_modify_other: true,
+        allow_print: Default::default(),
+        encrypt_metadata: true,
+        use_aes: true,
+    }))
+}
+
+#[test]
+fn test_pdf_encrypted_r6_write() {
+    test_pdf_encrypted_write(EncryptionParams::R6(EncryptionParamsR6 {
+        user_password: "foo".to_string(),
+        owner_password: "foo".to_string(),
+        allow_accessibility: true,
+        allow_extract: true,
+        allow_assemble: true,
+        allow_annotate_and_form: true,
+        allow_form_filling: true,
+        allow_modify_other: true,
+        allow_print: Default::default(),
+        encrypt_metadata: true,
+    }))
 }
 
 #[test]
