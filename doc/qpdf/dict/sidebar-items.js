@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["QPdfDictionary","QPdfDictionary wraps a QPdfObject for dictionary-related operations"]]};
+window.SIDEBAR_ITEMS = {"struct":["QPdfDictionary"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["QPdfWriter","PDF writer with several customizable parameters"]]};
+window.SIDEBAR_ITEMS = {"enum":["EncryptionParams","PrintPermission"],"struct":["EncryptionParamsR2","EncryptionParamsR3","EncryptionParamsR4","EncryptionParamsR6","QPdfWriter"]};

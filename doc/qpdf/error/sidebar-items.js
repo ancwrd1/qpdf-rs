@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["QPdfErrorCode","Error codes returned by QPDF library calls"]],"struct":[["QPdfError","QPdfError holds an error code and an optional extra information"]]};
+window.SIDEBAR_ITEMS = {"enum":["QPdfErrorCode"],"struct":["QPdfError"]};
