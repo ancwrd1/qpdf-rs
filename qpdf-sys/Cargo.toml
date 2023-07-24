@@ -1,6 +1,6 @@
 [package]
 name = "qpdf-sys"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["Dmitry Pankratov <dmitry@pankratov.net>"]
 description = "Rust bindings to QPDF C++ library via FFI and bindgen"
 license = "MIT/Apache-2.0"
