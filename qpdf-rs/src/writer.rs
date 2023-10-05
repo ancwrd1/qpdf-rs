@@ -309,7 +309,7 @@ impl QPdfWriter {
         let buffer = unsafe { qpdf_sys::qpdf_get_buffer(inner) };
         let buffer_len = unsafe { qpdf_sys::qpdf_get_buffer_length(inner) };
 
-        unsafe { Ok(slice::from_raw_parts(buffer as *const u8, buffer_len as _).to_vec()) }
+        unsafe { Ok(slice::from_raw_parts(buffer, buffer_len as _).to_vec()) }
     }
 
     /// Enable or disable stream compression
