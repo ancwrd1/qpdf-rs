@@ -232,7 +232,7 @@ fn build_bindings() {
         let bindings = bindgen::builder()
             .clang_arg(format!("-I{}", path.display()))
             .header(format!("{}/qpdf/qpdf-c.h", path.display()))
-            .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+            .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
             .generate()
             .unwrap();
 
