@@ -376,3 +376,17 @@ fn test_foreign_objects() {
         .write_to_memory()
         .unwrap();
 }
+
+#[test]
+fn test_foreign_pages() {
+    let sink = QPdf::empty();
+
+    for source in [load_pdf_from_memory(), load_pdf_from_memory(), load_pdf_from_memory()] {
+        source.get_pages().unwrap().iter().for_each(|p| {
+            sink.add_page(p, false).unwrap();
+        });
+    }
+
+    // shouldn't crash
+    sink.writer().write_to_memory().unwrap();
+}

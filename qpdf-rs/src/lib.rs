@@ -253,6 +253,9 @@ impl QPdf {
 
     /// Add a page object to PDF. The `first` parameter indicates whether to prepend or append it.
     pub fn add_page<T: AsRef<QPdfObject>>(self: &QPdf, new_page: T, first: bool) -> Result<()> {
+        if new_page.as_ref().owner.inner() != self.inner() {
+            self.foreign.borrow_mut().insert(new_page.as_ref().owner.clone());
+        }
         self.wrap_ffi_call(|| unsafe {
             qpdf_sys::qpdf_add_page(
                 self.inner(),
@@ -269,6 +272,9 @@ impl QPdf {
         N: AsRef<QPdfObject>,
         R: AsRef<QPdfObject>,
     {
+        if new_page.as_ref().owner.inner() != self.inner() {
+            self.foreign.borrow_mut().insert(new_page.as_ref().owner.clone());
+        }
         self.wrap_ffi_call(|| unsafe {
             qpdf_sys::qpdf_add_page_at(
                 self.inner(),
@@ -308,6 +314,7 @@ impl QPdf {
 
     /// Remove page object from the PDF.
     pub fn remove_page<P: AsRef<QPdfObject>>(self: &QPdf, page: P) -> Result<()> {
+        self.foreign.borrow_mut().remove(&page.as_ref().owner);
         self.wrap_ffi_call(|| unsafe { qpdf_sys::qpdf_remove_page(self.inner(), page.as_ref().inner) })
     }
 

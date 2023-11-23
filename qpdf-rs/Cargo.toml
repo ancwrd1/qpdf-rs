@@ -1,14 +1,14 @@
 [package]
 name = "qpdf"
-version = "0.1.6"
-authors = ["Dmitry Pankratov <dmitry@pankratov.net>"]
 description = "Rust bindings to QPDF C++ library"
-license = "MIT/Apache-2.0"
-repository = "https://github.com/ancwrd1/qpdf-rs"
-documentation = "https://docs.rs/qpdf"
-readme = "README.md"
-keywords = ["PDF", "QPDF"]
-edition = "2021"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+repository.workspace = true
+documentation.workspace = true
+readme.workspace = true
+keywords.workspace = true
+license.workspace = true
 
 [dependencies]
 qpdf-sys = { path = "../qpdf-sys", version = "0.1" }
