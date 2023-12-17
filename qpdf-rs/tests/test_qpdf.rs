@@ -14,7 +14,7 @@ fn load_pdf_from_memory() -> QPdf {
 
 #[test]
 fn test_qpdf_version() {
-    assert_eq!(QPdf::library_version(), "10.6.3");
+    assert_eq!(QPdf::library_version(), "11.6.4");
     println!("{}", QPdf::library_version());
 }
 

@@ -85,6 +85,7 @@ const QPDF_SRC: &[&str] = &[
     "Pl_AES_PDF.cc",
     "Pl_ASCII85Decoder.cc",
     "Pl_ASCIIHexDecoder.cc",
+    "Pl_Base64.cc",
     "Pl_Buffer.cc",
     "Pl_Concatenate.cc",
     "Pl_Count.cc",
@@ -93,6 +94,7 @@ const QPDF_SRC: &[&str] = &[
     "Pl_Flate.cc",
     "Pl_LZWDecoder.cc",
     "Pl_MD5.cc",
+    "Pl_OStream.cc",
     "Pl_PNGFilter.cc",
     "Pl_QPDFTokenizer.cc",
     "Pl_RC4.cc",
@@ -102,6 +104,7 @@ const QPDF_SRC: &[&str] = &[
     "Pl_TIFFPredictor.cc",
     "QPDF_Array.cc",
     "QPDF_Bool.cc",
+    "QPDF_Destroyed.cc",
     "QPDF_Dictionary.cc",
     "QPDF_encryption.cc",
     "QPDF_InlineImage.cc",
@@ -116,6 +119,10 @@ const QPDF_SRC: &[&str] = &[
     "QPDF_Reserved.cc",
     "QPDF_Stream.cc",
     "QPDF_String.cc",
+    "QPDF_Unresolved.cc",
+    "QPDFLogger.cc",
+    "QPDFParser.cc",
+    "QPDFValue.cc",
     "qpdf-c.cc",
     "QPDF.cc",
     "QPDFAcroFormDocumentHelper.cc",
@@ -152,7 +159,6 @@ const QPDF_SRC: &[&str] = &[
     "SecureRandomDataProvider.cc",
     "SF_FlateLzwDecode.cc",
     "SHA2_native.cc",
-    "SparseOHArray.cc",
 ];
 
 fn base_build() -> cc::Build {
@@ -191,9 +197,9 @@ fn build_cc(name: &str, dir: &str, files: &[&str]) {
 fn build_qpdf() {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let cpp_flags: &[&str] = if is_msvc() {
-        &["/std:c++14", "/EHsc"]
+        &["/std:c++17", "/EHsc"]
     } else {
-        &["-std=c++14"]
+        &["-std=c++17"]
     };
 
     let mut build = base_build();
@@ -207,6 +213,7 @@ fn build_qpdf() {
         .include(root.join("jpeg-9d"))
         .include(root.join("qpdf").join("include"))
         .include(root.join("qpdf").join("libqpdf"))
+        .define("POINTERHOLDER_TRANSITION", "0")
         .files(
             QPDF_SRC
                 .iter()

@@ -200,7 +200,7 @@ impl QPdfWriter {
                 let owner_password = CString::new(r2.owner_password.as_str())?;
                 unsafe {
                     self.owner.wrap_ffi_call(|| {
-                        qpdf_sys::qpdf_set_r2_encryption_parameters(
+                        qpdf_sys::qpdf_set_r2_encryption_parameters_insecure(
                             self.owner.inner(),
                             user_password.as_ptr(),
                             owner_password.as_ptr(),
@@ -217,7 +217,7 @@ impl QPdfWriter {
                 let owner_password = CString::new(r3.owner_password.as_str())?;
                 unsafe {
                     self.owner.wrap_ffi_call(|| {
-                        qpdf_sys::qpdf_set_r3_encryption_parameters2(
+                        qpdf_sys::qpdf_set_r3_encryption_parameters_insecure(
                             self.owner.inner(),
                             user_password.as_ptr(),
                             owner_password.as_ptr(),
@@ -237,7 +237,7 @@ impl QPdfWriter {
                 let owner_password = CString::new(r4.owner_password.as_str())?;
                 unsafe {
                     self.owner.wrap_ffi_call(|| {
-                        qpdf_sys::qpdf_set_r4_encryption_parameters2(
+                        qpdf_sys::qpdf_set_r4_encryption_parameters_insecure(
                             self.owner.inner(),
                             user_password.as_ptr(),
                             owner_password.as_ptr(),
