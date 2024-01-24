@@ -511,4 +511,9 @@ impl QPdf {
         self.foreign.borrow_mut().insert(foreign.as_ref().owner.clone());
         QPdfObject::new(self.clone(), oh)
     }
+
+    /// Return true if PDF has warnings
+    pub fn more_warnings(self: &QPdf) -> bool {
+        unsafe { qpdf_sys::qpdf_more_warnings(self.inner()) != 0 }
+    }
 }
