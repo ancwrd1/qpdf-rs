@@ -13,3 +13,6 @@ license.workspace = true
 [dependencies]
 qpdf-sys = { path = "../qpdf-sys", version = "0.1" }
 libc = "0.2"
+
+[features]
+pkg-config = ["qpdf-sys/pkg-config"]
