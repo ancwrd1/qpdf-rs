@@ -240,9 +240,45 @@ fn build_bindings() {
     }
 }
 
+#[cfg(not(feature = "pkg-config"))]
 fn main() {
     build_bindings();
     build_cc("zlib", "zlib-1.2.11", ZLIB_SRC);
     build_cc("jpeg", "jpeg-9d", JPEG_SRC);
     build_qpdf();
+}
+
+#[cfg(feature = "pkg-config")]
+fn main() {
+    let lib = pkg_config::Config::new()
+        .atleast_version("10.6.3")
+        .probe("libqpdf")
+        .unwrap();
+
+    let mut builder = bindgen::builder();
+
+    for path in lib.include_paths {
+        builder = builder.clang_arg(format!("-I{}", path.to_str().unwrap()));
+
+        let header_path = path.join("qpdf/qpdf-c.h");
+        if header_path.exists() {
+            builder = builder.header(header_path.into_os_string().into_string().unwrap());
+        }
+    }
+
+    for (key, val) in lib.defines {
+        builder = builder.clang_arg(match val {
+            Some(val) => format!("-D{}={}", key, val),
+            None => format!("-D{}", key),
+        });
+    }
+
+    let bindings = builder
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
+        .generate()
+        .unwrap();
+
+    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap()).join("bindings.rs");
+
+    bindings.write_to_file(&out_path).unwrap();
 }
