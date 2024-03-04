@@ -1,5 +1,6 @@
 use std::{env, path::PathBuf};
 
+#[cfg(feature = "vendored")]
 const ZLIB_SRC: &[&str] = &[
     "adler32.c",
     "compress.c",
@@ -14,6 +15,7 @@ const ZLIB_SRC: &[&str] = &[
     "zutil.c",
 ];
 
+#[cfg(feature = "vendored")]
 const JPEG_SRC: &[&str] = &[
     "jaricom.c",
     "jcapimin.c",
@@ -63,6 +65,7 @@ const JPEG_SRC: &[&str] = &[
     "jutils.c",
 ];
 
+#[cfg(feature = "vendored")]
 const QPDF_SRC: &[&str] = &[
     "AES_PDF_native.cc",
     "BitStream.cc",
@@ -155,6 +158,7 @@ const QPDF_SRC: &[&str] = &[
     "SparseOHArray.cc",
 ];
 
+#[cfg(feature = "vendored")]
 fn base_build() -> cc::Build {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let mut build = cc::Build::new();
@@ -167,10 +171,12 @@ fn base_build() -> cc::Build {
     build
 }
 
+#[cfg(feature = "vendored")]
 fn is_msvc() -> bool {
     env::var("TARGET").unwrap().ends_with("-msvc")
 }
 
+#[cfg(feature = "vendored")]
 fn build_cc(name: &str, dir: &str, files: &[&str]) {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let path = root.join(dir);
@@ -188,6 +194,7 @@ fn build_cc(name: &str, dir: &str, files: &[&str]) {
         .compile(name);
 }
 
+#[cfg(feature = "vendored")]
 fn build_qpdf() {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let cpp_flags: &[&str] = if is_msvc() {
@@ -218,6 +225,7 @@ fn build_qpdf() {
     build_cc("sha2", "qpdf/libqpdf", &["sha2.c", "sha2big.c"]);
 }
 
+#[cfg(feature = "vendored")]
 fn build_bindings() {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap()).join("bindings.rs");
@@ -240,7 +248,7 @@ fn build_bindings() {
     }
 }
 
-#[cfg(not(feature = "pkg-config"))]
+#[cfg(feature = "vendored")]
 fn main() {
     build_bindings();
     build_cc("zlib", "zlib-1.2.11", ZLIB_SRC);
@@ -248,7 +256,7 @@ fn main() {
     build_qpdf();
 }
 
-#[cfg(feature = "pkg-config")]
+#[cfg(not(feature = "vendored"))]
 fn main() {
     let lib = pkg_config::Config::new()
         .atleast_version("10.6.3")
