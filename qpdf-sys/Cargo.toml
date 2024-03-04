@@ -18,6 +18,9 @@ exclude = [
 ]
 
 [build-dependencies]
-cc = { version = "1",  features = ["parallel"] }
+cc = { version = "1", features = ["parallel"], optional = true }
 bindgen = "0.69"
-pkg-config = { version = "0.3", optional = true }
+pkg-config = "0.3"
+
+[features]
+vendored = ["dep:cc"]
