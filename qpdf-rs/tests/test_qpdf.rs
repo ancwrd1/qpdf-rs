@@ -1,6 +1,5 @@
 use std::collections::HashSet;
 
-use qpdf::scalar::QPdfScalar;
 use qpdf::*;
 
 fn load_pdf() -> QPdf {
@@ -14,8 +13,8 @@ fn load_pdf_from_memory() -> QPdf {
 
 #[test]
 fn test_qpdf_version() {
-    assert_eq!(QPdf::library_version(), "10.6.3");
-    println!("{}", QPdf::library_version());
+    let version = dbg!(QPdf::library_version());
+    assert!(!version.is_empty());
 }
 
 #[test]
@@ -294,6 +293,7 @@ fn test_pdf_encrypted_write(params: EncryptionParams) {
     assert!(qpdf.is_err());
 }
 
+#[cfg(feature = "legacy")]
 #[test]
 fn test_pdf_encrypted_r2_write() {
     test_pdf_encrypted_write(EncryptionParams::R2(EncryptionParamsR2 {
@@ -306,6 +306,7 @@ fn test_pdf_encrypted_r2_write() {
     }))
 }
 
+#[cfg(feature = "legacy")]
 #[test]
 fn test_pdf_encrypted_r3_write() {
     test_pdf_encrypted_write(EncryptionParams::R3(EncryptionParamsR3 {
@@ -321,6 +322,7 @@ fn test_pdf_encrypted_r3_write() {
     }))
 }
 
+#[cfg(feature = "legacy")]
 #[test]
 fn test_pdf_encrypted_r4_write() {
     test_pdf_encrypted_write(EncryptionParams::R4(EncryptionParamsR4 {

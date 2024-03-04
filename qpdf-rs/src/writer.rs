@@ -84,10 +84,13 @@ pub struct EncryptionParamsR6 {
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum EncryptionParams {
     /// R2 level, any PDF version
+    #[cfg(feature = "legacy")]
     R2(EncryptionParamsR2),
     /// R3 level, PDF version >= 1.4
+    #[cfg(feature = "legacy")]
     R3(EncryptionParamsR3),
     /// R4 level, PDF version >= 1.5
+    #[cfg(feature = "legacy")]
     R4(EncryptionParamsR4),
     /// R6 level, PDF version >= 1.7
     R6(EncryptionParamsR6),
@@ -195,6 +198,7 @@ impl QPdfWriter {
 
     fn set_encryption_params(&self, params: &EncryptionParams) -> Result<()> {
         match params {
+            #[cfg(feature = "legacy")]
             EncryptionParams::R2(r2) => {
                 let user_password = CString::new(r2.user_password.as_str())?;
                 let owner_password = CString::new(r2.owner_password.as_str())?;
@@ -212,6 +216,7 @@ impl QPdfWriter {
                     })?;
                 }
             }
+            #[cfg(feature = "legacy")]
             EncryptionParams::R3(r3) => {
                 let user_password = CString::new(r3.user_password.as_str())?;
                 let owner_password = CString::new(r3.owner_password.as_str())?;
@@ -232,6 +237,7 @@ impl QPdfWriter {
                     })?;
                 }
             }
+            #[cfg(feature = "legacy")]
             EncryptionParams::R4(r4) => {
                 let user_password = CString::new(r4.user_password.as_str())?;
                 let owner_password = CString::new(r4.owner_password.as_str())?;
