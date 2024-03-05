@@ -16,6 +16,12 @@ Tested on the following targets:
 
 The prebuilt bindings for those targets are included in the source tree.
 
+By default, `pkg-config` will be used to link against the system library `libqpdf`.
+
+If the `vendored` feature is enabled, a vendored source tree of qpdf is built and linked statically.
+
+The `legacy` feature enables bindings to the r2/3/4 encryption options which are available in qpdf 10.x but not 11.x.
+
 ## Usage example
 
 ```rust,no_run
