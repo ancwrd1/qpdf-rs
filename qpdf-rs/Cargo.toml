@@ -11,7 +11,7 @@ keywords.workspace = true
 license.workspace = true
 
 [dependencies]
-qpdf-sys = { path = "../qpdf-sys", version = "0.1" }
+qpdf-sys = { path = "../qpdf-sys", version = "0.2" }
 libc = "0.2"
 
 [features]
