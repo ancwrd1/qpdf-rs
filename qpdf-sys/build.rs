@@ -186,6 +186,7 @@ fn base_build() -> cc::Build {
     build
         .warnings(false)
         .extra_warnings(false)
+        .define("POINTERHOLDER_TRANSITION", "0")
         .include(root.join("include"));
 
     build
