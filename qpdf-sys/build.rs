@@ -173,7 +173,6 @@ const QPDF_SRC: &[&str] = &[
     "ResourceFinder.cc",
     "SecureRandomDataProvider.cc",
     "SF_FlateLzwDecode.cc",
-    "SparseOHArray.cc",
     "qpdf-c.cc",
     "qpdfjob-c.cc",
     "qpdflogger-c.cc"
@@ -219,9 +218,9 @@ fn build_cc(name: &str, dir: &str, files: &[&str]) {
 fn build_qpdf() {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let cpp_flags: &[&str] = if is_msvc() {
-        &["/std:c++14", "/EHsc"]
+        &["/std:c++17", "/EHsc"]
     } else {
-        &["-std=c++14"]
+        &["-std=c++17"]
     };
 
     let mut build = base_build();
