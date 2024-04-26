@@ -17,3 +17,6 @@ libc = "0.2"
 [features]
 vendored = ["qpdf-sys/vendored"]
 legacy = []
+
+[package.metadata.docs.rs]
+all-features = true
