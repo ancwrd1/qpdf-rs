@@ -24,3 +24,6 @@ pkg-config = "0.3"
 
 [features]
 vendored = ["dep:cc"]
+
+[package.metadata.docs.rs]
+all-features = true
