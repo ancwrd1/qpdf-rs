@@ -1,4 +1,10 @@
-# Rust bindings to QPDF C++ library
+# qpdf-rs
+
+[![github actions](https://github.com/ancwrd1/qpdf-rs/workflows/CI/badge.svg)](https://github.com/ancwrd1/qpdf-rs/actions)
+[![crates](https://img.shields.io/crates/v/qpdf.svg)](https://github.com/ancwrd1/qpdf-rs)
+[![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![docs.rs](https://docs.rs/qpdf/badge.svg)](https://docs.rs/qpdf)
 
 ## Overview
 
