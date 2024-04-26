@@ -19,4 +19,4 @@ vendored = ["qpdf-sys/vendored"]
 legacy = []
 
 [package.metadata.docs.rs]
-all-features = true
+features = ["vendored"]
