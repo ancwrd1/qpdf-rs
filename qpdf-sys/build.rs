@@ -309,5 +309,5 @@ fn main() {
 
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap()).join("bindings.rs");
 
-    bindings.write_to_file(&out_path).unwrap();
+    bindings.write_to_file(out_path).unwrap();
 }
