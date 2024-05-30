@@ -231,7 +231,7 @@ fn build_qpdf() {
 
     build
         .cpp(true)
-        .include(root.join("zlib-1.2.11"))
+        .include(root.join("zlib-1.3.1"))
         .include(root.join("jpeg-9d"))
         .include(root.join("qpdf").join("include"))
         .include(root.join("qpdf").join("libqpdf"))
@@ -272,7 +272,7 @@ fn build_bindings() {
 #[cfg(feature = "vendored")]
 fn main() {
     build_bindings();
-    build_cc("zlib", "zlib-1.2.11", ZLIB_SRC);
+    build_cc("zlib", "zlib-1.3.1", ZLIB_SRC);
     build_cc("jpeg", "jpeg-9d", JPEG_SRC);
     build_qpdf();
 }
