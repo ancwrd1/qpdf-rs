@@ -1,3 +1,4 @@
+#![allow(clippy::manual_c_str_literals)]
 #![doc = include_str!("../README.md")]
 
 use std::{
@@ -473,7 +474,7 @@ impl QPdf {
         let oh = unsafe { qpdf_sys::qpdf_oh_new_dictionary(self.inner()) };
         let dict = QPdfDictionary::new(QPdfObject::new(self.clone(), oh));
         for item in iter.into_iter() {
-            dict.set(item.0.as_ref(), &item.1.into());
+            dict.set(item.0.as_ref(), item.1.into());
         }
         dict
     }
@@ -482,7 +483,7 @@ impl QPdf {
     pub fn new_stream<D: AsRef<[u8]>>(self: &QPdf, data: D) -> QPdfStream {
         let oh = unsafe { qpdf_sys::qpdf_oh_new_stream(self.inner()) };
         let obj: QPdfStream = QPdfObject::new(self.clone(), oh).into();
-        obj.replace_data(data, &self.new_null(), &self.new_null());
+        obj.replace_data(data, self.new_null(), self.new_null());
         obj
     }
 
@@ -497,7 +498,7 @@ impl QPdf {
         let stream = self.new_stream(data.as_ref());
         let dict = stream.get_dictionary();
         for item in iter.into_iter() {
-            dict.set(item.0.as_ref(), &item.1.into());
+            dict.set(item.0.as_ref(), item.1.into());
         }
         drop(dict);
         stream

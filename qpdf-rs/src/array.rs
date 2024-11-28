@@ -110,7 +110,7 @@ pub struct QPdfArrayIterator<'a> {
     inner: &'a QPdfArray,
 }
 
-impl<'a> Iterator for QPdfArrayIterator<'a> {
+impl Iterator for QPdfArrayIterator<'_> {
     type Item = QPdfObject;
 
     fn next(&mut self) -> Option<Self::Item> {

@@ -65,7 +65,7 @@ fn test_pdf_from_scratch() {
         ("/Resources", resources.into()),
     ]);
 
-    qpdf.add_page(&page.into_indirect(), true).unwrap();
+    qpdf.add_page(page.into_indirect(), true).unwrap();
 
     let mem = qpdf
         .writer()
@@ -112,7 +112,7 @@ fn test_qpdf_basic_objects() {
     assert_eq!(obj.get_type(), QPdfObjectType::Stream);
     assert_eq!(obj.to_string(), "3 0 R");
 
-    obj.get_dictionary().set("/Type", &qpdf.new_name("/Stream"));
+    obj.get_dictionary().set("/Type", qpdf.new_name("/Stream"));
 
     let obj_id = obj.get_id();
     assert_ne!(obj.into_indirect().get_id(), obj_id);
@@ -168,9 +168,9 @@ fn test_error() {
 fn test_array() {
     let qpdf = QPdf::empty();
     let mut arr = qpdf.new_array();
-    arr.push(&qpdf.new_integer(1));
-    arr.push(&qpdf.new_integer(2));
-    arr.push(&qpdf.new_integer(3));
+    arr.push(qpdf.new_integer(1));
+    arr.push(qpdf.new_integer(2));
+    arr.push(qpdf.new_integer(3));
     assert_eq!(arr.to_string(), "[ 1 2 3 ]");
 
     assert!(arr.get(10).is_none());
@@ -180,7 +180,7 @@ fn test_array() {
         vec![1, 2, 3]
     );
 
-    arr.set(1, &qpdf.new_integer(5));
+    arr.set(1, qpdf.new_integer(5));
     assert_eq!(arr.to_string(), "[ 1 5 3 ]");
 }
 
