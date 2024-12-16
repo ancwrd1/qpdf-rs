@@ -7,6 +7,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
       - run: git submodule update --init
         shell: bash
       - run: ci/set_rust_version.bash ${{ matrix.channel }} ${{ matrix.target }}
@@ -28,6 +30,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
       - run: git submodule update --init
       - run: ci/set_rust_version.bash ${{ matrix.channel }} ${{ matrix.target }}
       - run: ci/build.bash cargo ${{ matrix.target }} vendor
@@ -44,6 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
       - run: git submodule update --init
       - run: sudo apt-get update && sudo apt-get install -yqq libqpdf-dev
       - run: ci/set_rust_version.bash ${{ matrix.channel }} ${{ matrix.target }}
