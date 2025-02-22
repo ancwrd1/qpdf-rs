@@ -175,7 +175,7 @@ const QPDF_SRC: &[&str] = &[
     "SF_FlateLzwDecode.cc",
     "qpdf-c.cc",
     "qpdfjob-c.cc",
-    "qpdflogger-c.cc"
+    "qpdflogger-c.cc",
 ];
 
 #[cfg(feature = "vendored")]
