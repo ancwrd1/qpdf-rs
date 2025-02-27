@@ -3,7 +3,7 @@ resolver = "2"
 members = ["qpdf-sys", "qpdf-rs"]
 
 [workspace.package]
-version = "0.3.2"
+version = "0.3.3"
 authors = ["Dmitry Pankratov <dmitry@pankratov.net>"]
 edition = "2021"
 repository = "https://github.com/ancwrd1/qpdf-rs"

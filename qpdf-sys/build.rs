@@ -186,7 +186,8 @@ fn base_build() -> cc::Build {
     build
         .warnings(false)
         .extra_warnings(false)
-        .define("POINTERHOLDER_TRANSITION", "0")
+        .define("POINTERHOLDER_TRANSITION", "4")
+        .define("QPDF_DISABLE_QTC", "1")
         .include(root.join("include"));
 
     build
