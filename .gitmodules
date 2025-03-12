@@ -1,3 +1,9 @@
 [submodule "qpdf-sys/qpdf"]
 	path = qpdf-sys/qpdf
 	url = https://github.com/qpdf/qpdf
+[submodule "qpdf-sys/zlib"]
+	path = qpdf-sys/zlib
+	url = https://github.com/madler/zlib.git
+[submodule "qpdf-sys/jpeg"]
+	path = qpdf-sys/jpeg
+	url = https://github.com/libjpeg-turbo/ijg.git
