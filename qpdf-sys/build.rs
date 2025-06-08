@@ -188,6 +188,11 @@ fn is_msvc() -> bool {
 }
 
 #[cfg(feature = "vendored")]
+fn is_windows() -> bool {
+    env::var("TARGET").unwrap().contains("-pc-windows-")
+}
+
+#[cfg(feature = "vendored")]
 fn build_cc(name: &str, dir: &str, files: &[&str]) {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let path = root.join(dir);
@@ -265,6 +270,10 @@ fn main() {
     build_cc("zlib", "zlib", ZLIB_SRC);
     build_cc("jpeg", "jpeg", JPEG_SRC);
     build_qpdf();
+
+    if is_windows() {
+        println!("cargo:rustc-link-lib=advapi32");
+    }
 }
 
 #[cfg(not(feature = "vendored"))]
