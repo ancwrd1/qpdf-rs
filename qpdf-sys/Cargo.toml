@@ -19,7 +19,7 @@ exclude = [
 
 [build-dependencies]
 cc = { version = "1", features = ["parallel"], optional = true }
-bindgen = "0.71"
+bindgen = "0.72"
 pkg-config = "0.3"
 
 [features]
