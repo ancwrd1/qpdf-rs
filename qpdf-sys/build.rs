@@ -296,8 +296,8 @@ fn main() {
 
     for (key, val) in lib.defines {
         builder = builder.clang_arg(match val {
-            Some(val) => format!("-D{}={}", key, val),
-            None => format!("-D{}", key),
+            Some(val) => format!("-D{key}={val}"),
+            None => format!("-D{key}"),
         });
     }
 
