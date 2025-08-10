@@ -23,7 +23,7 @@ impl QPdfArray {
     }
 
     /// Return array iterator
-    pub fn iter(&self) -> QPdfArrayIterator {
+    pub fn iter(&self) -> QPdfArrayIterator<'_> {
         QPdfArrayIterator { index: 0, inner: self }
     }
 
