@@ -353,8 +353,8 @@ impl QPdf {
     }
 
     /// Find indirect object by object id and generation
-    pub fn get_object_by_id(self: &QPdf, obj_id: u32, gen: u32) -> Option<QPdfObject> {
-        let oh = unsafe { qpdf_sys::qpdf_get_object_by_id(self.inner(), obj_id as _, gen as _) };
+    pub fn get_object_by_id(self: &QPdf, obj_id: u32, generation: u32) -> Option<QPdfObject> {
+        let oh = unsafe { qpdf_sys::qpdf_get_object_by_id(self.inner(), obj_id as _, generation as _) };
         self.last_error_or_then(|| ()).ok()?;
         let obj = QPdfObject::new(self.clone(), oh);
         if obj.get_type() != QPdfObjectType::Uninitialized && obj.get_type() != QPdfObjectType::Null {
@@ -365,9 +365,9 @@ impl QPdf {
     }
 
     /// Replace indirect object by object id and generation
-    pub fn replace_object<O: AsRef<QPdfObject>>(self: &QPdf, obj_id: u32, gen: u32, object: O) -> Result<()> {
+    pub fn replace_object<O: AsRef<QPdfObject>>(self: &QPdf, obj_id: u32, generation: u32, object: O) -> Result<()> {
         self.wrap_ffi_call(|| unsafe {
-            qpdf_sys::qpdf_replace_object(self.inner(), obj_id as _, gen as _, object.as_ref().inner)
+            qpdf_sys::qpdf_replace_object(self.inner(), obj_id as _, generation as _, object.as_ref().inner)
         })
     }
 
