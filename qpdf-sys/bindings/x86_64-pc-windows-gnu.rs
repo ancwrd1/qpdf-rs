@@ -179,13 +179,13 @@ pub struct _qpdflogger_handle {
     _unused: [u8; 0],
 }
 pub type qpdflogger_handle = *mut _qpdflogger_handle;
-extern "C" {
+unsafe extern "C" {
     pub fn qpdflogger_default_logger() -> qpdflogger_handle;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdflogger_create() -> qpdflogger_handle;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdflogger_cleanup(l: *mut qpdflogger_handle);
 }
 pub const qpdf_log_dest_e_qpdf_log_dest_default: qpdf_log_dest_e = 0;
@@ -201,7 +201,7 @@ pub type qpdf_log_fn_t = ::std::option::Option<
         udata: *mut ::std::os::raw::c_void,
     ) -> ::std::os::raw::c_int,
 >;
-extern "C" {
+unsafe extern "C" {
     pub fn qpdflogger_set_info(
         l: qpdflogger_handle,
         dest: qpdf_log_dest_e,
@@ -209,7 +209,7 @@ extern "C" {
         udata: *mut ::std::os::raw::c_void,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdflogger_set_warn(
         l: qpdflogger_handle,
         dest: qpdf_log_dest_e,
@@ -217,7 +217,7 @@ extern "C" {
         udata: *mut ::std::os::raw::c_void,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdflogger_set_error(
         l: qpdflogger_handle,
         dest: qpdf_log_dest_e,
@@ -225,7 +225,7 @@ extern "C" {
         udata: *mut ::std::os::raw::c_void,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdflogger_set_save(
         l: qpdflogger_handle,
         dest: qpdf_log_dest_e,
@@ -234,15 +234,15 @@ extern "C" {
         only_if_not_set: ::std::os::raw::c_int,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdflogger_save_to_standard_output(l: qpdflogger_handle, only_if_not_set: ::std::os::raw::c_int);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdflogger_equal(l1: qpdflogger_handle, l2: qpdflogger_handle) -> ::std::os::raw::c_int;
 }
 pub type __gnuc_va_list = __builtin_va_list;
 pub type va_list = __gnuc_va_list;
-extern "C" {
+unsafe extern "C" {
     pub fn __mingw_get_crt_info() -> *const ::std::os::raw::c_char;
 }
 pub type rsize_t = usize;
@@ -382,7 +382,7 @@ const _: () = {
         [::std::mem::offset_of!(threadlocaleinfostruct, lc_time_curr) - 344usize];
 };
 pub type threadlocinfo = threadlocaleinfostruct;
-extern "C" {
+unsafe extern "C" {
     pub fn _memccpy(
         _Dst: *mut ::std::os::raw::c_void,
         _Src: *const ::std::os::raw::c_void,
@@ -390,21 +390,21 @@ extern "C" {
         _MaxCount: usize,
     ) -> *mut ::std::os::raw::c_void;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn memchr(
         _Buf: *const ::std::os::raw::c_void,
         _Val: ::std::os::raw::c_int,
         _MaxCount: ::std::os::raw::c_ulonglong,
     ) -> *mut ::std::os::raw::c_void;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _memicmp(
         _Buf1: *const ::std::os::raw::c_void,
         _Buf2: *const ::std::os::raw::c_void,
         _Size: usize,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _memicmp_l(
         _Buf1: *const ::std::os::raw::c_void,
         _Buf2: *const ::std::os::raw::c_void,
@@ -412,21 +412,21 @@ extern "C" {
         _Locale: _locale_t,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn memcmp(
         _Buf1: *const ::std::os::raw::c_void,
         _Buf2: *const ::std::os::raw::c_void,
         _Size: ::std::os::raw::c_ulonglong,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn memcpy(
         _Dst: *mut ::std::os::raw::c_void,
         _Src: *const ::std::os::raw::c_void,
         _Size: ::std::os::raw::c_ulonglong,
     ) -> *mut ::std::os::raw::c_void;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn memcpy_s(
         _dest: *mut ::std::os::raw::c_void,
         _numberOfElements: usize,
@@ -434,21 +434,21 @@ extern "C" {
         _count: usize,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn mempcpy(
         _Dst: *mut ::std::os::raw::c_void,
         _Src: *const ::std::os::raw::c_void,
         _Size: ::std::os::raw::c_ulonglong,
     ) -> *mut ::std::os::raw::c_void;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn memset(
         _Dst: *mut ::std::os::raw::c_void,
         _Val: ::std::os::raw::c_int,
         _Size: ::std::os::raw::c_ulonglong,
     ) -> *mut ::std::os::raw::c_void;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn memccpy(
         _Dst: *mut ::std::os::raw::c_void,
         _Src: *const ::std::os::raw::c_void,
@@ -456,108 +456,108 @@ extern "C" {
         _Size: ::std::os::raw::c_ulonglong,
     ) -> *mut ::std::os::raw::c_void;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn memicmp(
         _Buf1: *const ::std::os::raw::c_void,
         _Buf2: *const ::std::os::raw::c_void,
         _Size: usize,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strset(_Str: *mut ::std::os::raw::c_char, _Val: ::std::os::raw::c_int) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strset_l(
         _Str: *mut ::std::os::raw::c_char,
         _Val: ::std::os::raw::c_int,
         _Locale: _locale_t,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strcpy(
         _Dest: *mut ::std::os::raw::c_char,
         _Source: *const ::std::os::raw::c_char,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strcat(
         _Dest: *mut ::std::os::raw::c_char,
         _Source: *const ::std::os::raw::c_char,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strcmp(_Str1: *const ::std::os::raw::c_char, _Str2: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strlen(_Str: *const ::std::os::raw::c_char) -> ::std::os::raw::c_ulonglong;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strnlen(_Str: *const ::std::os::raw::c_char, _MaxCount: usize) -> usize;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn memmove(
         _Dst: *mut ::std::os::raw::c_void,
         _Src: *const ::std::os::raw::c_void,
         _Size: ::std::os::raw::c_ulonglong,
     ) -> *mut ::std::os::raw::c_void;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strdup(_Src: *const ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strchr(_Str: *const ::std::os::raw::c_char, _Val: ::std::os::raw::c_int) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _stricmp(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strcmpi(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _stricmp_l(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
         _Locale: _locale_t,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strcoll(_Str1: *const ::std::os::raw::c_char, _Str2: *const ::std::os::raw::c_char)
         -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strcoll_l(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
         _Locale: _locale_t,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _stricoll(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _stricoll_l(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
         _Locale: _locale_t,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strncoll(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
         _MaxCount: usize,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strncoll_l(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
@@ -565,14 +565,14 @@ extern "C" {
         _Locale: _locale_t,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strnicoll(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
         _MaxCount: usize,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strnicoll_l(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
@@ -580,46 +580,46 @@ extern "C" {
         _Locale: _locale_t,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strcspn(
         _Str: *const ::std::os::raw::c_char,
         _Control: *const ::std::os::raw::c_char,
     ) -> ::std::os::raw::c_ulonglong;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strerror(_ErrMsg: *const ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strerror(arg1: ::std::os::raw::c_int) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strlwr(_String: *mut ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strlwr_l(_String: *mut ::std::os::raw::c_char, _Locale: _locale_t) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strncat(
         _Dest: *mut ::std::os::raw::c_char,
         _Source: *const ::std::os::raw::c_char,
         _Count: ::std::os::raw::c_ulonglong,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strncmp(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
         _MaxCount: ::std::os::raw::c_ulonglong,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strnicmp(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
         _MaxCount: usize,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strnicmp_l(
         _Str1: *const ::std::os::raw::c_char,
         _Str2: *const ::std::os::raw::c_char,
@@ -627,21 +627,21 @@ extern "C" {
         _Locale: _locale_t,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strncpy(
         _Dest: *mut ::std::os::raw::c_char,
         _Source: *const ::std::os::raw::c_char,
         _Count: ::std::os::raw::c_ulonglong,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strnset(
         _Str: *mut ::std::os::raw::c_char,
         _Val: ::std::os::raw::c_int,
         _MaxCount: usize,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strnset_l(
         str_: *mut ::std::os::raw::c_char,
         c: ::std::os::raw::c_int,
@@ -649,57 +649,57 @@ extern "C" {
         _Locale: _locale_t,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strpbrk(
         _Str: *const ::std::os::raw::c_char,
         _Control: *const ::std::os::raw::c_char,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strrchr(_Str: *const ::std::os::raw::c_char, _Ch: ::std::os::raw::c_int) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strrev(_Str: *mut ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strspn(
         _Str: *const ::std::os::raw::c_char,
         _Control: *const ::std::os::raw::c_char,
     ) -> ::std::os::raw::c_ulonglong;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strstr(
         _Str: *const ::std::os::raw::c_char,
         _SubStr: *const ::std::os::raw::c_char,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strtok(
         _Str: *mut ::std::os::raw::c_char,
         _Delim: *const ::std::os::raw::c_char,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strtok_r(
         _Str: *mut ::std::os::raw::c_char,
         _Delim: *const ::std::os::raw::c_char,
         __last: *mut *mut ::std::os::raw::c_char,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strupr(_String: *mut ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strupr_l(_String: *mut ::std::os::raw::c_char, _Locale: _locale_t) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strxfrm(
         _Dst: *mut ::std::os::raw::c_char,
         _Src: *const ::std::os::raw::c_char,
         _MaxCount: ::std::os::raw::c_ulonglong,
     ) -> ::std::os::raw::c_ulonglong;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strxfrm_l(
         _Dst: *mut ::std::os::raw::c_char,
         _Src: *const ::std::os::raw::c_char,
@@ -707,133 +707,133 @@ extern "C" {
         _Locale: _locale_t,
     ) -> usize;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strdup(_Src: *const ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strcmpi(_Str1: *const ::std::os::raw::c_char, _Str2: *const ::std::os::raw::c_char)
         -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn stricmp(_Str1: *const ::std::os::raw::c_char, _Str2: *const ::std::os::raw::c_char)
         -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strlwr(_Str: *mut ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strnicmp(
         _Str1: *const ::std::os::raw::c_char,
         _Str: *const ::std::os::raw::c_char,
         _MaxCount: usize,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strncasecmp(
         arg1: *const ::std::os::raw::c_char,
         arg2: *const ::std::os::raw::c_char,
         arg3: ::std::os::raw::c_ulonglong,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strcasecmp(
         arg1: *const ::std::os::raw::c_char,
         arg2: *const ::std::os::raw::c_char,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strnset(
         _Str: *mut ::std::os::raw::c_char,
         _Val: ::std::os::raw::c_int,
         _MaxCount: usize,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strrev(_Str: *mut ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strset(_Str: *mut ::std::os::raw::c_char, _Val: ::std::os::raw::c_int) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strupr(_Str: *mut ::std::os::raw::c_char) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsdup(_Str: *const wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcscat(_Dest: *mut wchar_t, _Source: *const wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcschr(
         _Str: *const ::std::os::raw::c_ushort,
         _Ch: ::std::os::raw::c_ushort,
     ) -> *mut ::std::os::raw::c_ushort;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcscmp(
         _Str1: *const ::std::os::raw::c_ushort,
         _Str2: *const ::std::os::raw::c_ushort,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcscpy(_Dest: *mut wchar_t, _Source: *const wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcscspn(_Str: *const wchar_t, _Control: *const wchar_t) -> usize;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcslen(_Str: *const ::std::os::raw::c_ushort) -> ::std::os::raw::c_ulonglong;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsnlen(_Src: *const wchar_t, _MaxCount: usize) -> usize;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsncat(_Dest: *mut wchar_t, _Source: *const wchar_t, _Count: usize) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsncmp(
         _Str1: *const ::std::os::raw::c_ushort,
         _Str2: *const ::std::os::raw::c_ushort,
         _MaxCount: ::std::os::raw::c_ulonglong,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsncpy(_Dest: *mut wchar_t, _Source: *const wchar_t, _Count: usize) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsncpy_l(_Dest: *mut wchar_t, _Source: *const wchar_t, _Count: usize, _Locale: _locale_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcspbrk(_Str: *const wchar_t, _Control: *const wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsrchr(_Str: *const wchar_t, _Ch: wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsspn(_Str: *const wchar_t, _Control: *const wchar_t) -> usize;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsstr(_Str: *const wchar_t, _SubStr: *const wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcstok(_Str: *mut wchar_t, _Delim: *const wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcserror(_ErrNum: ::std::os::raw::c_int) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn __wcserror(_Str: *const wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsicmp(_Str1: *const wchar_t, _Str2: *const wchar_t) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsicmp_l(_Str1: *const wchar_t, _Str2: *const wchar_t, _Locale: _locale_t) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsnicmp(_Str1: *const wchar_t, _Str2: *const wchar_t, _MaxCount: usize) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsnicmp_l(
         _Str1: *const wchar_t,
         _Str2: *const wchar_t,
@@ -841,49 +841,49 @@ extern "C" {
         _Locale: _locale_t,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsnset(_Str: *mut wchar_t, _Val: wchar_t, _MaxCount: usize) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsrev(_Str: *mut wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsset(_Str: *mut wchar_t, _Val: wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcslwr(_String: *mut wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcslwr_l(_String: *mut wchar_t, _Locale: _locale_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsupr(_String: *mut wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsupr_l(_String: *mut wchar_t, _Locale: _locale_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsxfrm(_Dst: *mut wchar_t, _Src: *const wchar_t, _MaxCount: usize) -> usize;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsxfrm_l(_Dst: *mut wchar_t, _Src: *const wchar_t, _MaxCount: usize, _Locale: _locale_t) -> usize;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcscoll(_Str1: *const wchar_t, _Str2: *const wchar_t) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcscoll_l(_Str1: *const wchar_t, _Str2: *const wchar_t, _Locale: _locale_t) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsicoll(_Str1: *const wchar_t, _Str2: *const wchar_t) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsicoll_l(_Str1: *const wchar_t, _Str2: *const wchar_t, _Locale: _locale_t) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsncoll(_Str1: *const wchar_t, _Str2: *const wchar_t, _MaxCount: usize) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsncoll_l(
         _Str1: *const wchar_t,
         _Str2: *const wchar_t,
@@ -891,10 +891,10 @@ extern "C" {
         _Locale: _locale_t,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsnicoll(_Str1: *const wchar_t, _Str2: *const wchar_t, _MaxCount: usize) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsnicoll_l(
         _Str1: *const wchar_t,
         _Str2: *const wchar_t,
@@ -902,57 +902,57 @@ extern "C" {
         _Locale: _locale_t,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsdup(_Str: *const wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsicmp(_Str1: *const wchar_t, _Str2: *const wchar_t) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsnicmp(_Str1: *const wchar_t, _Str2: *const wchar_t, _MaxCount: usize) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsnset(_Str: *mut wchar_t, _Val: wchar_t, _MaxCount: usize) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsrev(_Str: *mut wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsset(_Str: *mut wchar_t, _Val: wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcslwr(_Str: *mut wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsupr(_Str: *mut wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsicoll(_Str1: *const wchar_t, _Str2: *const wchar_t) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strset_s(_Dst: *mut ::std::os::raw::c_char, _DstSize: usize, _Value: ::std::os::raw::c_int) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strerror_s(
         _Buf: *mut ::std::os::raw::c_char,
         _SizeInBytes: usize,
         _ErrMsg: *const ::std::os::raw::c_char,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strerror_s(
         _Buf: *mut ::std::os::raw::c_char,
         _SizeInBytes: usize,
         _ErrNum: ::std::os::raw::c_int,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strlwr_s(_Str: *mut ::std::os::raw::c_char, _Size: usize) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strlwr_s_l(_Str: *mut ::std::os::raw::c_char, _Size: usize, _Locale: _locale_t) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strnset_s(
         _Str: *mut ::std::os::raw::c_char,
         _Size: usize,
@@ -960,13 +960,13 @@ extern "C" {
         _MaxCount: usize,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strupr_s(_Str: *mut ::std::os::raw::c_char, _Size: usize) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strupr_s_l(_Str: *mut ::std::os::raw::c_char, _Size: usize, _Locale: _locale_t) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strncat_s(
         _Dst: *mut ::std::os::raw::c_char,
         _DstSizeInChars: usize,
@@ -974,7 +974,7 @@ extern "C" {
         _MaxCount: usize,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strncat_s_l(
         _Dst: *mut ::std::os::raw::c_char,
         _DstSizeInChars: usize,
@@ -983,14 +983,14 @@ extern "C" {
         _Locale: _locale_t,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strcpy_s(
         _Dst: *mut ::std::os::raw::c_char,
         _SizeInBytes: rsize_t,
         _Src: *const ::std::os::raw::c_char,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strncpy_s(
         _Dst: *mut ::std::os::raw::c_char,
         _DstSizeInChars: usize,
@@ -998,7 +998,7 @@ extern "C" {
         _MaxCount: usize,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strncpy_s_l(
         _Dst: *mut ::std::os::raw::c_char,
         _DstSizeInChars: usize,
@@ -1007,14 +1007,14 @@ extern "C" {
         _Locale: _locale_t,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strtok_s(
         _Str: *mut ::std::os::raw::c_char,
         _Delim: *const ::std::os::raw::c_char,
         _Context: *mut *mut ::std::os::raw::c_char,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _strtok_s_l(
         _Str: *mut ::std::os::raw::c_char,
         _Delim: *const ::std::os::raw::c_char,
@@ -1022,14 +1022,14 @@ extern "C" {
         _Locale: _locale_t,
     ) -> *mut ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn strcat_s(
         _Dst: *mut ::std::os::raw::c_char,
         _SizeInBytes: rsize_t,
         _Src: *const ::std::os::raw::c_char,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn memmove_s(
         _dest: *mut ::std::os::raw::c_void,
         _numberOfElements: usize,
@@ -1037,43 +1037,43 @@ extern "C" {
         _count: usize,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcstok_s(_Str: *mut wchar_t, _Delim: *const wchar_t, _Context: *mut *mut wchar_t) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcserror_s(_Buf: *mut wchar_t, _SizeInWords: usize, _ErrNum: ::std::os::raw::c_int) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn __wcserror_s(_Buffer: *mut wchar_t, _SizeInWords: usize, _ErrMsg: *const wchar_t) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsnset_s(_Dst: *mut wchar_t, _DstSizeInWords: usize, _Val: wchar_t, _MaxCount: usize) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsset_s(_Str: *mut wchar_t, _SizeInWords: usize, _Val: wchar_t) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcslwr_s(_Str: *mut wchar_t, _SizeInWords: usize) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcslwr_s_l(_Str: *mut wchar_t, _SizeInWords: usize, _Locale: _locale_t) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsupr_s(_Str: *mut wchar_t, _Size: usize) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsupr_s_l(_Str: *mut wchar_t, _Size: usize, _Locale: _locale_t) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcscpy_s(_Dst: *mut wchar_t, _SizeInWords: rsize_t, _Src: *const wchar_t) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcscat_s(_Dst: *mut wchar_t, _SizeInWords: rsize_t, _Src: *const wchar_t) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsncat_s(_Dst: *mut wchar_t, _DstSizeInChars: usize, _Src: *const wchar_t, _MaxCount: usize) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsncat_s_l(
         _Dst: *mut wchar_t,
         _DstSizeInChars: usize,
@@ -1082,10 +1082,10 @@ extern "C" {
         _Locale: _locale_t,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn wcsncpy_s(_Dst: *mut wchar_t, _DstSizeInChars: usize, _Src: *const wchar_t, _MaxCount: usize) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsncpy_s_l(
         _Dst: *mut wchar_t,
         _DstSizeInChars: usize,
@@ -1094,7 +1094,7 @@ extern "C" {
         _Locale: _locale_t,
     ) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcstok_s_l(
         _Str: *mut wchar_t,
         _Delim: *const wchar_t,
@@ -1102,10 +1102,10 @@ extern "C" {
         _Locale: _locale_t,
     ) -> *mut wchar_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsset_s_l(_Str: *mut wchar_t, _SizeInChars: usize, _Val: wchar_t, _Locale: _locale_t) -> errno_t;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn _wcsnset_s_l(
         _Str: *mut wchar_t,
         _SizeInChars: usize,
@@ -1128,71 +1128,71 @@ pub struct _qpdf_error {
 pub type qpdf_error = *mut _qpdf_error;
 pub type QPDF_ERROR_CODE = ::std::os::raw::c_int;
 pub type QPDF_BOOL = ::std::os::raw::c_int;
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_silence_errors(qpdf: qpdf_data);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_qpdf_version() -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_init() -> qpdf_data;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_cleanup(qpdf: *mut qpdf_data);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_has_error(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_error(qpdf: qpdf_data) -> qpdf_error;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_more_warnings(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_next_warning(qpdf: qpdf_data) -> qpdf_error;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_error_full_text(q: qpdf_data, e: qpdf_error) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_error_code(q: qpdf_data, e: qpdf_error) -> qpdf_error_code_e;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_error_filename(q: qpdf_data, e: qpdf_error) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_error_file_position(q: qpdf_data, e: qpdf_error) -> ::std::os::raw::c_ulonglong;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_error_message_detail(q: qpdf_data, e: qpdf_error) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_suppress_warnings(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_logger(qpdf: qpdf_data, logger: qpdflogger_handle);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_logger(qpdf: qpdf_data) -> qpdflogger_handle;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_check_pdf(qpdf: qpdf_data) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_ignore_xref_streams(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_attempt_recovery(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_read(
         qpdf: qpdf_data,
         filename: *const ::std::os::raw::c_char,
         password: *const ::std::os::raw::c_char,
     ) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_read_memory(
         qpdf: qpdf_data,
         description: *const ::std::os::raw::c_char,
@@ -1201,75 +1201,75 @@ extern "C" {
         password: *const ::std::os::raw::c_char,
     ) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_empty_pdf(qpdf: qpdf_data) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_create_from_json_file(qpdf: qpdf_data, filename: *const ::std::os::raw::c_char) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_create_from_json_data(
         qpdf: qpdf_data,
         buffer: *const ::std::os::raw::c_char,
         size: ::std::os::raw::c_ulonglong,
     ) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_update_from_json_file(qpdf: qpdf_data, filename: *const ::std::os::raw::c_char) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_update_from_json_data(
         qpdf: qpdf_data,
         buffer: *const ::std::os::raw::c_char,
         size: ::std::os::raw::c_ulonglong,
     ) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_pdf_version(qpdf: qpdf_data) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_pdf_extension_level(qpdf: qpdf_data) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_user_password(qpdf: qpdf_data) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_info_key(qpdf: qpdf_data, key: *const ::std::os::raw::c_char) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_info_key(qpdf: qpdf_data, key: *const ::std::os::raw::c_char, value: *const ::std::os::raw::c_char);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_is_linearized(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_is_encrypted(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_allow_accessibility(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_allow_extract_all(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_allow_print_low_res(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_allow_print_high_res(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_allow_modify_assembly(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_allow_modify_form(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_allow_modify_annotation(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_allow_modify_other(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_allow_modify_all(qpdf: qpdf_data) -> QPDF_BOOL;
 }
 pub type qpdf_write_fn_t = ::std::option::Option<
@@ -1279,7 +1279,7 @@ pub type qpdf_write_fn_t = ::std::option::Option<
         udata: *mut ::std::os::raw::c_void,
     ) -> ::std::os::raw::c_int,
 >;
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_write_json(
         qpdf: qpdf_data,
         version: ::std::os::raw::c_int,
@@ -1291,58 +1291,58 @@ extern "C" {
         wanted_objects: *const *const ::std::os::raw::c_char,
     ) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_init_write(qpdf: qpdf_data, filename: *const ::std::os::raw::c_char) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_init_write_memory(qpdf: qpdf_data) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_buffer_length(qpdf: qpdf_data) -> usize;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_buffer(qpdf: qpdf_data) -> *const ::std::os::raw::c_uchar;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_object_stream_mode(qpdf: qpdf_data, mode: qpdf_object_stream_e);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_stream_data_mode(qpdf: qpdf_data, mode: qpdf_stream_data_e);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_compress_streams(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_decode_level(qpdf: qpdf_data, level: qpdf_stream_decode_level_e);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_preserve_unreferenced_objects(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_newline_before_endstream(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_content_normalization(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_qdf_mode(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_deterministic_ID(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_static_ID(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_static_aes_IV(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_suppress_original_object_IDs(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_preserve_encryption(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_r2_encryption_parameters_insecure(
         qpdf: qpdf_data,
         user_password: *const ::std::os::raw::c_char,
@@ -1353,7 +1353,7 @@ extern "C" {
         allow_annotate: QPDF_BOOL,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_r3_encryption_parameters_insecure(
         qpdf: qpdf_data,
         user_password: *const ::std::os::raw::c_char,
@@ -1367,7 +1367,7 @@ extern "C" {
         print: qpdf_r3_print_e,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_r4_encryption_parameters_insecure(
         qpdf: qpdf_data,
         user_password: *const ::std::os::raw::c_char,
@@ -1383,7 +1383,7 @@ extern "C" {
         use_aes: QPDF_BOOL,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_r5_encryption_parameters2(
         qpdf: qpdf_data,
         user_password: *const ::std::os::raw::c_char,
@@ -1398,7 +1398,7 @@ extern "C" {
         encrypt_metadata: QPDF_BOOL,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_r6_encryption_parameters2(
         qpdf: qpdf_data,
         user_password: *const ::std::os::raw::c_char,
@@ -1413,30 +1413,30 @@ extern "C" {
         encrypt_metadata: QPDF_BOOL,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_linearization(qpdf: qpdf_data, value: QPDF_BOOL);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_minimum_pdf_version(qpdf: qpdf_data, version: *const ::std::os::raw::c_char);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_set_minimum_pdf_version_and_extension(
         qpdf: qpdf_data,
         version: *const ::std::os::raw::c_char,
         extension_level: ::std::os::raw::c_int,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_force_pdf_version(qpdf: qpdf_data, version: *const ::std::os::raw::c_char);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_force_pdf_version_and_extension(
         qpdf: qpdf_data,
         version: *const ::std::os::raw::c_char,
         extension_level: ::std::os::raw::c_int,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_register_progress_reporter(
         qpdf: qpdf_data,
         report_progress: ::std::option::Option<
@@ -1445,36 +1445,36 @@ extern "C" {
         data: *mut ::std::os::raw::c_void,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_write(qpdf: qpdf_data) -> QPDF_ERROR_CODE;
 }
 pub type qpdf_oh = ::std::os::raw::c_uint;
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_release(qpdf: qpdf_data, oh: qpdf_oh);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_release_all(qpdf: qpdf_data);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_object(qpdf: qpdf_data, oh: qpdf_oh) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_trailer(qpdf: qpdf_data) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_root(qpdf: qpdf_data) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_object_by_id(
         qpdf: qpdf_data,
         objid: ::std::os::raw::c_int,
         generation: ::std::os::raw::c_int,
     ) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_make_indirect_object(qpdf: qpdf_data, oh: qpdf_oh) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_replace_object(
         qpdf: qpdf_data,
         objid: ::std::os::raw::c_int,
@@ -1482,52 +1482,52 @@ extern "C" {
         oh: qpdf_oh,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_initialized(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_bool(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_null(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_integer(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_real(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_name(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_string(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_operator(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_inline_image(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_array(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_dictionary(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_stream(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_indirect(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_scalar(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_name_and_equals(qpdf: qpdf_data, oh: qpdf_oh, name: *const ::std::os::raw::c_char) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_dictionary_of_type(
         qpdf: qpdf_data,
         oh: qpdf_oh,
@@ -1535,60 +1535,60 @@ extern "C" {
         subtype: *const ::std::os::raw::c_char,
     ) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_type_code(qpdf: qpdf_data, oh: qpdf_oh) -> qpdf_object_type_e;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_type_name(qpdf: qpdf_data, oh: qpdf_oh) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_wrap_in_array(qpdf: qpdf_data, oh: qpdf_oh) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_parse(qpdf: qpdf_data, object_str: *const ::std::os::raw::c_char) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_bool_value(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_value_as_bool(qpdf: qpdf_data, oh: qpdf_oh, value: *mut QPDF_BOOL) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_int_value(qpdf: qpdf_data, oh: qpdf_oh) -> ::std::os::raw::c_longlong;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_value_as_longlong(
         qpdf: qpdf_data,
         oh: qpdf_oh,
         value: *mut ::std::os::raw::c_longlong,
     ) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_int_value_as_int(qpdf: qpdf_data, oh: qpdf_oh) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_value_as_int(qpdf: qpdf_data, oh: qpdf_oh, value: *mut ::std::os::raw::c_int) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_uint_value(qpdf: qpdf_data, oh: qpdf_oh) -> ::std::os::raw::c_ulonglong;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_value_as_ulonglong(
         qpdf: qpdf_data,
         oh: qpdf_oh,
         value: *mut ::std::os::raw::c_ulonglong,
     ) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_uint_value_as_uint(qpdf: qpdf_data, oh: qpdf_oh) -> ::std::os::raw::c_uint;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_value_as_uint(qpdf: qpdf_data, oh: qpdf_oh, value: *mut ::std::os::raw::c_uint) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_real_value(qpdf: qpdf_data, oh: qpdf_oh) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_value_as_real(
         qpdf: qpdf_data,
         oh: qpdf_oh,
@@ -1596,19 +1596,19 @@ extern "C" {
         length: *mut usize,
     ) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_number(qpdf: qpdf_data, oh: qpdf_oh) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_numeric_value(qpdf: qpdf_data, oh: qpdf_oh) -> f64;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_value_as_number(qpdf: qpdf_data, oh: qpdf_oh, value: *mut f64) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_name(qpdf: qpdf_data, oh: qpdf_oh) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_value_as_name(
         qpdf: qpdf_data,
         oh: qpdf_oh,
@@ -1616,13 +1616,13 @@ extern "C" {
         length: *mut usize,
     ) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_last_string_length(qpdf: qpdf_data) -> usize;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_string_value(qpdf: qpdf_data, oh: qpdf_oh) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_value_as_string(
         qpdf: qpdf_data,
         oh: qpdf_oh,
@@ -1630,10 +1630,10 @@ extern "C" {
         length: *mut usize,
     ) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_utf8_value(qpdf: qpdf_data, oh: qpdf_oh) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_value_as_utf8(
         qpdf: qpdf_data,
         oh: qpdf_oh,
@@ -1641,115 +1641,115 @@ extern "C" {
         length: *mut usize,
     ) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_binary_string_value(
         qpdf: qpdf_data,
         oh: qpdf_oh,
         length: *mut usize,
     ) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_binary_utf8_value(
         qpdf: qpdf_data,
         oh: qpdf_oh,
         length: *mut usize,
     ) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_array_n_items(qpdf: qpdf_data, oh: qpdf_oh) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_array_item(qpdf: qpdf_data, oh: qpdf_oh, n: ::std::os::raw::c_int) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_begin_dict_key_iter(qpdf: qpdf_data, dict: qpdf_oh);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_dict_more_keys(qpdf: qpdf_data) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_dict_next_key(qpdf: qpdf_data) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_has_key(qpdf: qpdf_data, oh: qpdf_oh, key: *const ::std::os::raw::c_char) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_key(qpdf: qpdf_data, oh: qpdf_oh, key: *const ::std::os::raw::c_char) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_key_if_dict(qpdf: qpdf_data, oh: qpdf_oh, key: *const ::std::os::raw::c_char) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_is_or_has_name(qpdf: qpdf_data, oh: qpdf_oh, key: *const ::std::os::raw::c_char) -> QPDF_BOOL;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_uninitialized(qpdf: qpdf_data) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_null(qpdf: qpdf_data) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_bool(qpdf: qpdf_data, value: QPDF_BOOL) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_integer(qpdf: qpdf_data, value: ::std::os::raw::c_longlong) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_real_from_string(qpdf: qpdf_data, value: *const ::std::os::raw::c_char) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_real_from_double(qpdf: qpdf_data, value: f64, decimal_places: ::std::os::raw::c_int) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_name(qpdf: qpdf_data, name: *const ::std::os::raw::c_char) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_string(qpdf: qpdf_data, str_: *const ::std::os::raw::c_char) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_unicode_string(qpdf: qpdf_data, utf8_str: *const ::std::os::raw::c_char) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_binary_string(qpdf: qpdf_data, str_: *const ::std::os::raw::c_char, length: usize) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_binary_unicode_string(
         qpdf: qpdf_data,
         str_: *const ::std::os::raw::c_char,
         length: usize,
     ) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_array(qpdf: qpdf_data) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_dictionary(qpdf: qpdf_data) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_new_stream(qpdf: qpdf_data) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_make_direct(qpdf: qpdf_data, oh: qpdf_oh);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_set_array_item(qpdf: qpdf_data, oh: qpdf_oh, at: ::std::os::raw::c_int, item: qpdf_oh);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_insert_item(qpdf: qpdf_data, oh: qpdf_oh, at: ::std::os::raw::c_int, item: qpdf_oh);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_append_item(qpdf: qpdf_data, oh: qpdf_oh, item: qpdf_oh);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_erase_item(qpdf: qpdf_data, oh: qpdf_oh, at: ::std::os::raw::c_int);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_replace_key(qpdf: qpdf_data, oh: qpdf_oh, key: *const ::std::os::raw::c_char, item: qpdf_oh);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_remove_key(qpdf: qpdf_data, oh: qpdf_oh, key: *const ::std::os::raw::c_char);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_replace_or_remove_key(
         qpdf: qpdf_data,
         oh: qpdf_oh,
@@ -1757,28 +1757,28 @@ extern "C" {
         item: qpdf_oh,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_dict(qpdf: qpdf_data, oh: qpdf_oh) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_object_id(qpdf: qpdf_data, oh: qpdf_oh) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_generation(qpdf: qpdf_data, oh: qpdf_oh) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_unparse(qpdf: qpdf_data, oh: qpdf_oh) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_unparse_resolved(qpdf: qpdf_data, oh: qpdf_oh) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_unparse_binary(qpdf: qpdf_data, oh: qpdf_oh) -> *const ::std::os::raw::c_char;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_copy_foreign_object(qpdf: qpdf_data, other_qpdf: qpdf_data, foreign_oh: qpdf_oh) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_stream_data(
         qpdf: qpdf_data,
         stream_oh: qpdf_oh,
@@ -1788,7 +1788,7 @@ extern "C" {
         len: *mut usize,
     ) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_get_page_content_data(
         qpdf: qpdf_data,
         page_oh: qpdf_oh,
@@ -1796,10 +1796,10 @@ extern "C" {
         len: *mut usize,
     ) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_free_buffer(bufp: *mut *mut ::std::os::raw::c_uchar);
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_oh_replace_stream_data(
         qpdf: qpdf_data,
         stream_oh: qpdf_oh,
@@ -1809,29 +1809,29 @@ extern "C" {
         decode_parms: qpdf_oh,
     );
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_num_pages(qpdf: qpdf_data) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_get_page_n(qpdf: qpdf_data, zero_based_index: usize) -> qpdf_oh;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_update_all_pages_cache(qpdf: qpdf_data) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_find_page_by_id(
         qpdf: qpdf_data,
         objid: ::std::os::raw::c_int,
         generation: ::std::os::raw::c_int,
     ) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_find_page_by_oh(qpdf: qpdf_data, oh: qpdf_oh) -> ::std::os::raw::c_int;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_push_inherited_attributes_to_page(qpdf: qpdf_data) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_add_page(
         qpdf: qpdf_data,
         newpage_qpdf: qpdf_data,
@@ -1839,7 +1839,7 @@ extern "C" {
         first: QPDF_BOOL,
     ) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_add_page_at(
         qpdf: qpdf_data,
         newpage_qpdf: qpdf_data,
@@ -1848,7 +1848,7 @@ extern "C" {
         refpage: qpdf_oh,
     ) -> QPDF_ERROR_CODE;
 }
-extern "C" {
+unsafe extern "C" {
     pub fn qpdf_remove_page(qpdf: qpdf_data, page: qpdf_oh) -> QPDF_ERROR_CODE;
 }
 pub type __builtin_va_list = *mut ::std::os::raw::c_char;

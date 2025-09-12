@@ -1,3 +1,4 @@
+use bindgen::RustEdition;
 use std::{env, path::PathBuf};
 
 #[cfg(feature = "vendored")]
@@ -254,6 +255,7 @@ fn build_bindings() {
     } else {
         let path = root.join("qpdf").join("include");
         let bindings = bindgen::builder()
+            .rust_edition(RustEdition::Edition2024)
             .clang_arg(format!("-I{}", path.display()))
             .header(format!("{}/qpdf/qpdf-c.h", path.display()))
             .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
@@ -283,7 +285,7 @@ fn main() {
         .probe("libqpdf")
         .unwrap();
 
-    let mut builder = bindgen::builder();
+    let mut builder = bindgen::builder().rust_edition(RustEdition::Edition2024);
 
     for path in lib.include_paths {
         builder = builder.clang_arg(format!("-I{}", path.to_str().unwrap()));
