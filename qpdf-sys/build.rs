@@ -259,6 +259,7 @@ fn build_bindings() {
             .clang_arg(format!("-I{}", path.display()))
             .header(format!("{}/qpdf/qpdf-c.h", path.display()))
             .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
+            .blocklist_type("max_align_t")
             .generate()
             .unwrap();
 
@@ -305,6 +306,7 @@ fn main() {
 
     let bindings = builder
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
+        .blocklist_type("max_align_t")
         .generate()
         .unwrap();
 
