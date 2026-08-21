@@ -103,7 +103,6 @@ const QPDF_SRC: &[&str] = &[
     "Pl_Flate.cc",
     "Pl_Function.cc",
     "Pl_LZWDecoder.cc",
-    "Pl_MD5.cc",
     "Pl_OStream.cc",
     "Pl_PNGFilter.cc",
     "Pl_QPDFTokenizer.cc",
@@ -137,7 +136,6 @@ const QPDF_SRC: &[&str] = &[
     "QPDFObjectHelper.cc",
     "QPDFOutlineDocumentHelper.cc",
     "QPDFOutlineObjectHelper.cc",
-    "QPDFPageDocumentHelper.cc",
     "QPDFPageLabelDocumentHelper.cc",
     "QPDFPageObjectHelper.cc",
     "QPDFParser.cc",
@@ -146,18 +144,15 @@ const QPDF_SRC: &[&str] = &[
     "QPDFTokenizer.cc",
     "QPDFUsage.cc",
     "QPDFWriter.cc",
-    "QPDFXRefEntry.cc",
     "QPDF_Array.cc",
     "QPDF_Dictionary.cc",
-    "QPDF_Name.cc",
     "QPDF_Stream.cc",
     "QPDF_String.cc",
     "QPDF_encryption.cc",
     "QPDF_json.cc",
     "QPDF_linearization.cc",
-    "QPDF_optimization.cc",
     "QPDF_pages.cc",
-    "QTC.cc",
+    "QPDF_objects.cc",
     "QUtil.cc",
     "RC4.cc",
     "ResourceFinder.cc",
@@ -166,6 +161,7 @@ const QPDF_SRC: &[&str] = &[
     "qpdf-c.cc",
     "qpdfjob-c.cc",
     "qpdflogger-c.cc",
+    "global.cc"
 ];
 
 #[cfg(feature = "vendored")]
@@ -215,9 +211,9 @@ fn build_cc(name: &str, dir: &str, files: &[&str]) {
 fn build_qpdf() {
     let root = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let cpp_flags: &[&str] = if is_msvc() {
-        &["/std:c++17", "/EHsc"]
+        &["/std:c++20", "/EHsc"]
     } else {
-        &["-std=c++17"]
+        &["-std=c++20"]
     };
 
     let mut build = base_build();
