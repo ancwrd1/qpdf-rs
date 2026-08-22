@@ -1,5 +1,4 @@
-use std::ffi::NulError;
-use std::fmt;
+use std::{ffi::NulError, fmt};
 
 use crate::Result;
 
